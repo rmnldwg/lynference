@@ -1,0 +1,807 @@
+schema: '2.0'
+stages:
+  join:
+    cmd: "python -m lyscripts join --inputs data/2021-usz-oropharynx.csv data/2021-clb-oropharynx.csv\
+      \ --output data/joined.csv\n"
+    deps:
+    - path: data/2021-clb-oropharynx.csv
+      md5: d40c0a1ae967a6983d60a0a809cf3972
+      size: 92742
+    - path: data/2021-usz-oropharynx.csv
+      md5: 4c62057de32538d2274eaf7f2af0c759
+      size: 159482
+    outs:
+    - path: data/joined.csv
+      md5: 7992f871b1be0f226a516418a7531892
+      size: 307977
+  enhance:
+    cmd: "python -m lyscripts enhance data/joined.csv data/enhanced.csv --modalities\
+      \ 'CT' 'MRI' 'PET' 'FNA' 'diagnostic_consensus' 'pathology' 'pCT'\n"
+    deps:
+    - path: data/joined.csv
+      md5: 7992f871b1be0f226a516418a7531892
+      size: 307977
+    params:
+      params.yaml:
+        modalities:
+          CT:
+          - 0.76
+          - 0.81
+          MRI:
+          - 0.63
+          - 0.81
+          PET:
+          - 0.86
+          - 0.79
+          FNA:
+          - 0.98
+          - 0.8
+          diagnostic_consensus:
+          - 0.86
+          - 0.81
+          pathology:
+          - 1.0
+          - 1.0
+          pCT:
+          - 0.86
+          - 0.81
+          max_llh:
+          - 1.0
+          - 1.0
+    outs:
+    - path: data/enhanced.csv
+      md5: 81553b118186ac67a1c4c25a9eaffe14
+      size: 375364
+  clean:
+    cmd: python -m lyscripts clean data/enhanced.csv data/cleaned.csv
+    deps:
+    - path: data/enhanced.csv
+      md5: 81553b118186ac67a1c4c25a9eaffe14
+      size: 375364
+    params:
+      params.yaml:
+        model.class: Bilateral
+    outs:
+    - path: data/cleaned.csv
+      md5: a54143eb694335d44be4ea4c6bed0458
+      size: 300071
+  sampling:
+    cmd: "python -m lyscripts.sample data/cleaned.csv models/samples.hdf5 --plots\
+      \ plots/sampling --modalities 'max_llh' --ti\n"
+    deps:
+    - path: data/cleaned.csv
+      md5: a54143eb694335d44be4ea4c6bed0458
+      size: 300071
+    params:
+      params.yaml:
+        graph:
+          tumor:
+            primary:
+            - II
+            - III
+            - IV
+          lnl:
+            II:
+            - III
+            III:
+            - IV
+            IV: []
+        modalities:
+          CT:
+          - 0.76
+          - 0.81
+          MRI:
+          - 0.63
+          - 0.81
+          PET:
+          - 0.86
+          - 0.79
+          FNA:
+          - 0.98
+          - 0.8
+          diagnostic_consensus:
+          - 0.86
+          - 0.81
+          pathology:
+          - 1.0
+          - 1.0
+          pCT:
+          - 0.86
+          - 0.81
+          max_llh:
+          - 1.0
+          - 1.0
+        model:
+          first_binom_prob: 0.3
+          max_t: 10
+          t_stages:
+          - early
+          - late
+          class: Bilateral
+          kwargs:
+            base_symmetric: false
+            trans_symmetric: true
+            use_mixing: true
+        sampling:
+          walkers_per_dim: 20
+          burnin: 1000
+          nsteps: 50
+          thin_by: 5
+          temp_schedule:
+          - 0.0
+          - 1.0076210988534706e-09
+          - 3.224387516331105e-08
+          - 2.448519270213932e-07
+          - 1.031804005225953e-06
+          - 3.148815933917096e-06
+          - 7.835261664684588e-06
+          - 1.6935087808430282e-05
+          - 3.3017728167230525e-05
+          - 5.949901826619859e-05
+          - 0.00010076210988534707
+          - 0.0001622783855914503
+          - 0.0002507283732699068
+          - 0.0003741226606566017
+          - 0.000541922809869769
+          - 0.0007651622719418543
+          - 0.0010565673013513768
+          - 0.0014306778705547923
+          - 0.001903968584518355
+          - 0.00249496959524998
+          - 0.0032243875163311063
+          - 0.004115226337448558
+          - 0.00519290833892641
+          - 0.006485395006257844
+          - 0.008023307944637018
+          - 0.009840049793490924
+          - 0.011971925141011254
+          - 0.014458261438686257
+          - 0.01734152991583261
+          - 0.020667466494127266
+          - 0.02448519270213934
+          - 0.02884733658986194
+          - 0.03381015364324406
+          - 0.0394336476987224
+          - 0.045781691857753354
+          - 0.05292214940134466
+          - 0.06092699470458736
+          - 0.06987243415118778
+          - 0.07983902704799936
+          - 0.09091180653955425
+          - 0.1031804005225954
+          - 0.11673915256060852
+          - 0.13168724279835387
+          - 0.14812880887639787
+          - 0.16617306684564512
+          - 0.18593443208187052
+          - 0.207532640200251
+          - 0.231092867969897
+          - 0.2567458542283846
+          - 0.28462802079628763
+          - 0.31488159339170957
+          - 0.34765472254481466
+          - 0.38310160451236014
+          - 0.4213826021922288
+          - 0.46266436603796024
+          - 0.5071199549732823
+          - 0.5549289573066435
+          - 0.6062776116457449
+          - 0.6613589278120725
+          - 0.7203728077554274
+          - 0.7835261664684589
+          - 0.8510330529011965
+          - 0.923114770875582
+          - 1.0
+          kwargs:
+            max_steps: 10000
+            check_interval: 100
+            trust_threshold: 30.0
+            rel_acor_threshold: 0.075
+    outs:
+    - path: models/samples.hdf5
+      md5: c215daf91c5262ed50a6032fa4e6539c
+      size: 162242688
+    - path: plots/sampling/accept_rates.csv
+      md5: 755a1f84db11218d7fd145e754fefe40
+      size: 2453
+    - path: plots/sampling/acor_times.csv
+      md5: b56a769bc421aa2b5b2ba390aed2b34b
+      size: 2443
+  predict-risks:
+    cmd: "python -m lyscripts predict risks models/samples.hdf5 models/risks.hdf5\n"
+    deps:
+    - path: models/samples.hdf5
+      md5: c215daf91c5262ed50a6032fa4e6539c
+      size: 162242688
+    params:
+      params.yaml:
+        graph:
+          tumor:
+            primary:
+            - II
+            - III
+            - IV
+          lnl:
+            II:
+            - III
+            III:
+            - IV
+            IV: []
+        model:
+          first_binom_prob: 0.3
+          max_t: 10
+          t_stages:
+          - early
+          - late
+          class: Bilateral
+          kwargs:
+            base_symmetric: false
+            trans_symmetric: true
+            use_mixing: true
+        risks:
+        - name: contra-II/healthyCT/early/noext
+          involvement:
+            contra:
+              II: true
+          given_diagnosis:
+            ipsi:
+              II: false
+              III: false
+              IV: false
+            contra:
+              II: false
+              III: false
+              IV: false
+          given_diagnosis_spsn:
+          - 0.76
+          - 0.81
+          t_stage: early
+          midline_ext: false
+          invert: false
+        - name: contra-II/healthyCT/early/ext
+          involvement:
+            contra:
+              II: true
+          given_diagnosis:
+            ipsi:
+              II: false
+              III: false
+              IV: false
+            contra:
+              II: false
+              III: false
+              IV: false
+          given_diagnosis_spsn:
+          - 0.76
+          - 0.81
+          t_stage: early
+          midline_ext: true
+          invert: false
+        - name: contra-II/healthyCT/late/noext
+          involvement:
+            contra:
+              II: true
+          given_diagnosis:
+            ipsi:
+              II: false
+              III: false
+              IV: false
+            contra:
+              II: false
+              III: false
+              IV: false
+          given_diagnosis_spsn:
+          - 0.76
+          - 0.81
+          t_stage: late
+          midline_ext: false
+          invert: false
+        - name: contra-II/healthyCT/late/ext
+          involvement:
+            contra:
+              II: true
+          given_diagnosis:
+            ipsi:
+              II: false
+              III: false
+              IV: false
+            contra:
+              II: false
+              III: false
+              IV: false
+          given_diagnosis_spsn:
+          - 0.76
+          - 0.81
+          t_stage: late
+          midline_ext: true
+          invert: false
+        - name: contra-II/ipsi-II-pos/early/noext
+          involvement:
+            contra:
+              II: true
+          given_diagnosis:
+            ipsi:
+              II: true
+              III: false
+              IV: false
+            contra:
+              II: false
+              III: false
+              IV: false
+          given_diagnosis_spsn:
+          - 0.76
+          - 0.81
+          t_stage: early
+          midline_ext: false
+          invert: false
+        - name: contra-II/ipsi-II-pos/early/ext
+          involvement:
+            contra:
+              II: true
+          given_diagnosis:
+            ipsi:
+              II: true
+              III: false
+              IV: false
+            contra:
+              II: false
+              III: false
+              IV: false
+          given_diagnosis_spsn:
+          - 0.76
+          - 0.81
+          t_stage: early
+          midline_ext: true
+          invert: false
+        - name: contra-II/ipsi-II-pos/late/noext
+          involvement:
+            contra:
+              II: true
+          given_diagnosis:
+            ipsi:
+              II: true
+              III: false
+              IV: false
+            contra:
+              II: false
+              III: false
+              IV: false
+          given_diagnosis_spsn:
+          - 0.76
+          - 0.81
+          t_stage: late
+          midline_ext: false
+          invert: false
+        - name: contra-II/ipsi-II-pos/late/ext
+          involvement:
+            contra:
+              II: true
+          given_diagnosis:
+            ipsi:
+              II: true
+              III: false
+              IV: false
+            contra:
+              II: false
+              III: false
+              IV: false
+          given_diagnosis_spsn:
+          - 0.76
+          - 0.81
+          t_stage: late
+          midline_ext: true
+          invert: false
+        - name: ipsi-IV/all-neg/early/ext
+          label: healthy CT
+          involvement:
+            ipsi:
+              IV: true
+          given_diagnosis:
+            ipsi:
+              II: false
+              III: false
+              IV: false
+            contra:
+              II: false
+              III: false
+              IV: false
+          given_diagnosis_spsn:
+          - 0.76
+          - 0.81
+          t_stage: early
+          midline_ext: true
+          invert: false
+        - name: ipsi-IV/ipsi-II-pos/early/ext
+          label: ipsi II suspicious
+          involvement:
+            ipsi:
+              IV: true
+          given_diagnosis:
+            ipsi:
+              II: true
+              III: false
+              IV: false
+            contra:
+              II: false
+              III: false
+              IV: false
+          given_diagnosis_spsn:
+          - 0.76
+          - 0.81
+          t_stage: early
+          midline_ext: true
+          invert: false
+        - name: ipsi-IV/ipsi-II-III-pos/late/noext
+          label: ipsi II & III suspicious
+          involvement:
+            ipsi:
+              IV: true
+          given_diagnosis:
+            ipsi:
+              II: true
+              III: true
+              IV: false
+            contra:
+              II: false
+              III: false
+              IV: false
+          given_diagnosis_spsn:
+          - 0.76
+          - 0.81
+          t_stage: late
+          midline_ext: false
+          invert: false
+        - name: ipsi-IV/ipsi-all-pos/late/ext
+          label: all ipsi LNLs suspicious
+          involvement:
+            ipsi:
+              IV: true
+          given_diagnosis:
+            ipsi:
+              II: true
+              III: true
+              IV: true
+            contra:
+              II: false
+              III: false
+              IV: false
+          given_diagnosis_spsn:
+          - 0.76
+          - 0.81
+          t_stage: late
+          midline_ext: true
+          invert: false
+        - name: ipsi-IV/all-pos/late/ext
+          label: ipsi & contra all LNLs suspicious
+          involvement:
+            ipsi:
+              IV: true
+          given_diagnosis:
+            ipsi:
+              II: true
+              III: true
+              IV: true
+            contra:
+              II: true
+              III: true
+              IV: true
+          given_diagnosis_spsn:
+          - 0.76
+          - 0.81
+          t_stage: late
+          midline_ext: true
+          invert: false
+    outs:
+    - path: models/risks.hdf5
+      md5: 5cc3d7fd88f909a3dfbd6c7c6bc72187
+      size: 967800
+  evaluate:
+    cmd: "python -m lyscripts evaluate data/cleaned.csv models/samples.hdf5 --metrics\
+      \ metrics.json --plots plots/ti/accuracies.csv\n"
+    deps:
+    - path: data/cleaned.csv
+      md5: a54143eb694335d44be4ea4c6bed0458
+      size: 300071
+    - path: models/samples.hdf5
+      md5: c215daf91c5262ed50a6032fa4e6539c
+      size: 162242688
+    params:
+      params.yaml:
+        graph:
+          tumor:
+            primary:
+            - II
+            - III
+            - IV
+          lnl:
+            II:
+            - III
+            III:
+            - IV
+            IV: []
+        modalities:
+          CT:
+          - 0.76
+          - 0.81
+          MRI:
+          - 0.63
+          - 0.81
+          PET:
+          - 0.86
+          - 0.79
+          FNA:
+          - 0.98
+          - 0.8
+          diagnostic_consensus:
+          - 0.86
+          - 0.81
+          pathology:
+          - 1.0
+          - 1.0
+          pCT:
+          - 0.86
+          - 0.81
+          max_llh:
+          - 1.0
+          - 1.0
+        model:
+          first_binom_prob: 0.3
+          max_t: 10
+          t_stages:
+          - early
+          - late
+          class: Bilateral
+          kwargs:
+            base_symmetric: false
+            trans_symmetric: true
+            use_mixing: true
+        sampling:
+          walkers_per_dim: 20
+          burnin: 1000
+          nsteps: 50
+          thin_by: 5
+          temp_schedule:
+          - 0.0
+          - 1.0076210988534706e-09
+          - 3.224387516331105e-08
+          - 2.448519270213932e-07
+          - 1.031804005225953e-06
+          - 3.148815933917096e-06
+          - 7.835261664684588e-06
+          - 1.6935087808430282e-05
+          - 3.3017728167230525e-05
+          - 5.949901826619859e-05
+          - 0.00010076210988534707
+          - 0.0001622783855914503
+          - 0.0002507283732699068
+          - 0.0003741226606566017
+          - 0.000541922809869769
+          - 0.0007651622719418543
+          - 0.0010565673013513768
+          - 0.0014306778705547923
+          - 0.001903968584518355
+          - 0.00249496959524998
+          - 0.0032243875163311063
+          - 0.004115226337448558
+          - 0.00519290833892641
+          - 0.006485395006257844
+          - 0.008023307944637018
+          - 0.009840049793490924
+          - 0.011971925141011254
+          - 0.014458261438686257
+          - 0.01734152991583261
+          - 0.020667466494127266
+          - 0.02448519270213934
+          - 0.02884733658986194
+          - 0.03381015364324406
+          - 0.0394336476987224
+          - 0.045781691857753354
+          - 0.05292214940134466
+          - 0.06092699470458736
+          - 0.06987243415118778
+          - 0.07983902704799936
+          - 0.09091180653955425
+          - 0.1031804005225954
+          - 0.11673915256060852
+          - 0.13168724279835387
+          - 0.14812880887639787
+          - 0.16617306684564512
+          - 0.18593443208187052
+          - 0.207532640200251
+          - 0.231092867969897
+          - 0.2567458542283846
+          - 0.28462802079628763
+          - 0.31488159339170957
+          - 0.34765472254481466
+          - 0.38310160451236014
+          - 0.4213826021922288
+          - 0.46266436603796024
+          - 0.5071199549732823
+          - 0.5549289573066435
+          - 0.6062776116457449
+          - 0.6613589278120725
+          - 0.7203728077554274
+          - 0.7835261664684589
+          - 0.8510330529011965
+          - 0.923114770875582
+          - 1.0
+          kwargs:
+            max_steps: 10000
+            check_interval: 100
+            trust_threshold: 30.0
+            rel_acor_threshold: 0.075
+    outs:
+    - path: metrics.json
+      md5: 2d54e6a55e446bc75f9c9fa32122ac2c
+      size: 160
+    - path: plots/ti/accuracies.csv
+      md5: 7f33283616f942146d277cd2ebba0dfe
+      size: 3727
+  predict-prevalences:
+    cmd: "python -m lyscripts predict prevalences models/samples.hdf5 data/cleaned.csv\
+      \ models/prevalences.hdf5\n"
+    deps:
+    - path: data/cleaned.csv
+      md5: a54143eb694335d44be4ea4c6bed0458
+      size: 300071
+    - path: models/samples.hdf5
+      md5: c215daf91c5262ed50a6032fa4e6539c
+      size: 162242688
+    params:
+      params.yaml:
+        graph:
+          tumor:
+            primary:
+            - II
+            - III
+            - IV
+          lnl:
+            II:
+            - III
+            III:
+            - IV
+            IV: []
+        model:
+          first_binom_prob: 0.3
+          max_t: 10
+          t_stages:
+          - early
+          - late
+          class: Bilateral
+          kwargs:
+            base_symmetric: false
+            trans_symmetric: true
+            use_mixing: true
+        prevalences:
+        - name: contra/early/noext
+          pattern:
+            contra:
+              II: false
+              III: false
+              IV: false
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: early
+          midline_ext: false
+          invert: true
+        - name: contra/early/ext
+          pattern:
+            contra:
+              II: false
+              III: false
+              IV: false
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: early
+          midline_ext: true
+          invert: true
+        - name: contra/late/noext
+          pattern:
+            contra:
+              II: false
+              III: false
+              IV: false
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: late
+          midline_ext: false
+          invert: true
+        - name: contra/late/ext
+          pattern:
+            contra:
+              II: false
+              III: false
+              IV: false
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: late
+          midline_ext: true
+          invert: true
+        - name: ipsiII/early
+          label: LNL II
+          pattern:
+            ipsi:
+              II: true
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: early
+          invert: false
+        - name: ipsiIII/early
+          label: LNL III
+          pattern:
+            ipsi:
+              III: true
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: early
+          invert: false
+        - name: ipsiIV/early
+          label: LNL IV
+          pattern:
+            ipsi:
+              IV: true
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: early
+          invert: false
+        - name: ipsiII/late
+          label: LNL II
+          pattern:
+            ipsi:
+              II: true
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: late
+          invert: false
+        - name: ipsiIII/late
+          label: LNL III
+          pattern:
+            ipsi:
+              III: true
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: late
+          invert: false
+        - name: ipsiIV/late
+          label: LNL IV
+          pattern:
+            ipsi:
+              IV: true
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: late
+          invert: false
+    outs:
+    - path: models/prevalences.hdf5
+      md5: a7f279cfe261fdcbd80456d82ca72569
+      size: 739848
+  plot-corner:
+    cmd: "python -m lyscripts plot corner models/samples.hdf5 plots/corner.png\n"
+    deps:
+    - path: models/samples.hdf5
+      md5: c215daf91c5262ed50a6032fa4e6539c
+      size: 162242688
+    outs:
+    - path: plots/corner.png
+      md5: cfbad8aa72f6e02f8e8ac8a710ea97d3
+      size: 4114315

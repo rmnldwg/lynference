@@ -1,0 +1,39 @@
+stages:
+  pipeline:
+    desc:
+      This command runs the actual pipeline that one would run for reproducing a
+      particular experiment.
+    cmd: dvc repro pipeline/dvc.yaml
+
+  mermaid-md:
+    desc: Create directed acylic graph of the pipeline as mermaid file.
+    always_changed: true
+    cmd: >
+      dvc dag pipeline/dvc.yaml --full --mermaid --md
+      | sed 's/pipeline\/dvc.yaml://'
+      >> dag.md
+    outs:
+    - dag.md:
+        cache: false
+
+  mermaid-png:
+    desc: Transform the mermaid file into an image.
+    always_changed: true
+    cmd: ./node_modules/.bin/mmdc -i dag.md -o dag.png && mv dag-1.png dag.png
+    deps:
+    - dag.md
+    plots:
+    - dag.png:
+        cache: false
+
+  requirements:
+    desc:
+      For reproducibility, freeze the state of pip after every run. If one wants to
+      reproduce a particular run, one can use `pip install -r frozen.txt` inside a
+      blank new virtual environment to get exactly the setup that was used to obtain
+      these results.
+    always_changed: true
+    cmd: pip freeze > frozen.txt
+    outs:
+    - frozen.txt:
+        cache: false
