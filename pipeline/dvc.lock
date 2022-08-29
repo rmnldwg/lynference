@@ -121,7 +121,7 @@ stages:
           kwargs:
             base_symmetric: false
             trans_symmetric: true
-            use_mixing: true
+            use_mixing: false
         sampling:
           walkers_per_dim: 20
           burnin: 1000
@@ -199,20 +199,20 @@ stages:
             rel_acor_threshold: 0.075
     outs:
     - path: models/samples.hdf5
-      md5: d5387d0f458f9acd3d932ce354c2c09b
-      size: 174498528
+      md5: 7cf7745aa43b8fe7d2970c7df0fdb7cd
+      size: 228829088
     - path: plots/sampling/accept_rates.csv
-      md5: bace5677d2b811d18c56ea37404a9f4f
-      size: 2112
+      md5: 0e23e568c2e862577d8540c5ddea7165
+      size: 2383
     - path: plots/sampling/acor_times.csv
-      md5: 5034779fb604ef8145ac514b88714b48
-      size: 2446
+      md5: 52e79e33d74d3ac61cbb4d22f0dfe70d
+      size: 2440
   predict-risks:
     cmd: "python -m lyscripts predict risks models/samples.hdf5 models/risks.hdf5\n"
     deps:
     - path: models/samples.hdf5
-      md5: d5387d0f458f9acd3d932ce354c2c09b
-      size: 174498528
+      md5: 7cf7745aa43b8fe7d2970c7df0fdb7cd
+      size: 228829088
     params:
       params.yaml:
         graph:
@@ -237,7 +237,7 @@ stages:
           kwargs:
             base_symmetric: false
             trans_symmetric: true
-            use_mixing: true
+            use_mixing: false
         risks:
         - name: contra-II/healthyCT/early/noext
           involvement:
@@ -493,8 +493,8 @@ stages:
           invert: false
     outs:
     - path: models/risks.hdf5
-      md5: 671ace22e86644f4e4d95ff04e3f9ecc
-      size: 1071800
+      md5: 151e57a4f9860bbf03a1c4c5ee791ffd
+      size: 1279800
   evaluate:
     cmd: "python -m lyscripts evaluate data/cleaned.csv models/samples.hdf5 --metrics\
       \ metrics.json --plots plots/ti/accuracies.csv\n"
@@ -503,8 +503,8 @@ stages:
       md5: 502b9d327e052d93cbc219c25e8c9643
       size: 300071
     - path: models/samples.hdf5
-      md5: d5387d0f458f9acd3d932ce354c2c09b
-      size: 174498528
+      md5: 7cf7745aa43b8fe7d2970c7df0fdb7cd
+      size: 228829088
     params:
       params.yaml:
         graph:
@@ -554,7 +554,7 @@ stages:
           kwargs:
             base_symmetric: false
             trans_symmetric: true
-            use_mixing: true
+            use_mixing: false
         sampling:
           walkers_per_dim: 20
           burnin: 1000
@@ -632,11 +632,11 @@ stages:
             rel_acor_threshold: 0.075
     outs:
     - path: metrics.json
-      md5: 15dbb4c6f6458a7e07d35be2bab3451f
-      size: 161
+      md5: 345d468bdc59bec7e809bf65f816a6c3
+      size: 160
     - path: plots/ti/accuracies.csv
-      md5: f3928ee44a94a3d06dac175a4b59dc7f
-      size: 3728
+      md5: 11f28cf6f12c6d8fae4cc9ab79eacd45
+      size: 3723
   predict-prevalences:
     cmd: "python -m lyscripts predict prevalences models/samples.hdf5 data/cleaned.csv\
       \ models/prevalences.hdf5\n"
@@ -645,8 +645,8 @@ stages:
       md5: 502b9d327e052d93cbc219c25e8c9643
       size: 300071
     - path: models/samples.hdf5
-      md5: d5387d0f458f9acd3d932ce354c2c09b
-      size: 174498528
+      md5: 7cf7745aa43b8fe7d2970c7df0fdb7cd
+      size: 228829088
     params:
       params.yaml:
         graph:
@@ -671,7 +671,7 @@ stages:
           kwargs:
             base_symmetric: false
             trans_symmetric: true
-            use_mixing: true
+            use_mixing: false
         prevalences:
         - name: contra/early/noext
           pattern:
@@ -793,15 +793,15 @@ stages:
           invert: false
     outs:
     - path: models/prevalences.hdf5
-      md5: 40b100ab2ff389d418ca04d136011465
-      size: 819848
+      md5: d4fbe2dfcf2c8921a165ff14f69b3e93
+      size: 979848
   plot-corner:
     cmd: "python -m lyscripts plot corner models/samples.hdf5 plots/corner.png\n"
     deps:
     - path: models/samples.hdf5
-      md5: d5387d0f458f9acd3d932ce354c2c09b
-      size: 174498528
+      md5: 7cf7745aa43b8fe7d2970c7df0fdb7cd
+      size: 228829088
     outs:
     - path: plots/corner.png
-      md5: 31d1280dd934cddcfe52fc21538aa1d6
-      size: 5294880
+      md5: bf0100c5147776e7698e6b36f36eebde
+      size: 8024334
