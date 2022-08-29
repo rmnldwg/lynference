@@ -7,9 +7,9 @@ It is a repository that aims at making our research (modelling lymphatic cancer 
 
 The pipelines stored here largely depend on three other repositories:
 
-1. The [`lymph`](https://github.com/rmnldwg/lymph) repository, where we develop the mathematical model in the form of a Python library. **If you want to learn more about how we model the lymphatic spread of head & neck cancer, you can find more info in this repository**
-2. [`lyDATA`](https://github.com/rmnldwg/lydata), a repository that makes data on the patterns of lymphatic progression publicly available. This means we publish (anonymized) patient data here that details where in their lymphatic system the respective patient had lymph node metastases. The info over there is less mathematical and more clinical.
-3. A command line tool [`lyscripts`](https://github.com/rmnldwg/lyscripts) tailored to the specific purposes and use cases within the pipelines published here.
+1. The [`lymph`] repository, where we develop the mathematical model in the form of a Python library. **If you want to learn more about how we model the lymphatic spread of head & neck cancer, you can find more info in this repository**
+2. [`lyDATA`], a repository that makes data on the patterns of lymphatic progression publicly available. This means we publish (anonymized) patient data here that details where in their lymphatic system the respective patient had lymph node metastases. The info over there is less mathematical and more clinical.
+3. A command line tool [`lyscripts`] tailored to the specific purposes and use cases within the pipelines published here.
 
 ## How to reproduce a pipeline
 
@@ -26,13 +26,12 @@ If you want to reproduce our work, then follow these steps:
 5. Activate that virtual environment: `source .venv/bin/activate`
 6. (Optional but recommended) Update the package manager with `pip install -U pip setuptools`
 7. Install the requirements with `pip install -r frozen.txt`
-8. And finally, run the pipeline with `dvc repro pipeline`
+8. Get the source data with the commands
+   1. `dvc update data/2021-usz-oropharynx.csv.dvc`
+   2. `dvc update data/2021-clb-oropharynx.csv.dvc`
+9.  And finally, run the pipeline with `dvc repro pipeline`
 
 It could now take a while to run everything, but the programs that are being executed should keep you updated about its progress.
-
-[DVC]: https://dvc.org
-[`lyscripts`]: https://github.com/rmnldwg/lyscripts
-[`lymph-model`]: https://github.com/rmnldwg/lymph
 
 ## Navigating the repo
 
@@ -62,7 +61,7 @@ The `requirements.txt` file is only used by us during development.
 
 ### 📁 data
 
-This folder contains the data the pipeline is fed with at the beginning. Inside, you can find some `.dvc` files as well. These define the raw data everything starts with and their MD5 hashes.
+When you first clone the repository, this does not contain any data. Only two `.dvc` files. The command `dvc update <path-to-file>` DVC sets out and tries to get the actual data from the location defined in these `.dvc` files. In this case, they are fetched from the [`lyDATA`] repository.
 
 ### 📁 models
 
@@ -72,11 +71,7 @@ Essentially, all computationally intensive results are stored here from which pl
 
 ### 📁 plots
 
-This stores both data series (e.g. as CSV files) and images of produced plots. Some of them serve as checks to ensure everything went smoothly during the computations.
-
-### 📁 notebooks
-
-Inside this folder are some Jupyter notebooks that we used earlier, until managing them got messy and it became difficult to keep track of what was used when. They might be removed from this repo at any point.
+This stores both data series (e.g. as CSV files) and images of plots which are created during the pipeline run. Some of them serve as checks to ensure everything went smoothly during the computations.
 
 ## Branching model
 
@@ -86,9 +81,16 @@ So, if you want to see a list of pipelines we have published so far, head over t
 
 The development of these pipelines happens in dedicated `pipeline-xyz` branches, which might reflect unfinished stages of a pipeline, where parts crash or where we still figure out some parameters.
 
-[zenodo]: https://zenodo.org
-[releases]: https://github.com/rmnldwg/lynference/releases
 
 ## Anything unclear?
 
 If there are still unanswered questions regarding this work, don't hesitate to 📧 [contact us](mailto:roman.ludwig@usz.ch). We are happy to help and will provide you with what we can provide.
+
+
+[`lyDATA`]: https://github.com/rmnldwg/lydata
+[`lyscripts`]: https://github.com/rmnldwg/lyscripts
+[`lymph-model`]: https://github.com/rmnldwg/lymph
+[`lymph`]: https://github.com/rmnldwg/lymph
+[DVC]: https://dvc.org
+[zenodo]: https://zenodo.org
+[releases]: https://github.com/rmnldwg/lynference/releases
