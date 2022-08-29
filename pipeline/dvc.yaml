@@ -1,0 +1,159 @@
+vars:
+- ../params.yaml
+
+stages:
+  join:
+    wdir: ..
+    desc: Concatenate any number of datasets so they can be used as one for training
+    vars:
+    - output: data/joined.csv
+    cmd: >
+      python -m lyscripts join
+      --inputs data/2021-usz-oropharynx.csv data/2021-clb-oropharynx.csv
+      --output ${output}
+    deps:
+    - data/2021-usz-oropharynx.csv
+    - data/2021-clb-oropharynx.csv
+    outs:
+    - ${output}
+
+  enhance:
+    wdir: ..
+    desc:
+      This stage fixes the super- and sub-level reporting for the LNLs and also creates
+      new 'modalities' from combining existing ones, e.g. using the logical AND or
+      estimating the most likely involvement based on the observations only.
+    vars:
+    - input: data/joined.csv
+    - output: data/enhanced.csv
+    cmd: >
+      python -m lyscripts enhance ${input} ${output} ${data_cleaning_modalities}
+    deps:
+    - ${input}
+    params:
+    - modalities
+    outs:
+    - ${output}
+
+  clean:
+    wdir: ..
+    desc:
+      Transform the lyDATA/LyProX files into CSVs that the lymph model consumes.
+      This largerly amounts to discarding data the model cannot (yet) use. Also,
+      data for the `Unilateral` model class expect only two header rows, while
+      instances of the classes `Bilateral` and `MidlineBilateral` expect three.
+    vars:
+    - input: data/enhanced.csv
+    cmd: python -m lyscripts clean ${input} ${general.data}
+    deps:
+    - ${input}
+    params:
+    - model.class
+    outs:
+    - ${general.data}
+
+  sampling:
+    wdir: ..
+    desc:
+      Perform full sampling round and output the autocorrelation times
+      to the `plots` folder. If the `--ti` option is given, perform thermodynamic
+      integration (TI).
+    cmd: >
+      python -m lyscripts.sample ${general.data} ${general.samples}
+      --plots ${general.plots_dir}/sampling
+      ${inference_modalities}
+      --ti
+    deps:
+    - ${general.data}
+    params:
+    - graph
+    - model
+    - sampling
+    - modalities
+    plots:
+    - ${general.plots_dir}/sampling/accept_rates.csv:
+        x: x
+        y: accept_rates
+    - ${general.plots_dir}/sampling/acor_times.csv:
+        x: x
+        y: acor_times
+    outs:
+    - ${general.samples}
+
+  evaluate:
+    wdir: ..
+    desc:
+      Compute metrics for model evaluation and comparison. The metrics that are
+      produced here include the Bayesian information criterion (BIC), the maximum
+      and mean log likelihood (the latter being a measure of accuracy) and - if TI
+      was performed - it outputs the evidence by integrating said accuracy over the
+      inverse temparature ladder.
+    cmd: >
+      python -m lyscripts evaluate ${general.data} ${general.samples}
+      --metrics ${general.metrics}
+      --plots ${general.plots_dir}/ti/accuracies.csv
+    params:
+    - graph
+    - model
+    - modalities
+    - sampling
+    deps:
+    - ${general.data}
+    - ${general.samples}
+    plots:
+    - ${general.plots_dir}/ti/accuracies.csv:
+        x: β
+        y: accuracy
+    metrics:
+    - ${general.metrics}
+
+  plot-corner:
+    wdir: ..
+    desc: Create a corner plot of the last set of drawn samples.
+    cmd: >
+      python -m lyscripts plot corner
+      ${general.samples}
+      ${general.plots_dir}/corner.png
+    deps:
+    - ${general.samples}
+    plots:
+    - ${general.plots_dir}/corner.png
+
+  predict-risks:
+    wdir: ..
+    desc:
+      Compute risk predictions for all the scenarios defined in the `params.yaml`
+      file and store them in an HDF5 file.
+    cmd: >
+      python -m lyscripts predict risks
+      ${general.samples}
+      ${general.risks}
+    deps:
+    - ${general.samples}
+    params:
+    - graph
+    - model
+    - risks
+    outs:
+    - ${general.risks}
+
+  predict-prevalences:
+    wdir: ..
+    desc:
+      Compute prevalences for all the scenarios defined in the `params.yaml`
+      file, compare it to the data prevalence of the same scenario and store the
+      results in an HDF5 file.
+    cmd: >
+      python -m lyscripts predict prevalences
+      ${general.samples}
+      ${general.data}
+      ${general.prevalences}
+    deps:
+    - ${general.samples}
+    - ${general.data}
+    params:
+    - graph
+    - model
+    - prevalences
+    outs:
+    - ${general.prevalences}
