@@ -1,0 +1,27 @@
+schema: '2.0'
+stages:
+  mermaid-md:
+    cmd: "dvc dag pipeline/dvc.yaml --full --mermaid --md | sed 's/pipeline\\/dvc.yaml://'\
+      \ >> dag.md\n"
+    outs:
+    - path: dag.md
+      md5: 7123bd4b2ad25d81b5aec85e01808e3d
+      size: 448
+  mermaid-png:
+    cmd: ./node_modules/.bin/mmdc -i dag.md -o dag.png && mv dag-1.png dag.png
+    deps:
+    - path: dag.md
+      md5: 7123bd4b2ad25d81b5aec85e01808e3d
+      size: 448
+    outs:
+    - path: dag.png
+      md5: 1a6fa55acf462f16f4b12124c9488c69
+      size: 36101
+  requirements:
+    cmd: pip freeze > frozen.txt
+    outs:
+    - path: frozen.txt
+      md5: 7f7f848acdc91c99e6c3297e7134e57c
+      size: 2152
+  pipeline:
+    cmd: dvc repro pipeline/dvc.yaml
