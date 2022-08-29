@@ -19,13 +19,14 @@ The commands that DVC aims to chain together into a reproducible pipeline are la
 
 If you want to reproduce our work, then follow these steps:
 
-1. clone this repository using `git clone https://github.com/rmnldwg/lynference.git`
-2. enter the repo locally via `cd lynference`
-3. checkout the commit that corresponds to the pipeline run you would like to reproduce, e.g. `git checkout <ref>`, where `<ref>` can be any git reference like a git tag or a commit hash
-4. create a virtual environment, e.g. using `python3 -m venv .venv`
-5. activate that virtual environment: `source .venv/bin/activate`
-6. install the requirements with `pip install -r frozen.txt`
-7. and finally, run the pipeline with `dvc repro pipeline`
+1. Clone this repository using `git clone https://github.com/rmnldwg/lynference.git`
+2. Enter the repo locally via `cd lynference`
+3. Checkout the version of the repository that corresponds to the pipeline run you would like to reproduce, e.g. `git checkout <ref>`, where `<ref>` can be any git reference like a git tag or a commit hash
+4. Create a virtual environment, e.g. using `python3 -m venv .venv`
+5. Activate that virtual environment: `source .venv/bin/activate`
+6. (Optional but recommended) Update the package manager with `pip install -U pip setuptools`
+7. Install the requirements with `pip install -r frozen.txt`
+8. And finally, run the pipeline with `dvc repro pipeline`
 
 It could now take a while to run everything, but the programs that are being executed should keep you updated about its progress.
 
@@ -41,17 +42,17 @@ Here's a little overview over this repository's contents and what they do:
 
 The `dvc.yaml` _inside_ the `pipeline` folder defines the commands that should be run to reproduce the pipeline. It also defines what each command depends on (input files and parameters/settings) and what it outputs. In this way, it can connect the individual stages into a _directed acyclic graph_ (DAG), which is displayed at the top for the current pipeline.
 
-The `dvc.yaml` at the root of the repository does some additional stuff like creating a visual representation of the mentiond DAG and - more importantly - export the current python environment into a `frozen.txt` file. However, running this requires additional dependencies, which are not explained here.
+The `dvc.yaml` at the root of the repository does some additional stuff like creating a visual representation of the mentiond DAG and - more importantly - export the current python environment into a `frozen.txt` file. However, running this requires additional dependencies and it is reallz onlz necessarz, when _creating_ a pipeline.
 
 Look at the files and the desciptions we have put at each stage to get an idea of what happens there.
 
-There's also a `dvc.lock` file, which is automatically managed by DVC. It's best not to change anything there.
+⚠️ **Warning:** Leave the `dvc.lock` file unchanged, it is managed by DVC.
 
 ### 📄 `params.yaml`
 
-This is a configuration file that defines parameters and settings for the individual stages in the pipeline. Almost all the scripts in the `lyscripts` repository take a `--params` argument and use some keys and values defined there.
+This is a configuration file that defines parameters and settings for the individual stages in the pipeline. Almost all the scripts in the `lyscripts` repository take a `--params` argument where this file is passed and use some keys and values defined there.
 
-Again, in this file you should see some comments that explain what the repsective entries do.
+We have put extensive comments in that file that explain what each entry there does.
 
 ### 📄 `requirements.txt` and 📄 `frozen.txt`
 
