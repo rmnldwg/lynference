@@ -127,3 +127,23 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# vs code
+.vscode
+
+# Windows
+*:Zone.Identifier
+~$*
+
+# npm
+/node_modules
+/dag.mermaid
+
+# DVC
+/metrics.json
+models/
+plots/
+dvc_plots/
+/evidence.json
+/model.hdf5
+/data.csv
