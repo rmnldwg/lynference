@@ -33,7 +33,22 @@ stages:
       blank new virtual environment to get exactly the setup that was used to obtain
       these results.
     always_changed: true
-    cmd: pip freeze > frozen.txt
+    cmd: pip freeze | grep -v "pkg_resources" > frozen.txt
     outs:
     - frozen.txt:
         cache: false
+
+  remote:
+    desc:
+      Push all produced files to an adjacent directory from which a zipped version can
+      be added to the release on GitHub.
+    cmd: >
+      rm -rf ../lynference.dvc &&
+      mkdir ../lynference.dvc &&
+      dvc remote add --force local ../lynference.dvc &&
+      dvc push -r local
+    deps:
+    - ./data
+    - ./models
+    - ./plots
+    - metrics.json

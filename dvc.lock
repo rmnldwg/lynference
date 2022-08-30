@@ -5,23 +5,42 @@ stages:
       \ >> dag.md\n"
     outs:
     - path: dag.md
-      md5: 7123bd4b2ad25d81b5aec85e01808e3d
-      size: 448
+      md5: 0e102d9fef8528a0f1c9237a88585990
+      size: 627
   mermaid-png:
     cmd: ./node_modules/.bin/mmdc -i dag.md -o dag.png && mv dag-1.png dag.png
     deps:
     - path: dag.md
-      md5: 7123bd4b2ad25d81b5aec85e01808e3d
-      size: 448
+      md5: 0e102d9fef8528a0f1c9237a88585990
+      size: 627
     outs:
     - path: dag.png
-      md5: 1a6fa55acf462f16f4b12124c9488c69
-      size: 36101
+      md5: 9b920b0d09f5af78af6ec70df5627613
+      size: 53538
   requirements:
-    cmd: pip freeze > frozen.txt
+    cmd: pip freeze | grep -v "pkg_resources" > frozen.txt
     outs:
     - path: frozen.txt
-      md5: 7f7f848acdc91c99e6c3297e7134e57c
-      size: 2152
+      md5: da890077f75d9475d1c97d0be113574a
+      size: 1985
   pipeline:
     cmd: dvc repro pipeline/dvc.yaml
+  remote:
+    cmd: "rm -rf ../lynference.dvc && mkdir ../lynference.dvc && dvc remote add --force\
+      \ local ../lynference.dvc && dvc push -r local\n"
+    deps:
+    - path: ./data
+      md5: 76cd576de039b38ce48cead4ccd8e0e2.dir
+      size: 1236427
+      nfiles: 8
+    - path: ./models
+      md5: 2de00d55824608007ae9c4c0a5a848e6.dir
+      size: 231088736
+      nfiles: 3
+    - path: ./plots
+      md5: 011e4a96454870412de32b928bf1b3d8.dir
+      size: 14812634
+      nfiles: 5
+    - path: metrics.json
+      md5: 6c207aeb828e3c076276cda79b2e79e3
+      size: 159

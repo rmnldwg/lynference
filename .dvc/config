@@ -2,3 +2,5 @@
     remote = onedrive
 ['remote "onedrive"']
     url = /mnt/c/Users/roman/OneDrive - USZ/lynference.dvc
+['remote "local"']
+    url = ../../lynference.dvc
