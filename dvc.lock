@@ -15,8 +15,8 @@ stages:
       size: 627
     outs:
     - path: dag.png
-      md5: 9b920b0d09f5af78af6ec70df5627613
-      size: 53538
+      md5: d8be79c95101abc07603a065817cae27
+      size: 53471
   requirements:
     cmd: pip freeze | grep -v "pkg_resources" > frozen.txt
     outs:
@@ -34,13 +34,13 @@ stages:
       size: 1236427
       nfiles: 8
     - path: ./models
-      md5: 2de00d55824608007ae9c4c0a5a848e6.dir
-      size: 231088736
+      md5: f5cc948b28399ea7b8eb18be8d3a8a7b.dir
+      size: 176390176
       nfiles: 3
     - path: ./plots
-      md5: 011e4a96454870412de32b928bf1b3d8.dir
-      size: 14812634
+      md5: 3f72f04ccfdff2013a1c946d39138237.dir
+      size: 9836979
       nfiles: 5
     - path: metrics.json
-      md5: 6c207aeb828e3c076276cda79b2e79e3
-      size: 159
+      md5: 46e822e714112fe26083f82c3e34f35e
+      size: 160
