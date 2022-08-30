@@ -50,27 +50,27 @@ stages:
           - 1.0
     outs:
     - path: data/enhanced.csv
-      md5: 81553b118186ac67a1c4c25a9eaffe14
+      md5: a77e6a86b26d14410523e5aab9810f2d
       size: 375364
   clean:
     cmd: python -m lyscripts clean data/enhanced.csv data/cleaned.csv
     deps:
     - path: data/enhanced.csv
-      md5: 81553b118186ac67a1c4c25a9eaffe14
+      md5: a77e6a86b26d14410523e5aab9810f2d
       size: 375364
     params:
       params.yaml:
         model.class: MidlineBilateral
     outs:
     - path: data/cleaned.csv
-      md5: 502b9d327e052d93cbc219c25e8c9643
+      md5: 06b0d7f0b34ba2411a283afe3cf7e135
       size: 300071
   sampling:
     cmd: "python -m lyscripts.sample data/cleaned.csv models/samples.hdf5 --plots\
       \ plots/sampling --modalities 'max_llh' --ti\n"
     deps:
     - path: data/cleaned.csv
-      md5: 502b9d327e052d93cbc219c25e8c9643
+      md5: 06b0d7f0b34ba2411a283afe3cf7e135
       size: 300071
     params:
       params.yaml:
@@ -199,19 +199,19 @@ stages:
             rel_acor_threshold: 0.075
     outs:
     - path: models/samples.hdf5
-      md5: 7cf7745aa43b8fe7d2970c7df0fdb7cd
+      md5: fc4fb6013b57c1a5b1198f51a8d3781b
       size: 228829088
     - path: plots/sampling/accept_rates.csv
-      md5: 0e23e568c2e862577d8540c5ddea7165
-      size: 2383
+      md5: 0defc3803dad342afc7f0f410cbd69a6
+      size: 2351
     - path: plots/sampling/acor_times.csv
-      md5: 52e79e33d74d3ac61cbb4d22f0dfe70d
-      size: 2440
+      md5: ba3562db2642efd6383f248a41038ff1
+      size: 2441
   predict-risks:
     cmd: "python -m lyscripts predict risks models/samples.hdf5 models/risks.hdf5\n"
     deps:
     - path: models/samples.hdf5
-      md5: 7cf7745aa43b8fe7d2970c7df0fdb7cd
+      md5: fc4fb6013b57c1a5b1198f51a8d3781b
       size: 228829088
     params:
       params.yaml:
@@ -493,17 +493,17 @@ stages:
           invert: false
     outs:
     - path: models/risks.hdf5
-      md5: 151e57a4f9860bbf03a1c4c5ee791ffd
+      md5: f04bb0fbcfbac31c59ef33c873a5b493
       size: 1279800
   evaluate:
     cmd: "python -m lyscripts evaluate data/cleaned.csv models/samples.hdf5 --metrics\
       \ metrics.json --plots plots/ti/accuracies.csv\n"
     deps:
     - path: data/cleaned.csv
-      md5: 502b9d327e052d93cbc219c25e8c9643
+      md5: 06b0d7f0b34ba2411a283afe3cf7e135
       size: 300071
     - path: models/samples.hdf5
-      md5: 7cf7745aa43b8fe7d2970c7df0fdb7cd
+      md5: fc4fb6013b57c1a5b1198f51a8d3781b
       size: 228829088
     params:
       params.yaml:
@@ -564,7 +564,7 @@ stages:
           - 0.0
           - 1.0076210988534706e-09
           - 3.224387516331105e-08
-          - 2.448519270213932e-07
+          - 2.448519270213933e-07
           - 1.031804005225953e-06
           - 3.148815933917096e-06
           - 7.835261664684588e-06
@@ -632,20 +632,20 @@ stages:
             rel_acor_threshold: 0.075
     outs:
     - path: metrics.json
-      md5: 345d468bdc59bec7e809bf65f816a6c3
-      size: 160
+      md5: 6c207aeb828e3c076276cda79b2e79e3
+      size: 159
     - path: plots/ti/accuracies.csv
-      md5: 11f28cf6f12c6d8fae4cc9ab79eacd45
-      size: 3723
+      md5: 51d65e3eff5c352a14f5b4471d559f90
+      size: 3731
   predict-prevalences:
     cmd: "python -m lyscripts predict prevalences models/samples.hdf5 data/cleaned.csv\
       \ models/prevalences.hdf5\n"
     deps:
     - path: data/cleaned.csv
-      md5: 502b9d327e052d93cbc219c25e8c9643
+      md5: 06b0d7f0b34ba2411a283afe3cf7e135
       size: 300071
     - path: models/samples.hdf5
-      md5: 7cf7745aa43b8fe7d2970c7df0fdb7cd
+      md5: fc4fb6013b57c1a5b1198f51a8d3781b
       size: 228829088
     params:
       params.yaml:
@@ -793,15 +793,15 @@ stages:
           invert: false
     outs:
     - path: models/prevalences.hdf5
-      md5: d4fbe2dfcf2c8921a165ff14f69b3e93
+      md5: f5df7dddae40020e8945795caa1fb6a7
       size: 979848
   plot-corner:
     cmd: "python -m lyscripts plot corner models/samples.hdf5 plots/corner.png\n"
     deps:
     - path: models/samples.hdf5
-      md5: 7cf7745aa43b8fe7d2970c7df0fdb7cd
+      md5: fc4fb6013b57c1a5b1198f51a8d3781b
       size: 228829088
     outs:
     - path: plots/corner.png
-      md5: bf0100c5147776e7698e6b36f36eebde
-      size: 8024334
+      md5: d663f71ef1fe8fd147a5ccb1fac2f60b
+      size: 8019702
