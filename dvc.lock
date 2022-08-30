@@ -30,17 +30,17 @@ stages:
       \ local ../lynference.dvc && dvc push -r local\n"
     deps:
     - path: ./data
-      md5: 76cd576de039b38ce48cead4ccd8e0e2.dir
+      md5: 56115b817e86aba757ea916716f46d5a.dir
       size: 1236427
       nfiles: 8
     - path: ./models
-      md5: f5cc948b28399ea7b8eb18be8d3a8a7b.dir
-      size: 176390176
+      md5: e8aa906f49b80e49771df9dfdca073ea.dir
+      size: 163950336
       nfiles: 3
     - path: ./plots
-      md5: 3f72f04ccfdff2013a1c946d39138237.dir
-      size: 9836979
+      md5: 4495991b7ef0de42d66109bd93b60113.dir
+      size: 7760387
       nfiles: 5
     - path: metrics.json
-      md5: 46e822e714112fe26083f82c3e34f35e
-      size: 160
+      md5: 20e2efb932ed6b11e53bdf5fe0486cfd
+      size: 162
