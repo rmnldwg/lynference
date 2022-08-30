@@ -151,7 +151,7 @@ Look at the files and the descriptions we have put at each stage to get an idea 
 
 ### 📄 `params.yaml`
 
-This is a configuration file that defines parameters and settings for the individual stages in the pipeline. Almost all the scripts in the `lyscripts` repository take a `--params` argument where this file is passed and use some keys and values defined there.
+This is a configuration file that defines parameters and settings for the individual stages in the pipeline. Almost all the scripts in the [`lyscripts`] repository take a `--params` argument where this file is passed and use some keys and values defined there.
 
 We have put extensive comments in that file that explain what each entry there does.
 
