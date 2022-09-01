@@ -1,13 +1,23 @@
+# `lynference`
 
 ![pipeline](./dag.png)
 
-## What is **`lynference`**?
+## Content
+
+1. [What is this about?](#what-is-this-about)
+2. [How to reproduce a pipeline](#how-to-reproduce-a-pipeline)
+3. [Releases](#releases)
+4. [Navigating the repo](#navigating-the-repo)
+5. [Roadmap](#roadmap)
+6. [Contact us](#anything-unclear)
+
+## What is this about?
 
 It is a repository that aims at making our research (modelling lymphatic cancer progression in head & neck cancer) completely reproducible. It essentially stores the pipelines we have created persistently. These pipelines include the data pre-processing, inference, evaluation and prediction.
 
 The pipelines stored here largely depend on three other repositories:
 
-1. The [`lymph`] repository, where we develop the mathematical model in the form of a Python library. **If you want to learn more about how we model the lymphatic spread of head & neck cancer, you can find more info in this repository**
+1. The [`lymph`] repository, where we develop the mathematical model in the form of a Python library. If you want to learn more about how we model the lymphatic spread of head & neck cancer, you can find more info in this repository.
 2. [`lyDATA`], a repository that makes data on the patterns of lymphatic progression publicly available. This means we publish (anonymized) patient data here that details where in their lymphatic system the respective patient had lymph node metastases. The info over there is less mathematical and more clinical.
 3. A command line tool [`lyscripts`] tailored to the specific purposes and use cases within the pipelines published here.
 
@@ -83,13 +93,11 @@ and then delete it
 rm -rf lynference
 ```
 
-## Branching model
+## Releases
 
-On our `main` branch we aim to always only publish tagged, working and reproducible pipelines and create [releases] from them, which may at some point also be stored on platforms like [zenodo] to make them citeable and even more persistent.
+If you want to see a list of pipelines we have published so far, head over to the [releases] on GitHub. Every successful run of a pipeline will be published as a release, alongside a ZIP file containing a [DVC] remote for that exact run. [Read here](https://dvc.org/doc/command-reference/remote#remote) how to use it to fetch the data from it.
 
-So, if you want to see a list of pipelines we have published so far, head over to the [releases] on GitHub. Every run of a pipeline will be published as a release, alongside a ZIP file containing a [DVC] remote for that exact run.
-
-The development of these pipelines happens in dedicated `pipeline-xyz` branches, which might reflect unfinished stages of a pipeline, where parts crash or where we still figure out some parameters.
+The development of these pipelines might happen in dedicated `pipeline-xyz` branches, which may reflect unfinished stages of a pipeline, where parts crash or where we still figure out some parameters.
 
 ## Navigating the repo
 
@@ -119,7 +127,7 @@ The `requirements.txt` file is only used by us during development.
 
 ### 📁 data
 
-When you first clone the repository, this does not contain any data. Only two `.dvc` files. The command `dvc update <path-to-file>` [DVC] sets out and tries to get the actual data from the location defined in these `.dvc` files. In this case, they are fetched from the [`lyDATA`] repository.
+When you first clone the repository, this does not contain any data. Only two `.dvc` files. When issuing the command `dvc update` in [step 3](#3-get-the-raw-data), [DVC] sets out and tries to get the actual data from the location defined in these `.dvc` files. In this case, they are fetched from the [`lyDATA`] repository.
 
 ### 📁 models
 
@@ -130,6 +138,14 @@ Essentially, all computationally intensive results are stored here from which pl
 ### 📁 plots
 
 This stores both data series (e.g. as CSV files) and images of plots which are created during the pipeline run. Some of them serve as checks to ensure everything went smoothly during the computations.
+
+## Roadmap
+
+We are aware that there is still work to do to make this more reproducible.
+
+For instance, we did not manage yet to make the pipeline _fully_ deterministic. E.g., it seems at least one library we use does not respect numpy's random number generator. But we _can_ guarantee that the end results are all within narrow margins, even if they are rerun from scratch
+
+Also the way to set up the Python environment isn't super user-friendly yet. The gold standard is of course a docker container, but we didn't get to that yet.
 
 ## Anything unclear?
 
