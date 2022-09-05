@@ -8,16 +8,15 @@ We are researchers in the field of medical physics and want to predict how cance
 
 In the following we will explain, how it all works and what you have to do to obtain/reproduce our results.
 
-
 ## Content
 
-1. [⚙️ Requirements](#⚙️-requirements)
-2. [⬇️ Download Data](#⬇️-download-data)
-3. [♻️ Reproduce a Pipeline](#♻️-reproduce-a-pipeline)
-4. [📦 Releases](#📦-releases)
-5. [🧭 Navigating the repo](#🧭-navigating-the-repo)
-6. [🔜 Roadmap](#🔜-roadmap)
-7. [✉️ Contact us](#✉️-anything-unclear)
+1. [⚙️ Requirements](#%EF%B8%8F-requirements)
+2. [⬇️ Download Data](#%EF%B8%8F-download-data)
+3. [♻️ Reproduce a Pipeline](#%EF%B8%8F-reproduce-a-pipeline)
+4. [📦 Releases](#-releases)
+5. [🧭 Navigating the repo](#-navigating-the-repo)
+6. [🔜 Roadmap](#-roadmap)
+7. [✉️ Contact us](#%EF%B8%8F-anything-unclear)
 
 ## ⚙️ Requirements
 
@@ -69,7 +68,7 @@ dvc get https://github.com/rmnldwg/lynference --rev 123456 models/samples.hdf5
 
 ## ♻️ Reproduce a Pipeline
 
-[DVC] makes pipelines persistent using *pipeline file* (like the `dvc.yaml` at the root and the one inside the `pipeline` directory) that detail how [DVC] should execute various commands and how they depend on each other. After a successful run of a pipeline, [DVC] stores the MD5 hashes of all produced files in the `dvc.lock` file. This allows us to store the data - which may be binary and/or very large - to be stored elsewhere, while [DVC] will still know how to find it.
+[DVC] makes pipelines persistent using *pipeline files* (like the `dvc.yaml` at the root and the one inside the `pipeline` directory) that detail how [DVC] should execute various commands and how they depend on each other. After a successful run of a pipeline, [DVC] stores the MD5 hashes of all produced files in the `dvc.lock` file. This allows us to store the data - which may be binary and/or very large - to be stored elsewhere, while [DVC] will still know how to find it.
 
 To reproduce a pipeline, follow these steps:
 
@@ -133,6 +132,9 @@ rm -rf lynference
 If you want to see a list of pipelines we have published so far, head over to the [releases] on GitHub. Every successful run of a pipeline will be published as a release, alongside a ZIP file containing a [DVC] remote for that exact run. [Read here](https://dvc.org/doc/command-reference/remote#remote) how to use it to fetch the data from it.
 
 The development of these pipelines might happen in dedicated `pipeline-xyz` branches, which may reflect unfinished stages of a pipeline, where parts crash or where we still figure out some parameters.
+
+| [back to 🔝](#lynference) |
+| ------------------------- |
 
 ## 🧭 Navigating the repo
 
@@ -210,3 +212,11 @@ If there are still unanswered questions regarding this work, don't hesitate to �
 [`midline-without-mixing-v1`]: https://github.com/rmnldwg/lynference/releases/tags/midline-without-mixing-v1
 [zenodo]: https://zenodo.org
 [releases]: https://github.com/rmnldwg/lynference/releases
+
+## References
+
+<a id="1">[1]</a>
+Roman Ludwig, B. Pouymayou, P. Balermpas, and J. Unkelbach,
+**A hidden Markov model for lymphatic tumor progression in the head and neck**,
+*Sci Rep*, vol. 11, no. 1, p. 12261, Dec. 2021,
+doi: https://doi.org/10.1038/s41598-021-91544-1.
