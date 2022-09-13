@@ -18,7 +18,7 @@ graph:
     primary: [II, III]
   lnl:
     II: []
-    III: [II]
+    III: []
 
 ########################################################################################
 # Below are some parameters necessary for the model setup:
