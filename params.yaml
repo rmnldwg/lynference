@@ -15,11 +15,10 @@ general:
 # Subsequently, level II spreads to III and III to IV.
 graph:
   tumor:
-    primary: [II, III, IV]
+    primary: [II, III]
   lnl:
     II: [III]
-    III: [IV]
-    IV: []
+    III: []
 
 ########################################################################################
 # Below are some parameters necessary for the model setup:
@@ -27,7 +26,7 @@ model:
   first_binom_prob: 0.3         # defines shape of time prior of first T-stage
   max_t: 10                     # max number of time steps to evolve system
   t_stages: [early, late]       # T-stages to consider in the data
-  class: Bilateral              # model class to use (see `lymph-model` docs)
+  class: Unilateral             # model class to use (see `lymph-model` docs)
   # keyword arguments to pass to the model constructor
   kwargs:
     base_symmetric: false
@@ -169,150 +168,7 @@ sampling:
 # RISKS:
 # Every entry in this array defines a scenario for which the stage
 # `predict-risk` will compute the risks, given a set of samples
-risks:
-# contralateral risk of level II involvement, given...
-# ...a clinical N0 patient (everything looks good on CT)
-- name: contra-II/healthyCT/early/noext
-  involvement:
-    contra: {II: true}
-  given_diagnosis:
-    ipsi:   {II: false, III: false, IV: false}
-    contra: {II: false, III: false, IV: false}
-  given_diagnosis_spsn: [0.76, 0.81]
-  t_stage: early
-  midline_ext: false
-  invert: false
-- name: contra-II/healthyCT/early/ext
-  involvement:
-    contra: {II: true}
-  given_diagnosis:
-    ipsi:   {II: false, III: false, IV: false}
-    contra: {II: false, III: false, IV: false}
-  given_diagnosis_spsn: [0.76, 0.81]
-  t_stage: early
-  midline_ext: true
-  invert: false
-- name: contra-II/healthyCT/late/noext
-  involvement:
-    contra: {II: true}
-  given_diagnosis:
-    ipsi:   {II: false, III: false, IV: false}
-    contra: {II: false, III: false, IV: false}
-  given_diagnosis_spsn: [0.76, 0.81]
-  t_stage: late
-  midline_ext: false
-  invert: false
-- name: contra-II/healthyCT/late/ext
-  involvement:
-    contra: {II: true}
-  given_diagnosis:
-    ipsi:   {II: false, III: false, IV: false}
-    contra: {II: false, III: false, IV: false}
-  given_diagnosis_spsn: [0.76, 0.81]
-  t_stage: late
-  midline_ext: true
-  invert: false
-
-# ...an involved LNL II ipsilaterally. This is to show how
-# ipsilateral involvement can influence contralateral risk.
-- name: contra-II/ipsi-II-pos/early/noext
-  involvement:
-    contra: {II: true}
-  given_diagnosis:
-    ipsi:   {II: true,  III: false, IV: false}
-    contra: {II: false, III: false, IV: false}
-  given_diagnosis_spsn: [0.76, 0.81]
-  t_stage: early
-  midline_ext: false
-  invert: false
-- name: contra-II/ipsi-II-pos/early/ext
-  involvement:
-    contra: {II: true}
-  given_diagnosis:
-    ipsi:   {II: true,  III: false, IV: false}
-    contra: {II: false, III: false, IV: false}
-  given_diagnosis_spsn: [0.76, 0.81]
-  t_stage: early
-  midline_ext: true
-  invert: false
-- name: contra-II/ipsi-II-pos/late/noext
-  involvement:
-    contra: {II: true}
-  given_diagnosis:
-    ipsi:   {II: true,  III: false, IV: false}
-    contra: {II: false, III: false, IV: false}
-  given_diagnosis_spsn: [0.76, 0.81]
-  t_stage: late
-  midline_ext: false
-  invert: false
-- name: contra-II/ipsi-II-pos/late/ext
-  involvement:
-    contra: {II: true}
-  given_diagnosis:
-    ipsi:   {II: true,  III: false, IV: false}
-    contra: {II: false, III: false, IV: false}
-  given_diagnosis_spsn: [0.76, 0.81]
-  t_stage: late
-  midline_ext: true
-  invert: false
-
-# see how the ipsilateral risk for involvement worsens
-# the more severe the diagnose gets.
-- name: ipsi-IV/all-neg/early/ext
-  label: healthy CT
-  involvement:
-    ipsi: {IV: true}
-  given_diagnosis:
-    ipsi:   {II: false, III: false, IV: false}
-    contra: {II: false, III: false, IV: false}
-  given_diagnosis_spsn: [0.76, 0.81]
-  t_stage: early
-  midline_ext: true
-  invert: false
-- name: ipsi-IV/ipsi-II-pos/early/ext
-  label: ipsi II suspicious
-  involvement:
-    ipsi: {IV: true}
-  given_diagnosis:
-    ipsi:   {II: true,  III: false, IV: false}
-    contra: {II: false, III: false, IV: false}
-  given_diagnosis_spsn: [0.76, 0.81]
-  t_stage: early
-  midline_ext: true
-  invert: false
-- name: ipsi-IV/ipsi-II-III-pos/late/noext
-  label: ipsi II & III suspicious
-  involvement:
-    ipsi: {IV: true}
-  given_diagnosis:
-    ipsi:   {II: true,  III: true , IV: false}
-    contra: {II: false, III: false, IV: false}
-  given_diagnosis_spsn: [0.76, 0.81]
-  t_stage: late
-  midline_ext: false
-  invert: false
-- name: ipsi-IV/ipsi-all-pos/late/ext
-  label: all ipsi LNLs suspicious
-  involvement:
-    ipsi: {IV: true}
-  given_diagnosis:
-    ipsi:   {II: true,  III: true , IV: true }
-    contra: {II: false, III: false, IV: false}
-  given_diagnosis_spsn: [0.76, 0.81]
-  t_stage: late
-  midline_ext: true
-  invert: false
-- name: ipsi-IV/all-pos/late/ext
-  label: ipsi & contra all LNLs suspicious
-  involvement:
-    ipsi: {IV: true}
-  given_diagnosis:
-    ipsi:   {II: true,  III: true , IV: true }
-    contra: {II: true , III: true , IV: true }
-  given_diagnosis_spsn: [0.76, 0.81]
-  t_stage: late
-  midline_ext: true
-  invert: false
+risks: []
 
 ########################################################################################
 # PREVALENCES:
@@ -322,86 +178,58 @@ risks:
 # diagnostic modality. It can, however, be compared to the prevalence
 # in the data.
 prevalences:
-- name: contra/early/noext
+- name: healthy/early
   pattern:
-    contra: {II: false,  III: false, IV: false}
-  modality: max_llh
-  modality_spsn: [1.0, 1.0]
-  t_stage: early
-  midline_ext: false
-  invert: true
-- name: contra/early/ext
-  pattern:
-    contra: {II: false,  III: false, IV: false}
-  modality: max_llh
-  modality_spsn: [1.0, 1.0]
-  t_stage: early
-  midline_ext: true
-  invert: true
-- name: contra/late/noext
-  pattern:
-    contra: {II: false,  III: false, IV: false}
-  modality: max_llh
-  modality_spsn: [1.0, 1.0]
-  t_stage: late
-  midline_ext: false
-  invert: true
-- name: contra/late/ext
-  pattern:
-    contra: {II: false,  III: false, IV: false}
-  modality: max_llh
-  modality_spsn: [1.0, 1.0]
-  t_stage: late
-  midline_ext: true
-  invert: true
-
-# Prevalences of ipsilateral levels (early)
-- name: ipsiII/early
-  label: LNL II
-  pattern:
-    ipsi: {II: true}
+    ipsi: {II: false, III: false}
   modality: max_llh
   modality_spsn: [1.0, 1.0]
   t_stage: early
   invert: false
-- name: ipsiIII/early
-  label: LNL III
+- name: healthy/late
   pattern:
-    ipsi: {III: true}
-  modality: max_llh
-  modality_spsn: [1.0, 1.0]
-  t_stage: early
-  invert: false
-- name: ipsiIV/early
-  label: LNL IV
-  pattern:
-    ipsi: {IV: true}
-  modality: max_llh
-  modality_spsn: [1.0, 1.0]
-  t_stage: early
-  invert: false
-
-# Prevalences of ipsilateral levels (late)
-- name: ipsiII/late
-  label: LNL II
-  pattern:
-    ipsi: {II: true}
+    ipsi: {II: false, III: false}
   modality: max_llh
   modality_spsn: [1.0, 1.0]
   t_stage: late
   invert: false
-- name: ipsiIII/late
-  label: LNL III
+- name: II/early
   pattern:
-    ipsi: {III: true}
+    ipsi: {II: true, III: false}
+  modality: max_llh
+  modality_spsn: [1.0, 1.0]
+  t_stage: early
+  invert: false
+- name: II/late
+  pattern:
+    ipsi: {II: true, III: false}
   modality: max_llh
   modality_spsn: [1.0, 1.0]
   t_stage: late
   invert: false
-- name: ipsiIV/late
-  label: LNL IV
+- name: III/early
   pattern:
-    ipsi: {IV: true}
+    ipsi: {II: false, III: true}
+  modality: max_llh
+  modality_spsn: [1.0, 1.0]
+  t_stage: early
+  invert: false
+- name: III/late
+  pattern:
+    ipsi: {II: false, III: true}
+  modality: max_llh
+  modality_spsn: [1.0, 1.0]
+  t_stage: late
+  invert: false
+- name: both/early
+  pattern:
+    ipsi: {II: true, III: true}
+  modality: max_llh
+  modality_spsn: [1.0, 1.0]
+  t_stage: early
+  invert: false
+- name: both/late
+  pattern:
+    ipsi: {II: true, III: true}
   modality: max_llh
   modality_spsn: [1.0, 1.0]
   t_stage: late
