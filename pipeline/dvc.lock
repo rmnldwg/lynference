@@ -80,9 +80,9 @@ stages:
             - II
             - III
           lnl:
-            II:
-            - III
-            III: []
+            II: []
+            III:
+            - II
         modalities:
           CT:
           - 0.76
@@ -127,9 +127,9 @@ stages:
           temp_schedule:
           - 0.0
           - 1.0076210988534706e-09
-          - 3.224387516331106e-08
-          - 2.448519270213934e-07
-          - 1.031804005225954e-06
+          - 3.224387516331105e-08
+          - 2.448519270213932e-07
+          - 1.031804005225953e-06
           - 3.148815933917096e-06
           - 7.835261664684588e-06
           - 1.6935087808430282e-05
@@ -196,19 +196,19 @@ stages:
             rel_acor_threshold: 0.075
     outs:
     - path: models/samples.hdf5
-      md5: aad28208a5050d69b8968bfe96b123cf
+      md5: 31571f036b33a4780336054f1b53eab0
       size: 51359648
     - path: plots/sampling/accept_rates.csv
-      md5: de15386853f0f9224df59eec830cc3a3
-      size: 2095
+      md5: 095abe572738ea8ab764f8f5e8d9c13e
+      size: 2033
     - path: plots/sampling/acor_times.csv
-      md5: 05f1bbee02146b170acca71eb1844e3c
-      size: 2489
+      md5: a21c5a9906d75b40c803908d1b85eebb
+      size: 2492
   predict-risks:
     cmd: "python -m lyscripts predict risks models/samples.hdf5 models/risks.hdf5\n"
     deps:
     - path: models/samples.hdf5
-      md5: aad28208a5050d69b8968bfe96b123cf
+      md5: 31571f036b33a4780336054f1b53eab0
       size: 51359648
     params:
       params.yaml:
@@ -218,9 +218,9 @@ stages:
             - II
             - III
           lnl:
-            II:
-            - III
-            III: []
+            II: []
+            III:
+            - II
         model:
           first_binom_prob: 0.3
           max_t: 10
@@ -245,7 +245,7 @@ stages:
       md5: 0550ac1f685df7aaa8bc9451d3281468
       size: 155737
     - path: models/samples.hdf5
-      md5: aad28208a5050d69b8968bfe96b123cf
+      md5: 31571f036b33a4780336054f1b53eab0
       size: 51359648
     params:
       params.yaml:
@@ -255,9 +255,9 @@ stages:
             - II
             - III
           lnl:
-            II:
-            - III
-            III: []
+            II: []
+            III:
+            - II
         modalities:
           CT:
           - 0.76
@@ -371,11 +371,11 @@ stages:
             rel_acor_threshold: 0.075
     outs:
     - path: metrics.json
-      md5: 26495107309c81afb412760965a25482
-      size: 158
+      md5: 18790af13f00386c58f1c433ca084b8c
+      size: 157
     - path: plots/ti/accuracies.csv
-      md5: f36c092597e29c0a8cfc40e3b631e244
-      size: 3697
+      md5: 8e9cfb13bf9ba79aef2abcbbaede7257
+      size: 3695
   predict-prevalences:
     cmd: "python -m lyscripts predict prevalences models/samples.hdf5 data/cleaned.csv\
       \ models/prevalences.hdf5\n"
@@ -384,7 +384,7 @@ stages:
       md5: 0550ac1f685df7aaa8bc9451d3281468
       size: 155737
     - path: models/samples.hdf5
-      md5: aad28208a5050d69b8968bfe96b123cf
+      md5: 31571f036b33a4780336054f1b53eab0
       size: 51359648
     params:
       params.yaml:
@@ -394,9 +394,9 @@ stages:
             - II
             - III
           lnl:
-            II:
-            - III
-            III: []
+            II: []
+            III:
+            - II
         model:
           first_binom_prob: 0.3
           max_t: 10
@@ -499,15 +499,15 @@ stages:
           invert: false
     outs:
     - path: models/prevalences.hdf5
-      md5: 37abc7ceae42e369aebd7caf212f5630
+      md5: a7f5ecbb8c29aef6bafd4cfb60ea1bc2
       size: 271048
   plot-corner:
     cmd: "python -m lyscripts plot corner models/samples.hdf5 plots/corner.png\n"
     deps:
     - path: models/samples.hdf5
-      md5: aad28208a5050d69b8968bfe96b123cf
+      md5: 31571f036b33a4780336054f1b53eab0
       size: 51359648
     outs:
     - path: plots/corner.png
-      md5: 32ba842275943bae9e7f63b81316cddf
-      size: 692468
+      md5: e1d28022440dbe1c6b9d36e5ce7a5ff5
+      size: 720036

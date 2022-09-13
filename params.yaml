@@ -17,8 +17,8 @@ graph:
   tumor:
     primary: [II, III]
   lnl:
-    II: [III]
-    III: []
+    II: []
+    III: [II]
 
 ########################################################################################
 # Below are some parameters necessary for the model setup:
