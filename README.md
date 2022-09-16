@@ -240,7 +240,7 @@ If there are still unanswered questions regarding this work, don't hesitate to :
 [zenodo]: https://zenodo.org
 [releases]: https://github.com/rmnldwg/lynference/releases
 
-[up-button]: https://dabuttonfactory.com/button.png?t=back+to+top&f=Roboto-Bold&ts=15&tc=eef&hp=16&vp=5&c=6&bgt=unicolored&bgc=89a
+[up-button]: https://img.shields.io/badge/%E2%96%B2-back%20to%20top-lightgrey
 
 ## References
 
