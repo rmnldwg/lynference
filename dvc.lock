@@ -21,8 +21,8 @@ stages:
     cmd: pip freeze | grep -v "pkg_resources" > frozen.txt
     outs:
     - path: frozen.txt
-      md5: 1f26e280c14010927694b7d4f6a2528c
-      size: 2317
+      md5: ded47b7558da4856aa47562c5a215680
+      size: 2316
   pipeline:
     cmd: dvc repro pipeline/dvc.yaml
   remote:
@@ -30,20 +30,20 @@ stages:
       \ local ../lynference.dvc && dvc push -r local\n"
     deps:
     - path: ./data
-      md5: 31b4ad323efbe8cf9facca68e34e163e.dir
+      md5: ce233cb37eb6f7753bb20a4f11d03a24.dir
       size: 1092093
       nfiles: 8
     - path: ./models
-      md5: 5285be744027f711ddd6d9c3bcfc493e.dir
-      size: 74047656
+      md5: 76d4104411d80b99d8fa46a5d3814364.dir
+      size: 48324736
       nfiles: 3
     - path: ./plots
-      md5: dc28de86c7eed928123665ea999eff09.dir
-      size: 2215228
-      nfiles: 5
+      md5: a56358fc7f289f89ff5cc22cffc0b309.dir
+      size: 5317497
+      nfiles: 4
     - path: metrics.json
-      md5: 15f010186350680a7af51fb56a4725a5
-      size: 157
+      md5: be0a63f8d653a8e343c9dd242af951b6
+      size: 162
   mermaid-readme:
     cmd: cat dag.md | sed 's/^/3i/' | sed -f- README.template > README.md
     deps:
@@ -55,5 +55,5 @@ stages:
       size: 627
     outs:
     - path: README.md
-      md5: ba580ae6a9d5ffc5a372b96f18821a92
-      size: 11360
+      md5: 6a7e55c53c13bc5aaf1dceae5f188370
+      size: 11307

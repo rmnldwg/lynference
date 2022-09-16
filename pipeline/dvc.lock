@@ -1,7 +1,7 @@
 schema: '2.0'
 stages:
   join:
-    cmd: "python -m lyscripts join --inputs data/2021-usz-oropharynx.csv data/2021-clb-oropharynx.csv\
+    cmd: "lyscripts join --inputs data/2021-usz-oropharynx.csv data/2021-clb-oropharynx.csv\
       \ --output data/joined.csv\n"
     deps:
     - path: data/2021-clb-oropharynx.csv
@@ -15,8 +15,8 @@ stages:
       md5: 7992f871b1be0f226a516418a7531892
       size: 307977
   enhance:
-    cmd: "python -m lyscripts enhance data/joined.csv data/enhanced.csv --modalities\
-      \ 'CT' 'MRI' 'PET' 'FNA' 'diagnostic_consensus' 'pathology' 'pCT'\n"
+    cmd: "lyscripts enhance data/joined.csv data/enhanced.csv --modalities 'CT' 'MRI'\
+      \ 'PET' 'FNA' 'diagnostic_consensus' 'pathology' 'pCT'\n"
     deps:
     - path: data/joined.csv
       md5: 7992f871b1be0f226a516418a7531892
@@ -50,40 +50,49 @@ stages:
           - 1.0
     outs:
     - path: data/enhanced.csv
-      md5: a77e6a86b26d14410523e5aab9810f2d
+      md5: 053e113111dc64710916e5446d3d6ba6
       size: 375364
   clean:
-    cmd: python -m lyscripts clean data/enhanced.csv data/cleaned.csv
+    cmd: lyscripts clean data/enhanced.csv data/cleaned.csv
     deps:
     - path: data/enhanced.csv
-      md5: a77e6a86b26d14410523e5aab9810f2d
+      md5: 053e113111dc64710916e5446d3d6ba6
       size: 375364
     params:
       params.yaml:
         model.class: Unilateral
     outs:
     - path: data/cleaned.csv
-      md5: 0550ac1f685df7aaa8bc9451d3281468
+      md5: e275605eda82421e85d10dbd68a26609
       size: 155737
   sampling:
-    cmd: "python -m lyscripts.sample data/cleaned.csv models/samples.hdf5 --plots\
-      \ plots/sampling --modalities 'max_llh' --ti\n"
+    cmd: "lyscripts sample data/cleaned.csv models/samples.hdf5 --plots plots/sampling\
+      \ --pools 0 --modalities 'max_llh'\n"
     deps:
     - path: data/cleaned.csv
-      md5: 0550ac1f685df7aaa8bc9451d3281468
+      md5: e275605eda82421e85d10dbd68a26609
       size: 155737
     params:
       params.yaml:
         graph:
           tumor:
             primary:
+            - I
             - II
             - III
+            - IV
+            - V
+            - VII
           lnl:
+            I: []
             II:
             - III
+            - V
             III:
-            - II
+            - IV
+            IV: []
+            V: []
+            VII: []
         modalities:
           CT:
           - 0.76
@@ -127,68 +136,20 @@ stages:
           thin_by: 5
           temp_schedule:
           - 0.0
-          - 1.0076210988534706e-09
-          - 3.224387516331105e-08
-          - 2.448519270213932e-07
-          - 1.031804005225953e-06
-          - 3.148815933917096e-06
-          - 7.835261664684588e-06
-          - 1.6935087808430282e-05
-          - 3.3017728167230525e-05
-          - 5.949901826619859e-05
-          - 0.00010076210988534707
-          - 0.0001622783855914503
-          - 0.0002507283732699068
-          - 0.0003741226606566017
-          - 0.000541922809869769
-          - 0.0007651622719418543
-          - 0.0010565673013513768
-          - 0.0014306778705547923
-          - 0.001903968584518355
-          - 0.00249496959524998
-          - 0.0032243875163311063
+          - 1.316872427983538e-06
+          - 4.2139917695473246e-05
+          - 0.0003200000000000001
+          - 0.0013484773662551439
           - 0.004115226337448558
-          - 0.00519290833892641
-          - 0.006485395006257844
-          - 0.008023307944637018
-          - 0.009840049793490924
-          - 0.011971925141011254
-          - 0.014458261438686257
-          - 0.01734152991583261
-          - 0.020667466494127266
-          - 0.02448519270213934
-          - 0.02884733658986194
-          - 0.03381015364324406
-          - 0.0394336476987224
-          - 0.045781691857753354
-          - 0.05292214940134466
-          - 0.06092699470458736
-          - 0.06987243415118778
-          - 0.07983902704799936
-          - 0.09091180653955425
-          - 0.1031804005225954
-          - 0.11673915256060852
+          - 0.010240000000000003
+          - 0.022132674897119342
+          - 0.043151275720164604
+          - 0.07775999999999998
           - 0.13168724279835387
-          - 0.14812880887639787
-          - 0.16617306684564512
-          - 0.18593443208187052
-          - 0.207532640200251
-          - 0.231092867969897
-          - 0.2567458542283846
-          - 0.28462802079628763
-          - 0.31488159339170957
-          - 0.34765472254481466
-          - 0.38310160451236014
-          - 0.4213826021922288
-          - 0.46266436603796024
-          - 0.5071199549732823
-          - 0.5549289573066435
-          - 0.6062776116457449
-          - 0.6613589278120725
-          - 0.7203728077554274
-          - 0.7835261664684589
-          - 0.8510330529011965
-          - 0.923114770875582
+          - 0.21208362139917689
+          - 0.3276800000000001
+          - 0.48894551440329226
+          - 0.708245596707819
           - 1.0
           kwargs:
             max_steps: 10000
@@ -197,32 +158,41 @@ stages:
             rel_acor_threshold: 0.075
     outs:
     - path: models/samples.hdf5
-      md5: e84351b4c70b708a4ee2a8a2697a2fa0
-      size: 73711808
+      md5: 2942e68809b0a473d16f326d332cec6f
+      size: 45389688
     - path: plots/sampling/accept_rates.csv
-      md5: 1d6f0a6703584c4c1510a8488d56a78b
-      size: 2081
+      md5: 777253c0f524ceb9c97aa12344327644
+      size: 480
     - path: plots/sampling/acor_times.csv
-      md5: 015a807da4fa8e29143930873de80034
-      size: 2471
+      md5: 6d302ade8bf0b42fc85b6e33506e8db5
+      size: 600
   predict-risks:
-    cmd: "python -m lyscripts predict risks models/samples.hdf5 models/risks.hdf5\n"
+    cmd: "lyscripts predict risks models/samples.hdf5 models/risks.hdf5\n"
     deps:
     - path: models/samples.hdf5
-      md5: e84351b4c70b708a4ee2a8a2697a2fa0
-      size: 73711808
+      md5: 2942e68809b0a473d16f326d332cec6f
+      size: 45389688
     params:
       params.yaml:
         graph:
           tumor:
             primary:
+            - I
             - II
             - III
+            - IV
+            - V
+            - VII
           lnl:
+            I: []
             II:
             - III
+            - V
             III:
-            - II
+            - IV
+            IV: []
+            V: []
+            VII: []
         model:
           first_binom_prob: 0.3
           max_t: 10
@@ -234,33 +204,69 @@ stages:
             base_symmetric: false
             trans_symmetric: true
             use_mixing: true
-        risks: []
+        risks:
+        - name: ipsi-III/involved-II/early
+          involvement:
+            ipsi:
+              II:
+              III: true
+          given_diagnosis:
+            ipsi:
+              II: true
+              III: false
+          given_diagnosis_spsn:
+          - 0.76
+          - 0.81
+          t_stage: early
+          invert: false
+        - name: ipsi-III/involved-II/late
+          involvement:
+            ipsi:
+              II:
+              III: true
+          given_diagnosis:
+            ipsi:
+              II: true
+              III: false
+          given_diagnosis_spsn:
+          - 0.76
+          - 0.81
+          t_stage: late
+          invert: false
     outs:
     - path: models/risks.hdf5
-      md5: 6781e0baec8d65b9a95a3e879a5098d1
-      size: 800
+      md5: e4766c32eaf84e80094b2467b5cc9dac
+      size: 169608
   evaluate:
-    cmd: "python -m lyscripts evaluate data/cleaned.csv models/samples.hdf5 --metrics\
-      \ metrics.json --plots plots/ti/accuracies.csv\n"
+    cmd: "lyscripts evaluate data/cleaned.csv models/samples.hdf5 --metrics metrics.json\n"
     deps:
     - path: data/cleaned.csv
-      md5: 0550ac1f685df7aaa8bc9451d3281468
+      md5: e275605eda82421e85d10dbd68a26609
       size: 155737
     - path: models/samples.hdf5
-      md5: e84351b4c70b708a4ee2a8a2697a2fa0
-      size: 73711808
+      md5: 2942e68809b0a473d16f326d332cec6f
+      size: 45389688
     params:
       params.yaml:
         graph:
           tumor:
             primary:
+            - I
             - II
             - III
+            - IV
+            - V
+            - VII
           lnl:
+            I: []
             II:
             - III
+            - V
             III:
-            - II
+            - IV
+            IV: []
+            V: []
+            VII: []
         modalities:
           CT:
           - 0.76
@@ -304,68 +310,20 @@ stages:
           thin_by: 5
           temp_schedule:
           - 0.0
-          - 1.0076210988534706e-09
-          - 3.224387516331105e-08
-          - 2.448519270213933e-07
-          - 1.031804005225953e-06
-          - 3.148815933917096e-06
-          - 7.835261664684588e-06
-          - 1.6935087808430282e-05
-          - 3.3017728167230525e-05
-          - 5.949901826619859e-05
-          - 0.00010076210988534707
-          - 0.0001622783855914503
-          - 0.0002507283732699068
-          - 0.0003741226606566017
-          - 0.000541922809869769
-          - 0.0007651622719418543
-          - 0.0010565673013513768
-          - 0.0014306778705547923
-          - 0.001903968584518355
-          - 0.00249496959524998
-          - 0.0032243875163311063
+          - 1.316872427983539e-06
+          - 4.2139917695473246e-05
+          - 0.0003200000000000001
+          - 0.0013484773662551439
           - 0.004115226337448558
-          - 0.00519290833892641
-          - 0.006485395006257844
-          - 0.008023307944637018
-          - 0.009840049793490924
-          - 0.011971925141011254
-          - 0.014458261438686257
-          - 0.01734152991583261
-          - 0.020667466494127266
-          - 0.02448519270213934
-          - 0.02884733658986194
-          - 0.03381015364324406
-          - 0.0394336476987224
-          - 0.045781691857753354
-          - 0.05292214940134466
-          - 0.06092699470458736
-          - 0.06987243415118778
-          - 0.07983902704799936
-          - 0.09091180653955425
-          - 0.1031804005225954
-          - 0.11673915256060852
+          - 0.010240000000000003
+          - 0.022132674897119342
+          - 0.043151275720164604
+          - 0.07775999999999998
           - 0.13168724279835387
-          - 0.14812880887639787
-          - 0.16617306684564512
-          - 0.18593443208187052
-          - 0.207532640200251
-          - 0.231092867969897
-          - 0.2567458542283846
-          - 0.28462802079628763
-          - 0.31488159339170957
-          - 0.34765472254481466
-          - 0.38310160451236014
-          - 0.4213826021922288
-          - 0.46266436603796024
-          - 0.5071199549732823
-          - 0.5549289573066435
-          - 0.6062776116457449
-          - 0.6613589278120725
-          - 0.7203728077554274
-          - 0.7835261664684589
-          - 0.8510330529011965
-          - 0.923114770875582
+          - 0.21208362139917689
+          - 0.3276800000000001
+          - 0.48894551440329226
+          - 0.708245596707819
           - 1.0
           kwargs:
             max_steps: 10000
@@ -374,33 +332,38 @@ stages:
             rel_acor_threshold: 0.075
     outs:
     - path: metrics.json
-      md5: 15f010186350680a7af51fb56a4725a5
-      size: 157
-    - path: plots/ti/accuracies.csv
-      md5: 4287abaae406dcacc27fe07f597b3963
-      size: 3695
+      md5: be0a63f8d653a8e343c9dd242af951b6
+      size: 162
   predict-prevalences:
-    cmd: "python -m lyscripts predict prevalences models/samples.hdf5 data/cleaned.csv\
-      \ models/prevalences.hdf5\n"
+    cmd: "lyscripts predict prevalences models/samples.hdf5 data/cleaned.csv models/prevalences.hdf5\n"
     deps:
     - path: data/cleaned.csv
-      md5: 0550ac1f685df7aaa8bc9451d3281468
+      md5: e275605eda82421e85d10dbd68a26609
       size: 155737
     - path: models/samples.hdf5
-      md5: e84351b4c70b708a4ee2a8a2697a2fa0
-      size: 73711808
+      md5: 2942e68809b0a473d16f326d332cec6f
+      size: 45389688
     params:
       params.yaml:
         graph:
           tumor:
             primary:
+            - I
             - II
             - III
+            - IV
+            - V
+            - VII
           lnl:
+            I: []
             II:
             - III
+            - V
             III:
-            - II
+            - IV
+            IV: []
+            V: []
+            VII: []
         model:
           first_binom_prob: 0.3
           max_t: 10
@@ -413,105 +376,348 @@ stages:
             trans_symmetric: true
             use_mixing: true
         prevalences:
-        - name: healthy/early
+        - name: I/early
           pattern:
             ipsi:
-              II: false
-              III: false
+              I: true
           modality: max_llh
           modality_spsn:
           - 1.0
           - 1.0
           t_stage: early
-          invert: false
-        - name: healthy/late
+        - name: InotII/early
           pattern:
             ipsi:
+              I: true
               II: false
-              III: false
           modality: max_llh
           modality_spsn:
           - 1.0
           - 1.0
-          t_stage: late
-          invert: false
+          t_stage: early
+        - name: IandII/early
+          pattern:
+            ipsi:
+              I: true
+              II: true
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: early
         - name: II/early
           pattern:
             ipsi:
               II: true
-              III: false
           modality: max_llh
           modality_spsn:
           - 1.0
           - 1.0
           t_stage: early
-          invert: false
+        - name: IInotI/early
+          pattern:
+            ipsi:
+              I: false
+              II: true
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: early
+        - name: III/early
+          pattern:
+            ipsi:
+              III: true
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: early
+        - name: IV/early
+          pattern:
+            ipsi:
+              IV: true
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: early
+        - name: V/early
+          pattern:
+            ipsi:
+              V: true
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: early
+        - name: VandIII/early
+          pattern:
+            ipsi:
+              III: true
+              V: true
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: early
+        - name: VnotIII/early
+          pattern:
+            ipsi:
+              III: false
+              V: true
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: early
+        - name: VandIV/early
+          pattern:
+            ipsi:
+              IV: true
+              V: true
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: early
+        - name: VnotIV/early
+          pattern:
+            ipsi:
+              IV: false
+              V: true
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: early
+        - name: VII/early
+          pattern:
+            ipsi:
+              VII: true
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: early
+        - name: VIInotII/early
+          pattern:
+            ipsi:
+              II: false
+              VII: true
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: early
+        - name: VIIandII/early
+          pattern:
+            ipsi:
+              II: true
+              VII: true
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: early
+        - name: VIInotIII/early
+          pattern:
+            ipsi:
+              III: false
+              VII: true
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: early
+        - name: VIIandIII/early
+          pattern:
+            ipsi:
+              III: true
+              VII: true
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: early
+        - name: I/late
+          pattern:
+            ipsi:
+              I: true
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: late
+        - name: InotII/late
+          pattern:
+            ipsi:
+              I: true
+              II: false
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: late
+        - name: IandII/late
+          pattern:
+            ipsi:
+              I: true
+              II: true
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: late
         - name: II/late
           pattern:
             ipsi:
               II: true
-              III: false
           modality: max_llh
           modality_spsn:
           - 1.0
           - 1.0
           t_stage: late
-          invert: false
-        - name: III/early
+        - name: IInotI/late
           pattern:
             ipsi:
-              II: false
-              III: true
+              I: false
+              II: true
           modality: max_llh
           modality_spsn:
           - 1.0
           - 1.0
-          t_stage: early
-          invert: false
+          t_stage: late
         - name: III/late
           pattern:
             ipsi:
+              III: true
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: late
+        - name: IV/late
+          pattern:
+            ipsi:
+              IV: true
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: late
+        - name: V/late
+          pattern:
+            ipsi:
+              V: true
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: late
+        - name: VandIII/late
+          pattern:
+            ipsi:
+              III: true
+              V: true
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: late
+        - name: VnotIII/late
+          pattern:
+            ipsi:
+              III: false
+              V: true
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: late
+        - name: VandIV/late
+          pattern:
+            ipsi:
+              IV: true
+              V: true
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: late
+        - name: VnotIV/late
+          pattern:
+            ipsi:
+              IV: false
+              V: true
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: late
+        - name: VII/late
+          pattern:
+            ipsi:
+              VII: true
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: late
+        - name: VIInotII/late
+          pattern:
+            ipsi:
               II: false
-              III: true
+              VII: true
           modality: max_llh
           modality_spsn:
           - 1.0
           - 1.0
           t_stage: late
-          invert: false
-        - name: both/early
+        - name: VIIandII/late
           pattern:
             ipsi:
               II: true
-              III: true
-          modality: max_llh
-          modality_spsn:
-          - 1.0
-          - 1.0
-          t_stage: early
-          invert: false
-        - name: both/late
-          pattern:
-            ipsi:
-              II: true
-              III: true
+              VII: true
           modality: max_llh
           modality_spsn:
           - 1.0
           - 1.0
           t_stage: late
-          invert: false
+        - name: VIInotIII/late
+          pattern:
+            ipsi:
+              III: false
+              VII: true
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: late
+        - name: VIIandIII/late
+          pattern:
+            ipsi:
+              III: true
+              VII: true
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: late
     outs:
     - path: models/prevalences.hdf5
-      md5: 4cd9d0bf5e0661f22aad2043c77d4ca1
-      size: 335048
+      md5: 9a49e7ef412ab6c6542262506b9eb99b
+      size: 2765440
   plot-corner:
-    cmd: "python -m lyscripts plot corner models/samples.hdf5 plots/corner.png\n"
+    cmd: "lyscripts plot corner models/samples.hdf5 plots/corner.png\n"
     deps:
     - path: models/samples.hdf5
-      md5: e84351b4c70b708a4ee2a8a2697a2fa0
-      size: 73711808
+      md5: 2942e68809b0a473d16f326d332cec6f
+      size: 45389688
     outs:
     - path: plots/corner.png
-      md5: c8e457a7c3e7c18570b6d06b178d48ef
-      size: 1157981
+      md5: 04209fb11f5c8b4a6033f8056edf823f
+      size: 5316417
+    - path: plots/corner.svg
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
