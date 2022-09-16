@@ -1,10 +1,4 @@
 stages:
-  pipeline:
-    desc:
-      This command runs the actual pipeline that one would run for reproducing a
-      particular experiment.
-    cmd: dvc repro pipeline/dvc.yaml
-
   mermaid-md:
     desc: Create directed acylic graph of the pipeline as mermaid file.
     always_changed: true
@@ -16,14 +10,14 @@ stages:
     - dag.md:
         cache: false
 
-  mermaid-png:
-    desc: Transform the mermaid file into an image.
-    always_changed: true
-    cmd: ./node_modules/.bin/mmdc -i dag.md -o dag.png && mv dag-1.png dag.png
+  mermaid-readme:
+    desc: Put the mermaid diagram into the README
+    cmd: cat dag.md | sed 's/^/3i/' | sed -f- README.template > README.md
     deps:
     - dag.md
-    plots:
-    - dag.png:
+    - README.template
+    outs:
+    - README.md:
         cache: false
 
   requirements:
