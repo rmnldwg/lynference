@@ -84,9 +84,9 @@ stages:
             - V
             - VII
           lnl:
-            I:
-            - II
+            I: []
             II:
+            - I
             - III
             - V
             III:
@@ -159,19 +159,19 @@ stages:
             rel_acor_threshold: 0.075
     outs:
     - path: models/samples.hdf5
-      md5: 035a1cf72b319c31e1cfa4e03eb26976
+      md5: 189a63f5376e96ce1a524f18c45d7d4a
       size: 3428560
     - path: plots/sampling/accept_rates.csv
-      md5: 7d78c515349b9d935d2ba9748ccbf632
-      size: 917
+      md5: 503da78dea8bcbfedefe890992d3b6e5
+      size: 1159
     - path: plots/sampling/acor_times.csv
-      md5: b9a2c8aacabee03fd797f4f01602670f
-      size: 906
+      md5: af7a79908218fdbd677a9a439340782d
+      size: 1179
   predict-risks:
     cmd: "lyscripts predict risks models/samples.hdf5 models/risks.hdf5\n"
     deps:
     - path: models/samples.hdf5
-      md5: 035a1cf72b319c31e1cfa4e03eb26976
+      md5: 189a63f5376e96ce1a524f18c45d7d4a
       size: 3428560
     params:
       params.yaml:
@@ -185,9 +185,9 @@ stages:
             - V
             - VII
           lnl:
-            I:
-            - II
+            I: []
             II:
+            - I
             - III
             - V
             III:
@@ -246,7 +246,7 @@ stages:
       md5: e275605eda82421e85d10dbd68a26609
       size: 155737
     - path: models/samples.hdf5
-      md5: 035a1cf72b319c31e1cfa4e03eb26976
+      md5: 189a63f5376e96ce1a524f18c45d7d4a
       size: 3428560
     params:
       params.yaml:
@@ -260,9 +260,9 @@ stages:
             - V
             - VII
           lnl:
-            I:
-            - II
+            I: []
             II:
+            - I
             - III
             - V
             III:
@@ -335,8 +335,8 @@ stages:
             rel_acor_threshold: 0.075
     outs:
     - path: metrics.json
-      md5: 0e00f224f9b2d5fe234fb7035b9fe82b
-      size: 93
+      md5: 2a49f393ca4f098af02d0041f7e80e0f
+      size: 92
   predict-prevalences:
     cmd: "lyscripts predict prevalences models/samples.hdf5 data/cleaned.csv models/prevalences.hdf5\n"
     deps:
@@ -344,7 +344,7 @@ stages:
       md5: e275605eda82421e85d10dbd68a26609
       size: 155737
     - path: models/samples.hdf5
-      md5: 035a1cf72b319c31e1cfa4e03eb26976
+      md5: 189a63f5376e96ce1a524f18c45d7d4a
       size: 3428560
     params:
       params.yaml:
@@ -358,9 +358,9 @@ stages:
             - V
             - VII
           lnl:
-            I:
-            - II
+            I: []
             II:
+            - I
             - III
             - V
             III:
@@ -478,18 +478,18 @@ stages:
           t_stage: late
     outs:
     - path: models/prevalences.hdf5
-      md5: b2cc08fdab5d60b8f626ae42e30fd1a8
+      md5: 2897f2a2e9abcd3bd1ee64b77f08e01a
       size: 896872
   plot-corner:
     cmd: "lyscripts plot corner models/samples.hdf5 plots/corner.png\n"
     deps:
     - path: models/samples.hdf5
-      md5: 035a1cf72b319c31e1cfa4e03eb26976
+      md5: 189a63f5376e96ce1a524f18c45d7d4a
       size: 3428560
     outs:
     - path: plots/corner.png
-      md5: 29d30cab3d31edb029a664b8eeeac215
-      size: 5693334
+      md5: 55a3de0279cf3d91e0470e2acb4bbbc5
+      size: 6192838
     - path: plots/corner.svg
-      md5: 06f8e463a00b84e249c02ff44d2589e8
-      size: 5738482
+      md5: 0154d88a747bfb122f0ae3513f35c650
+      size: 5889842
