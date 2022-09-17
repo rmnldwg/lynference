@@ -84,7 +84,8 @@ stages:
             - V
             - VII
           lnl:
-            I: []
+            I:
+            - II
             II:
             - III
             - V
@@ -158,20 +159,20 @@ stages:
             rel_acor_threshold: 0.075
     outs:
     - path: models/samples.hdf5
-      md5: 2942e68809b0a473d16f326d332cec6f
-      size: 45389688
+      md5: 035a1cf72b319c31e1cfa4e03eb26976
+      size: 3428560
     - path: plots/sampling/accept_rates.csv
-      md5: 777253c0f524ceb9c97aa12344327644
-      size: 480
+      md5: 7d78c515349b9d935d2ba9748ccbf632
+      size: 917
     - path: plots/sampling/acor_times.csv
-      md5: 6d302ade8bf0b42fc85b6e33506e8db5
-      size: 600
+      md5: b9a2c8aacabee03fd797f4f01602670f
+      size: 906
   predict-risks:
     cmd: "lyscripts predict risks models/samples.hdf5 models/risks.hdf5\n"
     deps:
     - path: models/samples.hdf5
-      md5: 2942e68809b0a473d16f326d332cec6f
-      size: 45389688
+      md5: 035a1cf72b319c31e1cfa4e03eb26976
+      size: 3428560
     params:
       params.yaml:
         graph:
@@ -184,7 +185,8 @@ stages:
             - V
             - VII
           lnl:
-            I: []
+            I:
+            - II
             II:
             - III
             - V
@@ -244,8 +246,8 @@ stages:
       md5: e275605eda82421e85d10dbd68a26609
       size: 155737
     - path: models/samples.hdf5
-      md5: 2942e68809b0a473d16f326d332cec6f
-      size: 45389688
+      md5: 035a1cf72b319c31e1cfa4e03eb26976
+      size: 3428560
     params:
       params.yaml:
         graph:
@@ -258,7 +260,8 @@ stages:
             - V
             - VII
           lnl:
-            I: []
+            I:
+            - II
             II:
             - III
             - V
@@ -310,7 +313,7 @@ stages:
           thin_by: 5
           temp_schedule:
           - 0.0
-          - 1.316872427983539e-06
+          - 1.316872427983538e-06
           - 4.2139917695473246e-05
           - 0.0003200000000000001
           - 0.0013484773662551439
@@ -332,8 +335,8 @@ stages:
             rel_acor_threshold: 0.075
     outs:
     - path: metrics.json
-      md5: be0a63f8d653a8e343c9dd242af951b6
-      size: 162
+      md5: 0e00f224f9b2d5fe234fb7035b9fe82b
+      size: 93
   predict-prevalences:
     cmd: "lyscripts predict prevalences models/samples.hdf5 data/cleaned.csv models/prevalences.hdf5\n"
     deps:
@@ -341,8 +344,8 @@ stages:
       md5: e275605eda82421e85d10dbd68a26609
       size: 155737
     - path: models/samples.hdf5
-      md5: 2942e68809b0a473d16f326d332cec6f
-      size: 45389688
+      md5: 035a1cf72b319c31e1cfa4e03eb26976
+      size: 3428560
     params:
       params.yaml:
         graph:
@@ -355,7 +358,8 @@ stages:
             - V
             - VII
           lnl:
-            I: []
+            I:
+            - II
             II:
             - III
             - V
@@ -424,122 +428,6 @@ stages:
           - 1.0
           - 1.0
           t_stage: early
-        - name: III/early
-          pattern:
-            ipsi:
-              III: true
-          modality: max_llh
-          modality_spsn:
-          - 1.0
-          - 1.0
-          t_stage: early
-        - name: IV/early
-          pattern:
-            ipsi:
-              IV: true
-          modality: max_llh
-          modality_spsn:
-          - 1.0
-          - 1.0
-          t_stage: early
-        - name: V/early
-          pattern:
-            ipsi:
-              V: true
-          modality: max_llh
-          modality_spsn:
-          - 1.0
-          - 1.0
-          t_stage: early
-        - name: VandIII/early
-          pattern:
-            ipsi:
-              III: true
-              V: true
-          modality: max_llh
-          modality_spsn:
-          - 1.0
-          - 1.0
-          t_stage: early
-        - name: VnotIII/early
-          pattern:
-            ipsi:
-              III: false
-              V: true
-          modality: max_llh
-          modality_spsn:
-          - 1.0
-          - 1.0
-          t_stage: early
-        - name: VandIV/early
-          pattern:
-            ipsi:
-              IV: true
-              V: true
-          modality: max_llh
-          modality_spsn:
-          - 1.0
-          - 1.0
-          t_stage: early
-        - name: VnotIV/early
-          pattern:
-            ipsi:
-              IV: false
-              V: true
-          modality: max_llh
-          modality_spsn:
-          - 1.0
-          - 1.0
-          t_stage: early
-        - name: VII/early
-          pattern:
-            ipsi:
-              VII: true
-          modality: max_llh
-          modality_spsn:
-          - 1.0
-          - 1.0
-          t_stage: early
-        - name: VIInotII/early
-          pattern:
-            ipsi:
-              II: false
-              VII: true
-          modality: max_llh
-          modality_spsn:
-          - 1.0
-          - 1.0
-          t_stage: early
-        - name: VIIandII/early
-          pattern:
-            ipsi:
-              II: true
-              VII: true
-          modality: max_llh
-          modality_spsn:
-          - 1.0
-          - 1.0
-          t_stage: early
-        - name: VIInotIII/early
-          pattern:
-            ipsi:
-              III: false
-              VII: true
-          modality: max_llh
-          modality_spsn:
-          - 1.0
-          - 1.0
-          t_stage: early
-        - name: VIIandIII/early
-          pattern:
-            ipsi:
-              III: true
-              VII: true
-          modality: max_llh
-          modality_spsn:
-          - 1.0
-          - 1.0
-          t_stage: early
         - name: I/late
           pattern:
             ipsi:
@@ -588,136 +476,20 @@ stages:
           - 1.0
           - 1.0
           t_stage: late
-        - name: III/late
-          pattern:
-            ipsi:
-              III: true
-          modality: max_llh
-          modality_spsn:
-          - 1.0
-          - 1.0
-          t_stage: late
-        - name: IV/late
-          pattern:
-            ipsi:
-              IV: true
-          modality: max_llh
-          modality_spsn:
-          - 1.0
-          - 1.0
-          t_stage: late
-        - name: V/late
-          pattern:
-            ipsi:
-              V: true
-          modality: max_llh
-          modality_spsn:
-          - 1.0
-          - 1.0
-          t_stage: late
-        - name: VandIII/late
-          pattern:
-            ipsi:
-              III: true
-              V: true
-          modality: max_llh
-          modality_spsn:
-          - 1.0
-          - 1.0
-          t_stage: late
-        - name: VnotIII/late
-          pattern:
-            ipsi:
-              III: false
-              V: true
-          modality: max_llh
-          modality_spsn:
-          - 1.0
-          - 1.0
-          t_stage: late
-        - name: VandIV/late
-          pattern:
-            ipsi:
-              IV: true
-              V: true
-          modality: max_llh
-          modality_spsn:
-          - 1.0
-          - 1.0
-          t_stage: late
-        - name: VnotIV/late
-          pattern:
-            ipsi:
-              IV: false
-              V: true
-          modality: max_llh
-          modality_spsn:
-          - 1.0
-          - 1.0
-          t_stage: late
-        - name: VII/late
-          pattern:
-            ipsi:
-              VII: true
-          modality: max_llh
-          modality_spsn:
-          - 1.0
-          - 1.0
-          t_stage: late
-        - name: VIInotII/late
-          pattern:
-            ipsi:
-              II: false
-              VII: true
-          modality: max_llh
-          modality_spsn:
-          - 1.0
-          - 1.0
-          t_stage: late
-        - name: VIIandII/late
-          pattern:
-            ipsi:
-              II: true
-              VII: true
-          modality: max_llh
-          modality_spsn:
-          - 1.0
-          - 1.0
-          t_stage: late
-        - name: VIInotIII/late
-          pattern:
-            ipsi:
-              III: false
-              VII: true
-          modality: max_llh
-          modality_spsn:
-          - 1.0
-          - 1.0
-          t_stage: late
-        - name: VIIandIII/late
-          pattern:
-            ipsi:
-              III: true
-              VII: true
-          modality: max_llh
-          modality_spsn:
-          - 1.0
-          - 1.0
-          t_stage: late
     outs:
     - path: models/prevalences.hdf5
-      md5: 9a49e7ef412ab6c6542262506b9eb99b
-      size: 2765440
+      md5: b2cc08fdab5d60b8f626ae42e30fd1a8
+      size: 896872
   plot-corner:
     cmd: "lyscripts plot corner models/samples.hdf5 plots/corner.png\n"
     deps:
     - path: models/samples.hdf5
-      md5: 2942e68809b0a473d16f326d332cec6f
-      size: 45389688
+      md5: 035a1cf72b319c31e1cfa4e03eb26976
+      size: 3428560
     outs:
     - path: plots/corner.png
-      md5: 04209fb11f5c8b4a6033f8056edf823f
-      size: 5316417
+      md5: 29d30cab3d31edb029a664b8eeeac215
+      size: 5693334
     - path: plots/corner.svg
-      md5: d41d8cd98f00b204e9800998ecf8427e
-      size: 0
+      md5: 06f8e463a00b84e249c02ff44d2589e8
+      size: 5738482
