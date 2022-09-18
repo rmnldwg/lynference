@@ -86,11 +86,11 @@ stages:
           lnl:
             I: []
             II:
-            - I
             - III
             - V
             III:
             - IV
+            - V
             IV: []
             V: []
             VII: []
@@ -159,19 +159,19 @@ stages:
             rel_acor_threshold: 0.075
     outs:
     - path: models/samples.hdf5
-      md5: 189a63f5376e96ce1a524f18c45d7d4a
+      md5: 066637ba44f3f27ced84724db6fa9b6a
       size: 3428560
     - path: plots/sampling/accept_rates.csv
-      md5: 503da78dea8bcbfedefe890992d3b6e5
-      size: 1159
+      md5: 83b4305a04a8738bda9044b7bd6844e9
+      size: 1117
     - path: plots/sampling/acor_times.csv
-      md5: af7a79908218fdbd677a9a439340782d
-      size: 1179
+      md5: 8680ec2a5f791d46c3eb257bdc5d9dd3
+      size: 1126
   predict-risks:
     cmd: "lyscripts predict risks models/samples.hdf5 models/risks.hdf5\n"
     deps:
     - path: models/samples.hdf5
-      md5: 189a63f5376e96ce1a524f18c45d7d4a
+      md5: 066637ba44f3f27ced84724db6fa9b6a
       size: 3428560
     params:
       params.yaml:
@@ -187,11 +187,11 @@ stages:
           lnl:
             I: []
             II:
-            - I
             - III
             - V
             III:
             - IV
+            - V
             IV: []
             V: []
             VII: []
@@ -246,7 +246,7 @@ stages:
       md5: e275605eda82421e85d10dbd68a26609
       size: 155737
     - path: models/samples.hdf5
-      md5: 189a63f5376e96ce1a524f18c45d7d4a
+      md5: 066637ba44f3f27ced84724db6fa9b6a
       size: 3428560
     params:
       params.yaml:
@@ -262,11 +262,11 @@ stages:
           lnl:
             I: []
             II:
-            - I
             - III
             - V
             III:
             - IV
+            - V
             IV: []
             V: []
             VII: []
@@ -335,8 +335,8 @@ stages:
             rel_acor_threshold: 0.075
     outs:
     - path: metrics.json
-      md5: 2a49f393ca4f098af02d0041f7e80e0f
-      size: 92
+      md5: ca84a776ba88e64219856e2f38d907af
+      size: 93
   predict-prevalences:
     cmd: "lyscripts predict prevalences models/samples.hdf5 data/cleaned.csv models/prevalences.hdf5\n"
     deps:
@@ -344,7 +344,7 @@ stages:
       md5: e275605eda82421e85d10dbd68a26609
       size: 155737
     - path: models/samples.hdf5
-      md5: 189a63f5376e96ce1a524f18c45d7d4a
+      md5: 066637ba44f3f27ced84724db6fa9b6a
       size: 3428560
     params:
       params.yaml:
@@ -360,11 +360,11 @@ stages:
           lnl:
             I: []
             II:
-            - I
             - III
             - V
             III:
             - IV
+            - V
             IV: []
             V: []
             VII: []
@@ -380,97 +380,95 @@ stages:
             trans_symmetric: true
             use_mixing: true
         prevalences:
-        - name: I/early
+        - name: III/early
           pattern:
             ipsi:
-              I: true
+              III: true
           modality: max_llh
           modality_spsn:
           - 1.0
           - 1.0
           t_stage: early
-        - name: InotII/early
+        - name: IV/early
           pattern:
             ipsi:
-              I: true
-              II: false
+              IV: true
           modality: max_llh
           modality_spsn:
           - 1.0
           - 1.0
           t_stage: early
-        - name: IandII/early
+        - name: V/early
           pattern:
             ipsi:
-              I: true
-              II: true
+              V: true
           modality: max_llh
           modality_spsn:
           - 1.0
           - 1.0
           t_stage: early
-        - name: II/early
+        - name: VandIII/early
           pattern:
             ipsi:
-              II: true
+              III: true
+              V: true
           modality: max_llh
           modality_spsn:
           - 1.0
           - 1.0
           t_stage: early
-        - name: IInotI/early
+        - name: VnotIII/early
           pattern:
             ipsi:
-              I: false
-              II: true
+              III: false
+              V: true
           modality: max_llh
           modality_spsn:
           - 1.0
           - 1.0
           t_stage: early
-        - name: I/late
+        - name: III/late
           pattern:
             ipsi:
-              I: true
+              III: true
           modality: max_llh
           modality_spsn:
           - 1.0
           - 1.0
           t_stage: late
-        - name: InotII/late
+        - name: IV/late
           pattern:
             ipsi:
-              I: true
-              II: false
+              IV: true
           modality: max_llh
           modality_spsn:
           - 1.0
           - 1.0
           t_stage: late
-        - name: IandII/late
+        - name: V/late
           pattern:
             ipsi:
-              I: true
-              II: true
+              V: true
           modality: max_llh
           modality_spsn:
           - 1.0
           - 1.0
           t_stage: late
-        - name: II/late
+        - name: VandIII/late
           pattern:
             ipsi:
-              II: true
+              III: true
+              V: true
           modality: max_llh
           modality_spsn:
           - 1.0
           - 1.0
           t_stage: late
-        - name: IInotI/late
+        - name: VnotIII/late
           pattern:
             ipsi:
-              I: false
-              II: true
+              III: false
+              V: true
           modality: max_llh
           modality_spsn:
           - 1.0
@@ -478,18 +476,18 @@ stages:
           t_stage: late
     outs:
     - path: models/prevalences.hdf5
-      md5: 2897f2a2e9abcd3bd1ee64b77f08e01a
+      md5: 3860ba954e6dc86882edee73f0b827b5
       size: 896872
   plot-corner:
     cmd: "lyscripts plot corner models/samples.hdf5 plots/corner.png\n"
     deps:
     - path: models/samples.hdf5
-      md5: 189a63f5376e96ce1a524f18c45d7d4a
+      md5: 066637ba44f3f27ced84724db6fa9b6a
       size: 3428560
     outs:
     - path: plots/corner.png
-      md5: 55a3de0279cf3d91e0470e2acb4bbbc5
-      size: 6192838
+      md5: 3834293b29c353be5a419be399017d59
+      size: 6113773
     - path: plots/corner.svg
-      md5: 0154d88a747bfb122f0ae3513f35c650
-      size: 5889842
+      md5: b78f3822cdfce5fbd1c791e095e37541
+      size: 5862211
