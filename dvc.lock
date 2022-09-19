@@ -34,15 +34,15 @@ stages:
       size: 1092093
       nfiles: 8
     - path: ./models
-      md5: ff365c493b720ae4d8ad002729d4e5fb.dir
-      size: 4511040
+      md5: 88d6a3e0b50d082aaa44cee3ebcd1ef3.dir
+      size: 4332888
       nfiles: 3
     - path: ./plots
-      md5: 0c2019ca1f5b34a93f3372a9e1eda7ec.dir
-      size: 11677220
+      md5: 4e357bc6190ad6e5da740419886da1c0.dir
+      size: 12281471
       nfiles: 4
     - path: metrics.json
-      md5: c33e5cfc6ef43b6e0c52893f401ab4a1
+      md5: 07a9fd9f4099cbc7a9bc09bc054459fc
       size: 92
   mermaid-readme:
     cmd: cat dag.md | sed 's/^/3i/' | sed -f- README.template > README.md
