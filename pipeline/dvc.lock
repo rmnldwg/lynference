@@ -89,9 +89,9 @@ stages:
             - I
             - III
             - V
+            - VII
             III:
             - IV
-            - V
             IV: []
             V: []
             VII: []
@@ -160,19 +160,19 @@ stages:
             rel_acor_threshold: 0.075
     outs:
     - path: models/samples.hdf5
-      md5: ed996eda1cc8c897170123320dbe0bc2
+      md5: 18338a1a74f8b2f44860f04a5aa07704
       size: 3527152
     - path: plots/sampling/accept_rates.csv
-      md5: d47e62d6ee71ed3cf51a92e09331a1a7
-      size: 1200
+      md5: c50b62cbe81d3d43928dae868e146047
+      size: 1250
     - path: plots/sampling/acor_times.csv
-      md5: 7d196427a85a09d6e689dd1b65751263
-      size: 1204
+      md5: 26d9ae2252609c7ae01e9c207ca6d105
+      size: 1286
   predict-risks:
     cmd: "lyscripts predict risks models/samples.hdf5 models/risks.hdf5\n"
     deps:
     - path: models/samples.hdf5
-      md5: ed996eda1cc8c897170123320dbe0bc2
+      md5: 18338a1a74f8b2f44860f04a5aa07704
       size: 3527152
     params:
       params.yaml:
@@ -191,9 +191,9 @@ stages:
             - I
             - III
             - V
+            - VII
             III:
             - IV
-            - V
             IV: []
             V: []
             VII: []
@@ -248,7 +248,7 @@ stages:
       md5: e275605eda82421e85d10dbd68a26609
       size: 155737
     - path: models/samples.hdf5
-      md5: ed996eda1cc8c897170123320dbe0bc2
+      md5: 18338a1a74f8b2f44860f04a5aa07704
       size: 3527152
     params:
       params.yaml:
@@ -267,9 +267,9 @@ stages:
             - I
             - III
             - V
+            - VII
             III:
             - IV
-            - V
             IV: []
             V: []
             VII: []
@@ -338,8 +338,8 @@ stages:
             rel_acor_threshold: 0.075
     outs:
     - path: metrics.json
-      md5: 682a511fdf7db147919be894d77965d9
-      size: 91
+      md5: 18593aa0d463cbebcb15b3478f5f7ae6
+      size: 92
   predict-prevalences:
     cmd: "lyscripts predict prevalences models/samples.hdf5 data/cleaned.csv models/prevalences.hdf5\n"
     deps:
@@ -347,7 +347,7 @@ stages:
       md5: e275605eda82421e85d10dbd68a26609
       size: 155737
     - path: models/samples.hdf5
-      md5: ed996eda1cc8c897170123320dbe0bc2
+      md5: 18338a1a74f8b2f44860f04a5aa07704
       size: 3527152
     params:
       params.yaml:
@@ -366,9 +366,9 @@ stages:
             - I
             - III
             - V
+            - VII
             III:
             - IV
-            - V
             IV: []
             V: []
             VII: []
@@ -432,39 +432,30 @@ stages:
           - 1.0
           - 1.0
           t_stage: early
-        - name: III/early
+        - name: VII/early
           pattern:
             ipsi:
-              III: true
+              VII: true
           modality: max_llh
           modality_spsn:
           - 1.0
           - 1.0
           t_stage: early
-        - name: V/early
+        - name: VIInotII/early
           pattern:
             ipsi:
-              V: true
+              II: false
+              VII: true
           modality: max_llh
           modality_spsn:
           - 1.0
           - 1.0
           t_stage: early
-        - name: VandIII/early
+        - name: VIIandII/early
           pattern:
             ipsi:
-              III: true
-              V: true
-          modality: max_llh
-          modality_spsn:
-          - 1.0
-          - 1.0
-          t_stage: early
-        - name: VnotIII/early
-          pattern:
-            ipsi:
-              III: false
-              V: true
+              II: true
+              VII: true
           modality: max_llh
           modality_spsn:
           - 1.0
@@ -518,39 +509,30 @@ stages:
           - 1.0
           - 1.0
           t_stage: late
-        - name: III/late
+        - name: VII/late
           pattern:
             ipsi:
-              III: true
+              VII: true
           modality: max_llh
           modality_spsn:
           - 1.0
           - 1.0
           t_stage: late
-        - name: V/late
+        - name: VIInotII/late
           pattern:
             ipsi:
-              V: true
+              II: false
+              VII: true
           modality: max_llh
           modality_spsn:
           - 1.0
           - 1.0
           t_stage: late
-        - name: VandIII/late
+        - name: VIIandII/late
           pattern:
             ipsi:
-              III: true
-              V: true
-          modality: max_llh
-          modality_spsn:
-          - 1.0
-          - 1.0
-          t_stage: late
-        - name: VnotIII/late
-          pattern:
-            ipsi:
-              III: false
-              V: true
+              II: true
+              VII: true
           modality: max_llh
           modality_spsn:
           - 1.0
@@ -558,18 +540,18 @@ stages:
           t_stage: late
     outs:
     - path: models/prevalences.hdf5
-      md5: cb8611b9d34eb0945f869274355bc886
-      size: 1755008
+      md5: ac2290a8ebcf55c416476466b6842145
+      size: 1560960
   plot-corner:
     cmd: "lyscripts plot corner models/samples.hdf5 plots/corner.png\n"
     deps:
     - path: models/samples.hdf5
-      md5: ed996eda1cc8c897170123320dbe0bc2
+      md5: 18338a1a74f8b2f44860f04a5aa07704
       size: 3527152
     outs:
     - path: plots/corner.png
-      md5: 02d5eddb3e050c204d91ad3cad0b395e
-      size: 7578110
+      md5: 8745489113fa29b331138f4f6564894f
+      size: 7780977
     - path: plots/corner.svg
-      md5: a6fef23bf9c846bf94ad229d22c46380
-      size: 7056988
+      md5: 2f9dee8c91ff94b5d692c1b7cd2ae91e
+      size: 7203421
