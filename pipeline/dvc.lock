@@ -121,7 +121,7 @@ stages:
           kwargs:
             base_symmetric: false
             trans_symmetric: true
-            use_mixing: false
+            use_mixing: true
         sampling:
           walkers_per_dim: 20
           burnin: 1000
@@ -131,7 +131,7 @@ stages:
           - 0.0
           - 1.0076210988534706e-09
           - 3.224387516331105e-08
-          - 2.448519270213933e-07
+          - 2.448519270213932e-07
           - 1.031804005225953e-06
           - 3.148815933917096e-06
           - 7.835261664684588e-06
@@ -199,20 +199,20 @@ stages:
             rel_acor_threshold: 0.075
     outs:
     - path: models/samples.hdf5
-      md5: fc4fb6013b57c1a5b1198f51a8d3781b
-      size: 228829088
+      md5: 96db2576d571eb473e23d76621acc288
+      size: 174498528
     - path: plots/sampling/accept_rates.csv
-      md5: 0defc3803dad342afc7f0f410cbd69a6
-      size: 2351
+      md5: 67077a9647faf82d262e09c1b1aaaf89
+      size: 2068
     - path: plots/sampling/acor_times.csv
-      md5: ba3562db2642efd6383f248a41038ff1
-      size: 2441
+      md5: 4a4a690c8cc41fa6b96b140680c04839
+      size: 2449
   predict-risks:
     cmd: "python -m lyscripts predict risks models/samples.hdf5 models/risks.hdf5\n"
     deps:
     - path: models/samples.hdf5
-      md5: fc4fb6013b57c1a5b1198f51a8d3781b
-      size: 228829088
+      md5: 96db2576d571eb473e23d76621acc288
+      size: 174498528
     params:
       params.yaml:
         graph:
@@ -237,7 +237,7 @@ stages:
           kwargs:
             base_symmetric: false
             trans_symmetric: true
-            use_mixing: false
+            use_mixing: true
         risks:
         - name: contra-II/healthyCT/early/noext
           involvement:
@@ -393,8 +393,8 @@ stages:
           invert: false
     outs:
     - path: models/risks.hdf5
-      md5: 6ba6d14ac13b5d52756b2d362c80335a
-      size: 786832
+      md5: c1f4b07b6213ae602af720d6f24d7948
+      size: 658832
   evaluate:
     cmd: "python -m lyscripts evaluate data/cleaned.csv models/samples.hdf5 --metrics\
       \ metrics.json --plots plots/ti/accuracies.csv\n"
@@ -403,8 +403,8 @@ stages:
       md5: 06b0d7f0b34ba2411a283afe3cf7e135
       size: 300071
     - path: models/samples.hdf5
-      md5: fc4fb6013b57c1a5b1198f51a8d3781b
-      size: 228829088
+      md5: 96db2576d571eb473e23d76621acc288
+      size: 174498528
     params:
       params.yaml:
         graph:
@@ -454,7 +454,7 @@ stages:
           kwargs:
             base_symmetric: false
             trans_symmetric: true
-            use_mixing: false
+            use_mixing: true
         sampling:
           walkers_per_dim: 20
           burnin: 1000
@@ -532,11 +532,11 @@ stages:
             rel_acor_threshold: 0.075
     outs:
     - path: metrics.json
-      md5: 6c207aeb828e3c076276cda79b2e79e3
-      size: 159
+      md5: 46e822e714112fe26083f82c3e34f35e
+      size: 160
     - path: plots/ti/accuracies.csv
-      md5: 51d65e3eff5c352a14f5b4471d559f90
-      size: 3731
+      md5: aa407f1d510485aa91a675e365dd9702
+      size: 3725
   predict-prevalences:
     cmd: "python -m lyscripts predict prevalences models/samples.hdf5 data/cleaned.csv\
       \ models/prevalences.hdf5\n"
@@ -545,8 +545,8 @@ stages:
       md5: 06b0d7f0b34ba2411a283afe3cf7e135
       size: 300071
     - path: models/samples.hdf5
-      md5: fc4fb6013b57c1a5b1198f51a8d3781b
-      size: 228829088
+      md5: 96db2576d571eb473e23d76621acc288
+      size: 174498528
     params:
       params.yaml:
         graph:
@@ -571,7 +571,7 @@ stages:
           kwargs:
             base_symmetric: false
             trans_symmetric: true
-            use_mixing: false
+            use_mixing: true
         prevalences:
         - name: contra/early/noext
           pattern:
@@ -891,15 +891,15 @@ stages:
           midline_ext: true
     outs:
     - path: models/prevalences.hdf5
-      md5: 058d4761d9c61b50c63aa3bb0ebc5849
-      size: 2736304
+      md5: 99b4a020bc66b0d1ec3d0cfb5a46375e
+      size: 2288304
   plot-corner:
     cmd: "python -m lyscripts plot corner models/samples.hdf5 plots/corner.png\n"
     deps:
     - path: models/samples.hdf5
-      md5: fc4fb6013b57c1a5b1198f51a8d3781b
-      size: 228829088
+      md5: 96db2576d571eb473e23d76621acc288
+      size: 174498528
     outs:
     - path: plots/corner.png
-      md5: d663f71ef1fe8fd147a5ccb1fac2f60b
-      size: 8019702
+      md5: 9752c9c0f343cbd5f90eb1b01a109522
+      size: 5222970
