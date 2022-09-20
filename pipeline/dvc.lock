@@ -60,17 +60,17 @@ stages:
       size: 375364
     params:
       params.yaml:
-        model.class: Bilateral
+        model.class: MidlineBilateral
     outs:
     - path: data/cleaned.csv
-      md5: 19d41bf3be7f1593df344d1a4b7b61ef
+      md5: 06b0d7f0b34ba2411a283afe3cf7e135
       size: 300071
   sampling:
     cmd: "python -m lyscripts.sample data/cleaned.csv models/samples.hdf5 --plots\
       \ plots/sampling --modalities 'max_llh' --ti\n"
     deps:
     - path: data/cleaned.csv
-      md5: 19d41bf3be7f1593df344d1a4b7b61ef
+      md5: 06b0d7f0b34ba2411a283afe3cf7e135
       size: 300071
     params:
       params.yaml:
@@ -117,11 +117,11 @@ stages:
           t_stages:
           - early
           - late
-          class: Bilateral
+          class: MidlineBilateral
           kwargs:
             base_symmetric: false
             trans_symmetric: true
-            use_mixing: true
+            use_mixing: false
         sampling:
           walkers_per_dim: 20
           burnin: 1000
@@ -199,20 +199,20 @@ stages:
             rel_acor_threshold: 0.075
     outs:
     - path: models/samples.hdf5
-      md5: e65a54a0f617def15e50f22de9e32d33
-      size: 162242688
+      md5: fc4fb6013b57c1a5b1198f51a8d3781b
+      size: 228829088
     - path: plots/sampling/accept_rates.csv
-      md5: 103e36ceb66ed10931fc76767320ea1c
-      size: 2447
+      md5: 0defc3803dad342afc7f0f410cbd69a6
+      size: 2351
     - path: plots/sampling/acor_times.csv
-      md5: 1aa0817f4dece0b34b5407b09f038881
-      size: 2450
+      md5: ba3562db2642efd6383f248a41038ff1
+      size: 2441
   predict-risks:
     cmd: "python -m lyscripts predict risks models/samples.hdf5 models/risks.hdf5\n"
     deps:
     - path: models/samples.hdf5
-      md5: e65a54a0f617def15e50f22de9e32d33
-      size: 162242688
+      md5: fc4fb6013b57c1a5b1198f51a8d3781b
+      size: 228829088
     params:
       params.yaml:
         graph:
@@ -233,11 +233,11 @@ stages:
           t_stages:
           - early
           - late
-          class: Bilateral
+          class: MidlineBilateral
           kwargs:
             base_symmetric: false
             trans_symmetric: true
-            use_mixing: true
+            use_mixing: false
         risks:
         - name: contra-II/healthyCT/early/noext
           involvement:
@@ -391,120 +391,20 @@ stages:
           t_stage: late
           midline_ext: true
           invert: false
-        - name: ipsi-IV/all-neg/early/ext
-          label: healthy CT
-          involvement:
-            ipsi:
-              IV: true
-          given_diagnosis:
-            ipsi:
-              II: false
-              III: false
-              IV: false
-            contra:
-              II: false
-              III: false
-              IV: false
-          given_diagnosis_spsn:
-          - 0.76
-          - 0.81
-          t_stage: early
-          midline_ext: true
-          invert: false
-        - name: ipsi-IV/ipsi-II-pos/early/ext
-          label: ipsi II suspicious
-          involvement:
-            ipsi:
-              IV: true
-          given_diagnosis:
-            ipsi:
-              II: true
-              III: false
-              IV: false
-            contra:
-              II: false
-              III: false
-              IV: false
-          given_diagnosis_spsn:
-          - 0.76
-          - 0.81
-          t_stage: early
-          midline_ext: true
-          invert: false
-        - name: ipsi-IV/ipsi-II-III-pos/late/noext
-          label: ipsi II & III suspicious
-          involvement:
-            ipsi:
-              IV: true
-          given_diagnosis:
-            ipsi:
-              II: true
-              III: true
-              IV: false
-            contra:
-              II: false
-              III: false
-              IV: false
-          given_diagnosis_spsn:
-          - 0.76
-          - 0.81
-          t_stage: late
-          midline_ext: false
-          invert: false
-        - name: ipsi-IV/ipsi-all-pos/late/ext
-          label: all ipsi LNLs suspicious
-          involvement:
-            ipsi:
-              IV: true
-          given_diagnosis:
-            ipsi:
-              II: true
-              III: true
-              IV: true
-            contra:
-              II: false
-              III: false
-              IV: false
-          given_diagnosis_spsn:
-          - 0.76
-          - 0.81
-          t_stage: late
-          midline_ext: true
-          invert: false
-        - name: ipsi-IV/all-pos/late/ext
-          label: ipsi & contra all LNLs suspicious
-          involvement:
-            ipsi:
-              IV: true
-          given_diagnosis:
-            ipsi:
-              II: true
-              III: true
-              IV: true
-            contra:
-              II: true
-              III: true
-              IV: true
-          given_diagnosis_spsn:
-          - 0.76
-          - 0.81
-          t_stage: late
-          midline_ext: true
-          invert: false
     outs:
     - path: models/risks.hdf5
-      md5: 2a55bb478d50cbfc009ae70b3da833a2
-      size: 967800
+      md5: 6ba6d14ac13b5d52756b2d362c80335a
+      size: 786832
   evaluate:
     cmd: "python -m lyscripts evaluate data/cleaned.csv models/samples.hdf5 --metrics\
       \ metrics.json --plots plots/ti/accuracies.csv\n"
     deps:
     - path: data/cleaned.csv
-      md5: 19d41bf3be7f1593df344d1a4b7b61ef
+      md5: 06b0d7f0b34ba2411a283afe3cf7e135
       size: 300071
     - path: models/samples.hdf5
-      md5: e65a54a0f617def15e50f22de9e32d33
-      size: 162242688
+      md5: fc4fb6013b57c1a5b1198f51a8d3781b
+      size: 228829088
     params:
       params.yaml:
         graph:
@@ -550,11 +450,11 @@ stages:
           t_stages:
           - early
           - late
-          class: Bilateral
+          class: MidlineBilateral
           kwargs:
             base_symmetric: false
             trans_symmetric: true
-            use_mixing: true
+            use_mixing: false
         sampling:
           walkers_per_dim: 20
           burnin: 1000
@@ -632,21 +532,21 @@ stages:
             rel_acor_threshold: 0.075
     outs:
     - path: metrics.json
-      md5: 20e2efb932ed6b11e53bdf5fe0486cfd
-      size: 162
+      md5: 6c207aeb828e3c076276cda79b2e79e3
+      size: 159
     - path: plots/ti/accuracies.csv
-      md5: c9db81871f556cae3ca5ba10276d6929
-      size: 3733
+      md5: 51d65e3eff5c352a14f5b4471d559f90
+      size: 3731
   predict-prevalences:
     cmd: "python -m lyscripts predict prevalences models/samples.hdf5 data/cleaned.csv\
       \ models/prevalences.hdf5\n"
     deps:
     - path: data/cleaned.csv
-      md5: 19d41bf3be7f1593df344d1a4b7b61ef
+      md5: 06b0d7f0b34ba2411a283afe3cf7e135
       size: 300071
     - path: models/samples.hdf5
-      md5: e65a54a0f617def15e50f22de9e32d33
-      size: 162242688
+      md5: fc4fb6013b57c1a5b1198f51a8d3781b
+      size: 228829088
     params:
       params.yaml:
         graph:
@@ -667,11 +567,11 @@ stages:
           t_stages:
           - early
           - late
-          class: Bilateral
+          class: MidlineBilateral
           kwargs:
             base_symmetric: false
             trans_symmetric: true
-            use_mixing: true
+            use_mixing: false
         prevalences:
         - name: contra/early/noext
           pattern:
@@ -725,7 +625,139 @@ stages:
           t_stage: late
           midline_ext: true
           invert: true
-        - name: ipsiII/early
+        - name: contraIIandIII/early/noext
+          pattern:
+            contra:
+              II: true
+              III: true
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: early
+          midline_ext: false
+        - name: contraIInotIII/early/noext
+          pattern:
+            contra:
+              II: true
+              III: false
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: early
+          midline_ext: false
+        - name: contraIIInotII/early/noext
+          pattern:
+            contra:
+              II: false
+              III: true
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: early
+          midline_ext: false
+        - name: contraIIandIII/late/noext
+          pattern:
+            contra:
+              II: true
+              III: true
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: late
+          midline_ext: false
+        - name: contraIInotIII/late/noext
+          pattern:
+            contra:
+              II: true
+              III: false
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: late
+          midline_ext: false
+        - name: contraIIInotII/late/noext
+          pattern:
+            contra:
+              II: false
+              III: true
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: late
+          midline_ext: false
+        - name: contraIIandIII/early/ext
+          pattern:
+            contra:
+              II: true
+              III: true
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: early
+          midline_ext: true
+        - name: contraIInotIII/early/ext
+          pattern:
+            contra:
+              II: true
+              III: false
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: early
+          midline_ext: true
+        - name: contraIIInotII/early/ext
+          pattern:
+            contra:
+              II: false
+              III: true
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: early
+          midline_ext: true
+        - name: contraIIandIII/late/ext
+          pattern:
+            contra:
+              II: true
+              III: true
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: late
+          midline_ext: true
+        - name: contraIInotIII/late/ext
+          pattern:
+            contra:
+              II: true
+              III: false
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: late
+          midline_ext: true
+        - name: contraIIInotII/late/ext
+          pattern:
+            contra:
+              II: false
+              III: true
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: late
+          midline_ext: true
+        - name: ipsiII/early/noext
           label: LNL II
           pattern:
             ipsi:
@@ -735,8 +767,8 @@ stages:
           - 1.0
           - 1.0
           t_stage: early
-          invert: false
-        - name: ipsiIII/early
+          midline_ext: false
+        - name: ipsiIII/early/noext
           label: LNL III
           pattern:
             ipsi:
@@ -746,8 +778,8 @@ stages:
           - 1.0
           - 1.0
           t_stage: early
-          invert: false
-        - name: ipsiIV/early
+          midline_ext: false
+        - name: ipsiIV/early/noext
           label: LNL IV
           pattern:
             ipsi:
@@ -757,8 +789,41 @@ stages:
           - 1.0
           - 1.0
           t_stage: early
-          invert: false
-        - name: ipsiII/late
+          midline_ext: false
+        - name: ipsiII/early/ext
+          label: LNL II
+          pattern:
+            ipsi:
+              II: true
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: early
+          midline_ext: true
+        - name: ipsiIII/early/ext
+          label: LNL III
+          pattern:
+            ipsi:
+              III: true
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: early
+          midline_ext: true
+        - name: ipsiIV/early/ext
+          label: LNL IV
+          pattern:
+            ipsi:
+              IV: true
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: early
+          midline_ext: true
+        - name: ipsiII/late/noext
           label: LNL II
           pattern:
             ipsi:
@@ -768,8 +833,8 @@ stages:
           - 1.0
           - 1.0
           t_stage: late
-          invert: false
-        - name: ipsiIII/late
+          midline_ext: false
+        - name: ipsiIII/late/noext
           label: LNL III
           pattern:
             ipsi:
@@ -779,8 +844,8 @@ stages:
           - 1.0
           - 1.0
           t_stage: late
-          invert: false
-        - name: ipsiIV/late
+          midline_ext: false
+        - name: ipsiIV/late/noext
           label: LNL IV
           pattern:
             ipsi:
@@ -790,18 +855,51 @@ stages:
           - 1.0
           - 1.0
           t_stage: late
-          invert: false
+          midline_ext: false
+        - name: ipsiII/late/ext
+          label: LNL II
+          pattern:
+            ipsi:
+              II: true
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: late
+          midline_ext: true
+        - name: ipsiIII/late/ext
+          label: LNL III
+          pattern:
+            ipsi:
+              III: true
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: late
+          midline_ext: true
+        - name: ipsiIV/late/ext
+          label: LNL IV
+          pattern:
+            ipsi:
+              IV: true
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: late
+          midline_ext: true
     outs:
     - path: models/prevalences.hdf5
-      md5: 90242ec91d57fcea269fab2a62d89eea
-      size: 739848
+      md5: 058d4761d9c61b50c63aa3bb0ebc5849
+      size: 2736304
   plot-corner:
     cmd: "python -m lyscripts plot corner models/samples.hdf5 plots/corner.png\n"
     deps:
     - path: models/samples.hdf5
-      md5: e65a54a0f617def15e50f22de9e32d33
-      size: 162242688
+      md5: fc4fb6013b57c1a5b1198f51a8d3781b
+      size: 228829088
     outs:
     - path: plots/corner.png
-      md5: 2bd9ca6c95764dd9fc419efda49dbb6a
-      size: 4087996
+      md5: d663f71ef1fe8fd147a5ccb1fac2f60b
+      size: 8019702
