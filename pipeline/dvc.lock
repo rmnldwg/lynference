@@ -60,17 +60,17 @@ stages:
       size: 375364
     params:
       params.yaml:
-        model.class: MidlineBilateral
+        model.class: Bilateral
     outs:
     - path: data/cleaned.csv
-      md5: 06b0d7f0b34ba2411a283afe3cf7e135
+      md5: 22c87d9a7fbe5509a68da87b4fca6038
       size: 300071
   sampling:
     cmd: "python -m lyscripts.sample data/cleaned.csv models/samples.hdf5 --plots\
       \ plots/sampling --modalities 'max_llh' --ti\n"
     deps:
     - path: data/cleaned.csv
-      md5: 06b0d7f0b34ba2411a283afe3cf7e135
+      md5: 22c87d9a7fbe5509a68da87b4fca6038
       size: 300071
     params:
       params.yaml:
@@ -117,7 +117,7 @@ stages:
           t_stages:
           - early
           - late
-          class: MidlineBilateral
+          class: Bilateral
           kwargs:
             base_symmetric: false
             trans_symmetric: true
@@ -199,20 +199,20 @@ stages:
             rel_acor_threshold: 0.075
     outs:
     - path: models/samples.hdf5
-      md5: 96db2576d571eb473e23d76621acc288
-      size: 174498528
+      md5: e65a54a0f617def15e50f22de9e32d33
+      size: 162242688
     - path: plots/sampling/accept_rates.csv
-      md5: 67077a9647faf82d262e09c1b1aaaf89
-      size: 2068
+      md5: 103e36ceb66ed10931fc76767320ea1c
+      size: 2447
     - path: plots/sampling/acor_times.csv
-      md5: 4a4a690c8cc41fa6b96b140680c04839
-      size: 2449
+      md5: 1aa0817f4dece0b34b5407b09f038881
+      size: 2450
   predict-risks:
     cmd: "python -m lyscripts predict risks models/samples.hdf5 models/risks.hdf5\n"
     deps:
     - path: models/samples.hdf5
-      md5: 96db2576d571eb473e23d76621acc288
-      size: 174498528
+      md5: e65a54a0f617def15e50f22de9e32d33
+      size: 162242688
     params:
       params.yaml:
         graph:
@@ -233,7 +233,7 @@ stages:
           t_stages:
           - early
           - late
-          class: MidlineBilateral
+          class: Bilateral
           kwargs:
             base_symmetric: false
             trans_symmetric: true
@@ -457,18 +457,18 @@ stages:
           midline_ext: true
     outs:
     - path: models/risks.hdf5
-      md5: 194345f72b4fe9f0bd66c6336564a99b
-      size: 983016
+      md5: 797ec2ccee28187cf4289cdd585ed26b
+      size: 887016
   evaluate:
     cmd: "python -m lyscripts evaluate data/cleaned.csv models/samples.hdf5 --metrics\
       \ metrics.json --plots plots/ti/accuracies.csv\n"
     deps:
     - path: data/cleaned.csv
-      md5: 06b0d7f0b34ba2411a283afe3cf7e135
+      md5: 22c87d9a7fbe5509a68da87b4fca6038
       size: 300071
     - path: models/samples.hdf5
-      md5: 96db2576d571eb473e23d76621acc288
-      size: 174498528
+      md5: e65a54a0f617def15e50f22de9e32d33
+      size: 162242688
     params:
       params.yaml:
         graph:
@@ -514,7 +514,7 @@ stages:
           t_stages:
           - early
           - late
-          class: MidlineBilateral
+          class: Bilateral
           kwargs:
             base_symmetric: false
             trans_symmetric: true
@@ -596,21 +596,21 @@ stages:
             rel_acor_threshold: 0.075
     outs:
     - path: metrics.json
-      md5: 46e822e714112fe26083f82c3e34f35e
-      size: 160
+      md5: 20e2efb932ed6b11e53bdf5fe0486cfd
+      size: 162
     - path: plots/ti/accuracies.csv
-      md5: aa407f1d510485aa91a675e365dd9702
-      size: 3725
+      md5: c9db81871f556cae3ca5ba10276d6929
+      size: 3733
   predict-prevalences:
     cmd: "python -m lyscripts predict prevalences models/samples.hdf5 data/cleaned.csv\
       \ models/prevalences.hdf5\n"
     deps:
     - path: data/cleaned.csv
-      md5: 06b0d7f0b34ba2411a283afe3cf7e135
+      md5: 22c87d9a7fbe5509a68da87b4fca6038
       size: 300071
     - path: models/samples.hdf5
-      md5: 96db2576d571eb473e23d76621acc288
-      size: 174498528
+      md5: e65a54a0f617def15e50f22de9e32d33
+      size: 162242688
     params:
       params.yaml:
         graph:
@@ -631,7 +631,7 @@ stages:
           t_stages:
           - early
           - late
-          class: MidlineBilateral
+          class: Bilateral
           kwargs:
             base_symmetric: false
             trans_symmetric: true
@@ -955,15 +955,15 @@ stages:
           midline_ext: true
     outs:
     - path: models/prevalences.hdf5
-      md5: 99b4a020bc66b0d1ec3d0cfb5a46375e
-      size: 2288304
+      md5: 8e0fb6e21cd83649b9ee258e0a305946
+      size: 2064304
   plot-corner:
     cmd: "python -m lyscripts plot corner models/samples.hdf5 plots/corner.png\n"
     deps:
     - path: models/samples.hdf5
-      md5: 96db2576d571eb473e23d76621acc288
-      size: 174498528
+      md5: e65a54a0f617def15e50f22de9e32d33
+      size: 162242688
     outs:
     - path: plots/corner.png
-      md5: 9752c9c0f343cbd5f90eb1b01a109522
-      size: 5222970
+      md5: 2bd9ca6c95764dd9fc419efda49dbb6a
+      size: 4087996
