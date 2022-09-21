@@ -32,7 +32,7 @@ model:
   kwargs:
     base_symmetric: false
     trans_symmetric: true
-    use_mixing: false
+    use_mixing: true
 
 ########################################################################################
 # Choose how to create the synthetic dataset. The currently set values
