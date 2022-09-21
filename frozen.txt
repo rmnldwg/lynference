@@ -1,5 +1,5 @@
 adal==1.2.7
-adlfs==2022.7.0
+adlfs==2022.9.1
 aiohttp==3.8.1
 aiohttp-retry==2.8.3
 aiosignal==1.2.0
@@ -36,16 +36,17 @@ diskcache==5.4.0
 distro==1.7.0
 dpath==2.0.6
 dulwich==0.20.46
-dvc==2.26.2
-dvc-azure==2.20.2
-dvc-data==0.8.0
+dvc==2.27.2
+dvc-azure==2.20.4
+dvc-data==0.10.0
 dvc-gdrive==2.19.0
 dvc-http==2.19.1
-dvc-objects==0.2.2
-dvc-render==0.0.10
+dvc-objects==0.4.0
+dvc-render==0.0.11
 dvc-task==0.1.2
 dvclive==0.10.0
 emcee==3.1.2
+filelock==3.8.0
 flatten-dict==0.4.2
 flufl.lock==7.1
 fonttools==4.37.1
@@ -67,6 +68,7 @@ hydra-core==1.2.0
 idna==3.3
 importlib-resources==5.9.0
 isodate==0.6.1
+iterative-telemetry==0.0.5
 jmespath==1.0.1
 kiwisolver==1.4.4
 knack==0.10.0
