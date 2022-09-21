@@ -27,12 +27,12 @@ model:
   first_binom_prob: 0.3         # defines shape of time prior of first T-stage
   max_t: 10                     # max number of time steps to evolve system
   t_stages: [early, late]       # T-stages to consider in the data
-  class: Bilateral              # model class to use (see `lymph-model` docs)
+  class: MidlineBilateral       # model class to use (see `lymph-model` docs)
   # keyword arguments to pass to the model constructor
   kwargs:
     base_symmetric: false
     trans_symmetric: true
-    use_mixing: true
+    use_mixing: false
 
 ########################################################################################
 # Choose how to create the synthetic dataset. The currently set values
@@ -181,7 +181,7 @@ risks:
   given_diagnosis_spsn: [0.76, 0.81]
   t_stage: early
   midline_ext: false
-  invert: false
+
 - name: contra-II/healthyCT/early/ext
   involvement:
     contra: {II: true}
@@ -191,7 +191,7 @@ risks:
   given_diagnosis_spsn: [0.76, 0.81]
   t_stage: early
   midline_ext: true
-  invert: false
+
 - name: contra-II/healthyCT/late/noext
   involvement:
     contra: {II: true}
@@ -201,7 +201,7 @@ risks:
   given_diagnosis_spsn: [0.76, 0.81]
   t_stage: late
   midline_ext: false
-  invert: false
+
 - name: contra-II/healthyCT/late/ext
   involvement:
     contra: {II: true}
@@ -211,7 +211,7 @@ risks:
   given_diagnosis_spsn: [0.76, 0.81]
   t_stage: late
   midline_ext: true
-  invert: false
+
 
 # ...an involved LNL II ipsilaterally. This is to show how
 # ipsilateral involvement can influence contralateral risk.
@@ -224,7 +224,7 @@ risks:
   given_diagnosis_spsn: [0.76, 0.81]
   t_stage: early
   midline_ext: false
-  invert: false
+
 - name: contra-II/ipsi-II-pos/early/ext
   involvement:
     contra: {II: true}
@@ -234,7 +234,7 @@ risks:
   given_diagnosis_spsn: [0.76, 0.81]
   t_stage: early
   midline_ext: true
-  invert: false
+
 - name: contra-II/ipsi-II-pos/late/noext
   involvement:
     contra: {II: true}
@@ -244,7 +244,7 @@ risks:
   given_diagnosis_spsn: [0.76, 0.81]
   t_stage: late
   midline_ext: false
-  invert: false
+
 - name: contra-II/ipsi-II-pos/late/ext
   involvement:
     contra: {II: true}
@@ -254,7 +254,50 @@ risks:
   given_diagnosis_spsn: [0.76, 0.81]
   t_stage: late
   midline_ext: true
-  invert: false
+
+
+# ...involved LNLs II and III ipsilaterally. This is to show how
+# ipsilateral involvement can influence contralateral risk.
+- name: contra-II/ipsi-IIandIII-pos/early/noext
+  involvement:
+    contra: {II: true}
+  given_diagnosis:
+    ipsi:   {II: true,  III: true , IV: false}
+    contra: {II: false, III: false, IV: false}
+  given_diagnosis_spsn: [0.76, 0.81]
+  t_stage: early
+  midline_ext: false
+
+- name: contra-II/ipsi-IIandIII-pos/early/ext
+  involvement:
+    contra: {II: true}
+  given_diagnosis:
+    ipsi:   {II: true,  III: true , IV: false}
+    contra: {II: false, III: false, IV: false}
+  given_diagnosis_spsn: [0.76, 0.81]
+  t_stage: early
+  midline_ext: true
+
+- name: contra-II/ipsi-IIandIII-pos/late/noext
+  involvement:
+    contra: {II: true}
+  given_diagnosis:
+    ipsi:   {II: true,  III: true , IV: false}
+    contra: {II: false, III: false, IV: false}
+  given_diagnosis_spsn: [0.76, 0.81]
+  t_stage: late
+  midline_ext: false
+
+- name: contra-II/ipsi-IIandIII-pos/late/ext
+  involvement:
+    contra: {II: true}
+  given_diagnosis:
+    ipsi:   {II: true,  III: true , IV: false}
+    contra: {II: false, III: false, IV: false}
+  given_diagnosis_spsn: [0.76, 0.81]
+  t_stage: late
+  midline_ext: true
+
 
 ########################################################################################
 # PREVALENCES:

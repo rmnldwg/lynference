@@ -60,17 +60,17 @@ stages:
       size: 375364
     params:
       params.yaml:
-        model.class: Bilateral
+        model.class: MidlineBilateral
     outs:
     - path: data/cleaned.csv
-      md5: 22c87d9a7fbe5509a68da87b4fca6038
+      md5: 06b0d7f0b34ba2411a283afe3cf7e135
       size: 300071
   sampling:
     cmd: "python -m lyscripts.sample data/cleaned.csv models/samples.hdf5 --plots\
       \ plots/sampling --modalities 'max_llh' --ti\n"
     deps:
     - path: data/cleaned.csv
-      md5: 22c87d9a7fbe5509a68da87b4fca6038
+      md5: 06b0d7f0b34ba2411a283afe3cf7e135
       size: 300071
     params:
       params.yaml:
@@ -117,11 +117,11 @@ stages:
           t_stages:
           - early
           - late
-          class: Bilateral
+          class: MidlineBilateral
           kwargs:
             base_symmetric: false
             trans_symmetric: true
-            use_mixing: true
+            use_mixing: false
         sampling:
           walkers_per_dim: 20
           burnin: 1000
@@ -199,20 +199,20 @@ stages:
             rel_acor_threshold: 0.075
     outs:
     - path: models/samples.hdf5
-      md5: e65a54a0f617def15e50f22de9e32d33
-      size: 162242688
+      md5: fc4fb6013b57c1a5b1198f51a8d3781b
+      size: 228829088
     - path: plots/sampling/accept_rates.csv
-      md5: 103e36ceb66ed10931fc76767320ea1c
-      size: 2447
+      md5: 0defc3803dad342afc7f0f410cbd69a6
+      size: 2351
     - path: plots/sampling/acor_times.csv
-      md5: 1aa0817f4dece0b34b5407b09f038881
-      size: 2450
+      md5: ba3562db2642efd6383f248a41038ff1
+      size: 2441
   predict-risks:
     cmd: "python -m lyscripts predict risks models/samples.hdf5 models/risks.hdf5\n"
     deps:
     - path: models/samples.hdf5
-      md5: e65a54a0f617def15e50f22de9e32d33
-      size: 162242688
+      md5: fc4fb6013b57c1a5b1198f51a8d3781b
+      size: 228829088
     params:
       params.yaml:
         graph:
@@ -233,11 +233,11 @@ stages:
           t_stages:
           - early
           - late
-          class: Bilateral
+          class: MidlineBilateral
           kwargs:
             base_symmetric: false
             trans_symmetric: true
-            use_mixing: true
+            use_mixing: false
         risks:
         - name: contra-II/healthyCT/early/noext
           involvement:
@@ -257,7 +257,6 @@ stages:
           - 0.81
           t_stage: early
           midline_ext: false
-          invert: false
         - name: contra-II/healthyCT/early/ext
           involvement:
             contra:
@@ -276,7 +275,6 @@ stages:
           - 0.81
           t_stage: early
           midline_ext: true
-          invert: false
         - name: contra-II/healthyCT/late/noext
           involvement:
             contra:
@@ -295,7 +293,6 @@ stages:
           - 0.81
           t_stage: late
           midline_ext: false
-          invert: false
         - name: contra-II/healthyCT/late/ext
           involvement:
             contra:
@@ -314,7 +311,6 @@ stages:
           - 0.81
           t_stage: late
           midline_ext: true
-          invert: false
         - name: contra-II/ipsi-II-pos/early/noext
           involvement:
             contra:
@@ -333,7 +329,6 @@ stages:
           - 0.81
           t_stage: early
           midline_ext: false
-          invert: false
         - name: contra-II/ipsi-II-pos/early/ext
           involvement:
             contra:
@@ -352,7 +347,6 @@ stages:
           - 0.81
           t_stage: early
           midline_ext: true
-          invert: false
         - name: contra-II/ipsi-II-pos/late/noext
           involvement:
             contra:
@@ -371,7 +365,6 @@ stages:
           - 0.81
           t_stage: late
           midline_ext: false
-          invert: false
         - name: contra-II/ipsi-II-pos/late/ext
           involvement:
             contra:
@@ -390,21 +383,92 @@ stages:
           - 0.81
           t_stage: late
           midline_ext: true
-          invert: false
+        - name: contra-II/ipsi-IIandIII-pos/early/noext
+          involvement:
+            contra:
+              II: true
+          given_diagnosis:
+            ipsi:
+              II: true
+              III: true
+              IV: false
+            contra:
+              II: false
+              III: false
+              IV: false
+          given_diagnosis_spsn:
+          - 0.76
+          - 0.81
+          t_stage: early
+          midline_ext: false
+        - name: contra-II/ipsi-IIandIII-pos/early/ext
+          involvement:
+            contra:
+              II: true
+          given_diagnosis:
+            ipsi:
+              II: true
+              III: true
+              IV: false
+            contra:
+              II: false
+              III: false
+              IV: false
+          given_diagnosis_spsn:
+          - 0.76
+          - 0.81
+          t_stage: early
+          midline_ext: true
+        - name: contra-II/ipsi-IIandIII-pos/late/noext
+          involvement:
+            contra:
+              II: true
+          given_diagnosis:
+            ipsi:
+              II: true
+              III: true
+              IV: false
+            contra:
+              II: false
+              III: false
+              IV: false
+          given_diagnosis_spsn:
+          - 0.76
+          - 0.81
+          t_stage: late
+          midline_ext: false
+        - name: contra-II/ipsi-IIandIII-pos/late/ext
+          involvement:
+            contra:
+              II: true
+          given_diagnosis:
+            ipsi:
+              II: true
+              III: true
+              IV: false
+            contra:
+              II: false
+              III: false
+              IV: false
+          given_diagnosis_spsn:
+          - 0.76
+          - 0.81
+          t_stage: late
+          midline_ext: true
     outs:
     - path: models/risks.hdf5
-      md5: 6a8054c55c148c0d16c701397955f0e2
-      size: 594832
+      md5: 402943eaa5b0bef8ee7c5d2f80fded02
+      size: 1175016
   evaluate:
     cmd: "python -m lyscripts evaluate data/cleaned.csv models/samples.hdf5 --metrics\
       \ metrics.json --plots plots/ti/accuracies.csv\n"
     deps:
     - path: data/cleaned.csv
-      md5: 22c87d9a7fbe5509a68da87b4fca6038
+      md5: 06b0d7f0b34ba2411a283afe3cf7e135
       size: 300071
     - path: models/samples.hdf5
-      md5: e65a54a0f617def15e50f22de9e32d33
-      size: 162242688
+      md5: fc4fb6013b57c1a5b1198f51a8d3781b
+      size: 228829088
     params:
       params.yaml:
         graph:
@@ -450,11 +514,11 @@ stages:
           t_stages:
           - early
           - late
-          class: Bilateral
+          class: MidlineBilateral
           kwargs:
             base_symmetric: false
             trans_symmetric: true
-            use_mixing: true
+            use_mixing: false
         sampling:
           walkers_per_dim: 20
           burnin: 1000
@@ -532,21 +596,21 @@ stages:
             rel_acor_threshold: 0.075
     outs:
     - path: metrics.json
-      md5: 20e2efb932ed6b11e53bdf5fe0486cfd
-      size: 162
+      md5: 6c207aeb828e3c076276cda79b2e79e3
+      size: 159
     - path: plots/ti/accuracies.csv
-      md5: c9db81871f556cae3ca5ba10276d6929
-      size: 3733
+      md5: 51d65e3eff5c352a14f5b4471d559f90
+      size: 3731
   predict-prevalences:
     cmd: "python -m lyscripts predict prevalences models/samples.hdf5 data/cleaned.csv\
       \ models/prevalences.hdf5\n"
     deps:
     - path: data/cleaned.csv
-      md5: 22c87d9a7fbe5509a68da87b4fca6038
+      md5: 06b0d7f0b34ba2411a283afe3cf7e135
       size: 300071
     - path: models/samples.hdf5
-      md5: e65a54a0f617def15e50f22de9e32d33
-      size: 162242688
+      md5: fc4fb6013b57c1a5b1198f51a8d3781b
+      size: 228829088
     params:
       params.yaml:
         graph:
@@ -567,11 +631,11 @@ stages:
           t_stages:
           - early
           - late
-          class: Bilateral
+          class: MidlineBilateral
           kwargs:
             base_symmetric: false
             trans_symmetric: true
-            use_mixing: true
+            use_mixing: false
         prevalences:
         - name: contra/early/noext
           pattern:
@@ -891,15 +955,15 @@ stages:
           midline_ext: true
     outs:
     - path: models/prevalences.hdf5
-      md5: 8e0fb6e21cd83649b9ee258e0a305946
-      size: 2064304
+      md5: 058d4761d9c61b50c63aa3bb0ebc5849
+      size: 2736304
   plot-corner:
     cmd: "python -m lyscripts plot corner models/samples.hdf5 plots/corner.png\n"
     deps:
     - path: models/samples.hdf5
-      md5: e65a54a0f617def15e50f22de9e32d33
-      size: 162242688
+      md5: fc4fb6013b57c1a5b1198f51a8d3781b
+      size: 228829088
     outs:
     - path: plots/corner.png
-      md5: 2bd9ca6c95764dd9fc419efda49dbb6a
-      size: 4087996
+      md5: d663f71ef1fe8fd147a5ccb1fac2f60b
+      size: 8019702
