@@ -8,7 +8,7 @@ stages:
     vars:
     - output: data/joined.csv
     cmd: >
-      python -m lyscripts join
+      lyscripts join
       --inputs data/2021-usz-oropharynx.csv data/2021-clb-oropharynx.csv
       --output ${output}
     deps:
@@ -27,7 +27,7 @@ stages:
     - input: data/joined.csv
     - output: data/enhanced.csv
     cmd: >
-      python -m lyscripts enhance ${input} ${output} ${data_cleaning_modalities}
+      lyscripts enhance ${input} ${output} ${data_cleaning_modalities}
     deps:
     - ${input}
     params:
@@ -44,7 +44,7 @@ stages:
       instances of the classes `Bilateral` and `MidlineBilateral` expect three.
     vars:
     - input: data/enhanced.csv
-    cmd: python -m lyscripts clean ${input} ${general.data}
+    cmd: lyscripts clean ${input} ${general.data}
     deps:
     - ${input}
     params:
@@ -59,10 +59,10 @@ stages:
       to the `plots` folder. If the `--ti` option is given, perform thermodynamic
       integration (TI).
     cmd: >
-      python -m lyscripts.sample ${general.data} ${general.samples}
+      lyscripts sample ${general.data} ${general.samples}
       --plots ${general.plots_dir}/sampling
+      --pools 0
       ${inference_modalities}
-      --ti
     deps:
     - ${general.data}
     params:
@@ -89,9 +89,8 @@ stages:
       was performed - it outputs the evidence by integrating said accuracy over the
       inverse temparature ladder.
     cmd: >
-      python -m lyscripts evaluate ${general.data} ${general.samples}
+      lyscripts evaluate ${general.data} ${general.samples}
       --metrics ${general.metrics}
-      --plots ${general.plots_dir}/ti/accuracies.csv
     params:
     - graph
     - model
@@ -100,10 +99,6 @@ stages:
     deps:
     - ${general.data}
     - ${general.samples}
-    plots:
-    - ${general.plots_dir}/ti/accuracies.csv:
-        x: β
-        y: accuracy
     metrics:
     - ${general.metrics}
 
@@ -111,13 +106,14 @@ stages:
     wdir: ..
     desc: Create a corner plot of the last set of drawn samples.
     cmd: >
-      python -m lyscripts plot corner
+      lyscripts plot corner
       ${general.samples}
       ${general.plots_dir}/corner.png
     deps:
     - ${general.samples}
     plots:
     - ${general.plots_dir}/corner.png
+    - ${general.plots_dir}/corner.svg
 
   predict-risks:
     wdir: ..
@@ -125,7 +121,7 @@ stages:
       Compute risk predictions for all the scenarios defined in the `params.yaml`
       file and store them in an HDF5 file.
     cmd: >
-      python -m lyscripts predict risks
+      lyscripts predict risks
       ${general.samples}
       ${general.risks}
     deps:
@@ -144,7 +140,7 @@ stages:
       file, compare it to the data prevalence of the same scenario and store the
       results in an HDF5 file.
     cmd: >
-      python -m lyscripts predict prevalences
+      lyscripts predict prevalences
       ${general.samples}
       ${general.data}
       ${general.prevalences}

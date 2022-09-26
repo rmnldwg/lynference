@@ -15,10 +15,14 @@ general:
 # Subsequently, level II spreads to III and III to IV.
 graph:
   tumor:
-    primary: [II, III]
+    primary: [I, II, III, IV, V, VII]
   lnl:
-    II: [III]
-    III: [II]
+    I: []
+    II: [I, III, V]
+    III: [IV]
+    IV: [V]
+    V: []
+    VII: []
 
 ########################################################################################
 # Below are some parameters necessary for the model setup:
@@ -94,68 +98,20 @@ sampling:
   thin_by: 5                    # draw this many samples for one step in `nsteps`
   temp_schedule:                # use this as the inverse temp schedule for TI
   - 0.0
-  - 1.0076210988534706e-09
-  - 3.224387516331106e-08
-  - 2.448519270213934e-07
-  - 1.031804005225954e-06
-  - 3.148815933917096e-06
-  - 7.835261664684588e-06
-  - 1.6935087808430282e-05
-  - 3.3017728167230525e-05
-  - 5.949901826619859e-05
-  - 0.00010076210988534707
-  - 0.0001622783855914503
-  - 0.0002507283732699068
-  - 0.0003741226606566017
-  - 0.000541922809869769
-  - 0.0007651622719418543
-  - 0.0010565673013513768
-  - 0.0014306778705547923
-  - 0.001903968584518355
-  - 0.00249496959524998
-  - 0.0032243875163311063
+  - 1.316872427983539e-06
+  - 4.2139917695473246e-05
+  - 0.0003200000000000001
+  - 0.0013484773662551439
   - 0.004115226337448558
-  - 0.00519290833892641
-  - 0.006485395006257844
-  - 0.008023307944637018
-  - 0.009840049793490924
-  - 0.011971925141011254
-  - 0.014458261438686257
-  - 0.01734152991583261
-  - 0.020667466494127266
-  - 0.02448519270213934
-  - 0.02884733658986194
-  - 0.03381015364324406
-  - 0.0394336476987224
-  - 0.045781691857753354
-  - 0.05292214940134466
-  - 0.06092699470458736
-  - 0.06987243415118778
-  - 0.07983902704799936
-  - 0.09091180653955425
-  - 0.1031804005225954
-  - 0.11673915256060852
+  - 0.010240000000000003
+  - 0.022132674897119342
+  - 0.043151275720164604
+  - 0.07775999999999998
   - 0.13168724279835387
-  - 0.14812880887639787
-  - 0.16617306684564512
-  - 0.18593443208187052
-  - 0.207532640200251
-  - 0.231092867969897
-  - 0.2567458542283846
-  - 0.28462802079628763
-  - 0.31488159339170957
-  - 0.34765472254481466
-  - 0.38310160451236014
-  - 0.4213826021922288
-  - 0.46266436603796024
-  - 0.5071199549732823
-  - 0.5549289573066435
-  - 0.6062776116457449
-  - 0.6613589278120725
-  - 0.7203728077554274
-  - 0.7835261664684589
-  - 0.8510330529011965
-  - 0.923114770875582
+  - 0.21208362139917689
+  - 0.3276800000000001
+  - 0.48894551440329226
+  - 0.708245596707819
   - 1.0
   # only used when sampling until convergence
   kwargs:
@@ -168,7 +124,23 @@ sampling:
 # RISKS:
 # Every entry in this array defines a scenario for which the stage
 # `predict-risk` will compute the risks, given a set of samples
-risks: []
+risks:
+- name: ipsi-III/involved-II/early
+  involvement:
+    ipsi: {II: null, III: true}
+  given_diagnosis:
+    ipsi:   {II: true, III: false}
+  given_diagnosis_spsn: [0.76, 0.81]
+  t_stage: early
+  invert: false
+- name: ipsi-III/involved-II/late
+  involvement:
+    ipsi: {II: null, III: true}
+  given_diagnosis:
+    ipsi:   {II: true, III: false}
+  given_diagnosis_spsn: [0.76, 0.81]
+  t_stage: late
+  invert: false
 
 ########################################################################################
 # PREVALENCES:
@@ -178,59 +150,242 @@ risks: []
 # diagnostic modality. It can, however, be compared to the prevalence
 # in the data.
 prevalences:
-- name: healthy/early
+# early
+- name: I/early
   pattern:
-    ipsi: {II: false, III: false}
+    ipsi: {I: true}
   modality: max_llh
   modality_spsn: [1.0, 1.0]
   t_stage: early
-  invert: false
-- name: healthy/late
+
+- name: InotII/early
   pattern:
-    ipsi: {II: false, III: false}
+    ipsi: {I: true, II: false}
   modality: max_llh
   modality_spsn: [1.0, 1.0]
-  t_stage: late
-  invert: false
+  t_stage: early
+
+- name: IandII/early
+  pattern:
+    ipsi: {I: true, II: true}
+  modality: max_llh
+  modality_spsn: [1.0, 1.0]
+  t_stage: early
+
 - name: II/early
   pattern:
-    ipsi: {II: true, III: false}
+    ipsi: {II: true}
   modality: max_llh
   modality_spsn: [1.0, 1.0]
   t_stage: early
-  invert: false
+
+- name: IInotI/early
+  pattern:
+    ipsi: {I: false, II: true}
+  modality: max_llh
+  modality_spsn: [1.0, 1.0]
+  t_stage: early
+
+# - name: III/early
+#   pattern:
+#     ipsi: {III: true}
+#   modality: max_llh
+#   modality_spsn: [1.0, 1.0]
+#   t_stage: early
+
+- name: IV/early
+  pattern:
+    ipsi: {IV: true}
+  modality: max_llh
+  modality_spsn: [1.0, 1.0]
+  t_stage: early
+
+- name: V/early
+  pattern:
+    ipsi: {V: true}
+  modality: max_llh
+  modality_spsn: [1.0, 1.0]
+  t_stage: early
+
+# - name: VandIII/early
+#   pattern:
+#     ipsi: {III: true, V: true}
+#   modality: max_llh
+#   modality_spsn: [1.0, 1.0]
+#   t_stage: early
+
+# - name: VnotIII/early
+#   pattern:
+#     ipsi: {III: false, V: true}
+#   modality: max_llh
+#   modality_spsn: [1.0, 1.0]
+#   t_stage: early
+
+- name: VandIV/early
+  pattern:
+    ipsi: {IV: true, V: true}
+  modality: max_llh
+  modality_spsn: [1.0, 1.0]
+  t_stage: early
+
+- name: VnotIV/early
+  pattern:
+    ipsi: {IV: false, V: true}
+  modality: max_llh
+  modality_spsn: [1.0, 1.0]
+  t_stage: early
+
+# - name: VII/early
+#   pattern:
+#     ipsi: {VII: true}
+#   modality: max_llh
+#   modality_spsn: [1.0, 1.0]
+#   t_stage: early
+
+# - name: VIInotII/early
+#   pattern:
+#     ipsi: {II: false, VII: true}
+#   modality: max_llh
+#   modality_spsn: [1.0, 1.0]
+#   t_stage: early
+
+# - name: VIIandII/early
+#   pattern:
+#     ipsi: {II: true, VII: true}
+#   modality: max_llh
+#   modality_spsn: [1.0, 1.0]
+#   t_stage: early
+
+# - name: VIInotIII/early
+#   pattern:
+#     ipsi: {III: false, VII: true}
+#   modality: max_llh
+#   modality_spsn: [1.0, 1.0]
+#   t_stage: early
+
+# - name: VIIandIII/early
+#   pattern:
+#     ipsi: {III: true, VII: true}
+#   modality: max_llh
+#   modality_spsn: [1.0, 1.0]
+#   t_stage: early
+
+# late
+- name: I/late
+  pattern:
+    ipsi: {I: true}
+  modality: max_llh
+  modality_spsn: [1.0, 1.0]
+  t_stage: late
+
+- name: InotII/late
+  pattern:
+    ipsi: {I: true, II: false}
+  modality: max_llh
+  modality_spsn: [1.0, 1.0]
+  t_stage: late
+
+- name: IandII/late
+  pattern:
+    ipsi: {I: true, II: true}
+  modality: max_llh
+  modality_spsn: [1.0, 1.0]
+  t_stage: late
+
 - name: II/late
   pattern:
-    ipsi: {II: true, III: false}
+    ipsi: {II: true}
   modality: max_llh
   modality_spsn: [1.0, 1.0]
   t_stage: late
-  invert: false
-- name: III/early
+
+- name: IInotI/late
   pattern:
-    ipsi: {II: false, III: true}
-  modality: max_llh
-  modality_spsn: [1.0, 1.0]
-  t_stage: early
-  invert: false
-- name: III/late
-  pattern:
-    ipsi: {II: false, III: true}
+    ipsi: {I: false, II: true}
   modality: max_llh
   modality_spsn: [1.0, 1.0]
   t_stage: late
-  invert: false
-- name: both/early
+
+# - name: III/late
+#   pattern:
+#     ipsi: {III: true}
+#   modality: max_llh
+#   modality_spsn: [1.0, 1.0]
+#   t_stage: late
+
+- name: IV/late
   pattern:
-    ipsi: {II: true, III: true}
-  modality: max_llh
-  modality_spsn: [1.0, 1.0]
-  t_stage: early
-  invert: false
-- name: both/late
-  pattern:
-    ipsi: {II: true, III: true}
+    ipsi: {IV: true}
   modality: max_llh
   modality_spsn: [1.0, 1.0]
   t_stage: late
-  invert: false
+
+- name: V/late
+  pattern:
+    ipsi: {V: true}
+  modality: max_llh
+  modality_spsn: [1.0, 1.0]
+  t_stage: late
+
+# - name: VandIII/late
+#   pattern:
+#     ipsi: {III: true, V: true}
+#   modality: max_llh
+#   modality_spsn: [1.0, 1.0]
+#   t_stage: late
+
+# - name: VnotIII/late
+#   pattern:
+#     ipsi: {III: false, V: true}
+#   modality: max_llh
+#   modality_spsn: [1.0, 1.0]
+#   t_stage: late
+
+- name: VandIV/late
+  pattern:
+    ipsi: {IV: true, V: true}
+  modality: max_llh
+  modality_spsn: [1.0, 1.0]
+  t_stage: late
+
+- name: VnotIV/late
+  pattern:
+    ipsi: {IV: false, V: true}
+  modality: max_llh
+  modality_spsn: [1.0, 1.0]
+  t_stage: late
+
+# - name: VII/late
+#   pattern:
+#     ipsi: {VII: true}
+#   modality: max_llh
+#   modality_spsn: [1.0, 1.0]
+#   t_stage: late
+
+# - name: VIInotII/late
+#   pattern:
+#     ipsi: {II: false, VII: true}
+#   modality: max_llh
+#   modality_spsn: [1.0, 1.0]
+#   t_stage: late
+
+# - name: VIIandII/late
+#   pattern:
+#     ipsi: {II: true, VII: true}
+#   modality: max_llh
+#   modality_spsn: [1.0, 1.0]
+#   t_stage: late
+
+# - name: VIInotIII/late
+#   pattern:
+#     ipsi: {III: false, VII: true}
+#   modality: max_llh
+#   modality_spsn: [1.0, 1.0]
+#   t_stage: late
+
+# - name: VIIandIII/late
+#   pattern:
+#     ipsi: {III: true, VII: true}
+#   modality: max_llh
+#   modality_spsn: [1.0, 1.0]
+#   t_stage: late
