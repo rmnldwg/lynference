@@ -108,36 +108,18 @@ sampling:
 # Every entry in this array defines a scenario for which the stage
 # `predict-risk` will compute the risks, given a set of samples
 risks:
-- name: contra-II/N0/early/noext
+- name: contra-III/N0/early/noext
   involvement:
-    contra: {II: true}
+    contra: {III: true}
   given_diagnosis:
     ipsi:   {I: false, II: false, III: false, IV: false, V: false, VII: false}
     contra: {I: false, II: false, III: false, IV: false, V: false, VII: false}
   given_diagnosis_spsn: [0.76, 0.81]
   t_stage: early
   midline_ext: false
-- name: contra-II/N0/late/noext
+- name: contra-III/N0/late/ext
   involvement:
-    contra: {II: true}
-  given_diagnosis:
-    ipsi:   {I: false, II: false, III: false, IV: false, V: false, VII: false}
-    contra: {I: false, II: false, III: false, IV: false, V: false, VII: false}
-  given_diagnosis_spsn: [0.76, 0.81]
-  t_stage: late
-  midline_ext: false
-- name: contra-II/N0/early/ext
-  involvement:
-    contra: {II: true}
-  given_diagnosis:
-    ipsi:   {I: false, II: false, III: false, IV: false, V: false, VII: false}
-    contra: {I: false, II: false, III: false, IV: false, V: false, VII: false}
-  given_diagnosis_spsn: [0.76, 0.81]
-  t_stage: early
-  midline_ext: true
-- name: contra-II/N0/late/ext
-  involvement:
-    contra: {II: true}
+    contra: {III: true}
   given_diagnosis:
     ipsi:   {I: false, II: false, III: false, IV: false, V: false, VII: false}
     contra: {I: false, II: false, III: false, IV: false, V: false, VII: false}
@@ -145,36 +127,9 @@ risks:
   t_stage: late
   midline_ext: true
 
-- name: contra-II/ipsi-II/early/noext
+- name: contra-III/ipsi-II/late/ext
   involvement:
-    contra: {II: true}
-  given_diagnosis:
-    ipsi:   {I: false, II: true , III: false, IV: false, V: false, VII: false}
-    contra: {I: false, II: false, III: false, IV: false, V: false, VII: false}
-  given_diagnosis_spsn: [0.76, 0.81]
-  t_stage: early
-  midline_ext: false
-- name: contra-II/ipsi-II/late/noext
-  involvement:
-    contra: {II: true}
-  given_diagnosis:
-    ipsi:   {I: false, II: true , III: false, IV: false, V: false, VII: false}
-    contra: {I: false, II: false, III: false, IV: false, V: false, VII: false}
-  given_diagnosis_spsn: [0.76, 0.81]
-  t_stage: late
-  midline_ext: false
-- name: contra-II/ipsi-II/early/ext
-  involvement:
-    contra: {II: true}
-  given_diagnosis:
-    ipsi:   {I: false, II: true , III: false, IV: false, V: false, VII: false}
-    contra: {I: false, II: false, III: false, IV: false, V: false, VII: false}
-  given_diagnosis_spsn: [0.76, 0.81]
-  t_stage: early
-  midline_ext: true
-- name: contra-II/ipsi-II/late/ext
-  involvement:
-    contra: {II: true}
+    contra: {III: true}
   given_diagnosis:
     ipsi:   {I: false, II: true , III: false, IV: false, V: false, VII: false}
     contra: {I: false, II: false, III: false, IV: false, V: false, VII: false}
@@ -182,39 +137,41 @@ risks:
   t_stage: late
   midline_ext: true
 
-- name: contra-II/ipsi-IIandIII/early/noext
+- name: contra-III/ipsi-IIandIII/late/ext
   involvement:
-    contra: {II: true}
-  given_diagnosis:
-    ipsi:   {I: false, II: true , III: true , IV: false, V: false, VII: false}
-    contra: {I: false, II: false, III: false, IV: false, V: false, VII: false}
-  given_diagnosis_spsn: [0.76, 0.81]
-  t_stage: early
-  midline_ext: false
-- name: contra-II/ipsi-IIandIII/late/noext
-  involvement:
-    contra: {II: true}
+    contra: {III: true}
   given_diagnosis:
     ipsi:   {I: false, II: true , III: true , IV: false, V: false, VII: false}
     contra: {I: false, II: false, III: false, IV: false, V: false, VII: false}
   given_diagnosis_spsn: [0.76, 0.81]
   t_stage: late
-  midline_ext: false
-- name: contra-II/ipsi-IIandIII/early/ext
+  midline_ext: true
+
+- name: contra-III/ipsi-IIandIII-contra-II/late/ext
   involvement:
-    contra: {II: true}
+    contra: {III: true}
   given_diagnosis:
     ipsi:   {I: false, II: true , III: true , IV: false, V: false, VII: false}
+    contra: {I: false, II: true , III: false, IV: false, V: false, VII: false}
+  given_diagnosis_spsn: [0.76, 0.81]
+  t_stage: late
+  midline_ext: true
+
+- name: contra-IV/ipsi-IIandIII/late/ext
+  involvement:
+    contra: {IV: true}
+  given_diagnosis:
+    ipsi:   {I: false, II: true , III: true , IV: true , V: false, VII: false}
     contra: {I: false, II: false, III: false, IV: false, V: false, VII: false}
   given_diagnosis_spsn: [0.76, 0.81]
-  t_stage: early
+  t_stage: late
   midline_ext: true
-- name: contra-II/ipsi-IIandIII/late/ext
+- name: contra-IV/N+/late/ext
   involvement:
-    contra: {II: true}
+    contra: {IV: true}
   given_diagnosis:
-    ipsi:   {I: false, II: true , III: true , IV: false, V: false, VII: false}
-    contra: {I: false, II: false, III: false, IV: false, V: false, VII: false}
+    ipsi:   {I: false, II: true , III: true , IV: true , V: false, VII: false}
+    contra: {I: false, II: true , III: true , IV: false, V: false, VII: false}
   given_diagnosis_spsn: [0.76, 0.81]
   t_stage: late
   midline_ext: true
