@@ -34,8 +34,8 @@ stages:
       size: 1236427
       nfiles: 8
     - path: ./models
-      md5: e8e6bbfd395ea27be8cc4e60c3fb7aea.dir
-      size: 5929160
+      md5: 1dcfa2a878a3fc0d569b25e715cda94a.dir
+      size: 5766392
       nfiles: 3
     - path: ./plots
       md5: 645e4fd6a927081b6b61af6ceb23eeb9.dir
