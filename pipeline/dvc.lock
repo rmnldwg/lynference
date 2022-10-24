@@ -192,131 +192,62 @@ stages:
             trans_symmetric: true
             use_mixing: true
         risks:
-        - name: ipsi-V/N0/early
+        - name: ipsi/IV/N0/early
           involvement:
             ipsi:
-              V: true
-          given_diagnosis:
-            ipsi:
-              I: false
-              II: false
-              III: false
-              IV: false
-              V: false
-              VII: false
-            contra:
-              I: false
-              II: false
-              III: false
-              IV: false
-              V: false
-              VII: false
-          given_diagnosis_spsn:
-          - 0.76
-          - 0.81
-          t_stage: early
-        - name: ipsi-V/N0/late
-          involvement:
-            ipsi:
-              V: true
-          given_diagnosis:
-            ipsi:
-              I: false
-              II: false
-              III: false
-              IV: false
-              V: false
-              VII: false
-            contra:
-              I: false
-              II: false
-              III: false
-              IV: false
-              V: false
-              VII: false
-          given_diagnosis_spsn:
-          - 0.76
-          - 0.81
-          t_stage: late
-        - name: ipsi-V/ipsi-II/early
-          involvement:
-            ipsi:
-              V: true
-          given_diagnosis:
-            ipsi:
-              I: false
-              II: true
-              III: false
-              IV: false
-              V: false
-              VII: false
-            contra:
-              I: false
-              II: false
-              III: false
-              IV: false
-              V: false
-              VII: false
-          given_diagnosis_spsn:
-          - 0.76
-          - 0.81
-          t_stage: early
-        - name: ipsi-V/ipsi-II/late
-          involvement:
-            ipsi:
-              V: true
-          given_diagnosis:
-            ipsi:
-              I: false
-              II: true
-              III: false
-              IV: false
-              V: false
-              VII: false
-            contra:
-              I: false
-              II: false
-              III: false
-              IV: false
-              V: false
-              VII: false
-          given_diagnosis_spsn:
-          - 0.76
-          - 0.81
-          t_stage: late
-        - name: ipsi-V/ipsi-IIandIII/late
-          involvement:
-            ipsi:
-              V: true
-          given_diagnosis:
-            ipsi:
-              I: false
-              II: true
-              III: true
-              IV: false
-              V: false
-              VII: false
-            contra:
-              I: false
-              II: false
-              III: false
-              IV: false
-              V: false
-              VII: false
-          given_diagnosis_spsn:
-          - 0.76
-          - 0.81
-          t_stage: late
-        - name: ipsi-V/ipsi-IIandIIIandIV/late
-          involvement:
-            ipsi:
-              V: true
-          given_diagnosis:
-            ipsi:
-              I: false
-              II: true
-              III: true
               IV: true
+          given_diagnosis:
+            ipsi:
+              I: false
+              II: false
+              III: false
+              IV: false
+              V: false
+              VII: false
+            contra:
+              I: false
+              II: false
+              III: false
+              IV: false
+              V: false
+              VII: false
+          given_diagnosis_spsn:
+          - 0.76
+          - 0.81
+          t_stage: early
+        - name: ipsi/IV/ipsi-II/early
+          involvement:
+            ipsi:
+              IV: true
+          given_diagnosis:
+            ipsi:
+              I: false
+              II: true
+              III: false
+              IV: false
+              V: false
+              VII: false
+            contra:
+              I: false
+              II: false
+              III: false
+              IV: false
+              V: false
+              VII: false
+          given_diagnosis_spsn:
+          - 0.76
+          - 0.81
+          t_stage: early
+        - name: ipsi/IV/ipsi-II/late
+          involvement:
+            ipsi:
+              IV: true
+          given_diagnosis:
+            ipsi:
+              I: false
+              II: true
+              III: false
+              IV: false
               V: false
               VII: false
             contra:
@@ -330,10 +261,129 @@ stages:
           - 0.76
           - 0.81
           t_stage: late
+        - name: ipsi/IV/ipsi-IIandIII/late
+          involvement:
+            ipsi:
+              IV: true
+          given_diagnosis:
+            ipsi:
+              I: false
+              II: true
+              III: true
+              IV: false
+              V: false
+              VII: false
+            contra:
+              I: false
+              II: false
+              III: false
+              IV: false
+              V: false
+              VII: false
+          given_diagnosis_spsn:
+          - 0.76
+          - 0.81
+          t_stage: late
+        - name: contra/II/N0/early/noext
+          involvement:
+            contra:
+              II: true
+          given_diagnosis:
+            ipsi:
+              I: false
+              II: false
+              III: false
+              IV: false
+              V: false
+              VII: false
+            contra:
+              I: false
+              II: false
+              III: false
+              IV: false
+              V: false
+              VII: false
+          given_diagnosis_spsn:
+          - 0.76
+          - 0.81
+          t_stage: early
+          midline_extension: false
+        - name: contra/II/N0/late/ext
+          involvement:
+            contra:
+              II: true
+          given_diagnosis:
+            ipsi:
+              I: false
+              II: false
+              III: false
+              IV: false
+              V: false
+              VII: false
+            contra:
+              I: false
+              II: false
+              III: false
+              IV: false
+              V: false
+              VII: false
+          given_diagnosis_spsn:
+          - 0.76
+          - 0.81
+          t_stage: late
+          midline_extension: true
+        - name: contra/II/ipsi-IIandIII/late/noext
+          involvement:
+            contra:
+              II: true
+          given_diagnosis:
+            ipsi:
+              I: false
+              II: true
+              III: true
+              IV: false
+              V: false
+              VII: false
+            contra:
+              I: false
+              II: false
+              III: false
+              IV: false
+              V: false
+              VII: false
+          given_diagnosis_spsn:
+          - 0.76
+          - 0.81
+          t_stage: late
+          midline_extension: false
+        - name: contra/II/ipsi-IIandIII/late/ext
+          involvement:
+            contra:
+              II: true
+          given_diagnosis:
+            ipsi:
+              I: false
+              II: true
+              III: true
+              IV: false
+              V: false
+              VII: false
+            contra:
+              I: false
+              II: false
+              III: false
+              IV: false
+              V: false
+              VII: false
+          given_diagnosis_spsn:
+          - 0.76
+          - 0.81
+          t_stage: late
+          midline_extension: true
     outs:
     - path: models/risks.hdf5
-      md5: 05404c862050bc803fc45aee8a590c90
-      size: 925704
+      md5: 9345fa2ec1bb991f6bdbeda37398c4bd
+      size: 1238800
   evaluate:
     cmd: "lyscripts evaluate data/cleaned.csv models/samples.hdf5 --metrics metrics.json\n"
     deps:
@@ -459,11 +509,105 @@ stages:
             base_symmetric: false
             trans_symmetric: true
             use_mixing: true
-        prevalences: []
+        prevalences:
+        - name: ipsi/II/early
+          pattern:
+            ipsi:
+              II: true
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: early
+        - name: ipsi/II/late
+          pattern:
+            ipsi:
+              II: true
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: late
+        - name: ipsi/IV/early
+          pattern:
+            ipsi:
+              IV: true
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: early
+        - name: ipsi/IV/late
+          pattern:
+            ipsi:
+              IV: true
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: late
+        - name: ipsi/V/early
+          pattern:
+            ipsi:
+              V: true
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: early
+        - name: ipsi/V/late
+          pattern:
+            ipsi:
+              V: true
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: late
+        - name: contra/II/noext
+          pattern:
+            contra:
+              II: true
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: late
+          midline_ext: false
+        - name: contra/II/ext
+          pattern:
+            contra:
+              II: true
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: late
+          midline_ext: true
+        - name: contra/III/noext
+          pattern:
+            contra:
+              III: true
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: late
+          midline_ext: false
+        - name: contra/III/ext
+          pattern:
+            contra:
+              III: true
+          modality: max_llh
+          modality_spsn:
+          - 1.0
+          - 1.0
+          t_stage: late
+          midline_ext: true
     outs:
     - path: models/prevalences.hdf5
-      md5: 6781e0baec8d65b9a95a3e879a5098d1
-      size: 800
+      md5: a5b23a0c2698eb92c029cc41ff3c1551
+      size: 1539848
   plot-corner:
     cmd: "lyscripts plot corner models/samples.hdf5 plots/corner.png\n"
     deps:

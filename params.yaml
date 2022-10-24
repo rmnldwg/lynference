@@ -108,54 +108,75 @@ sampling:
 # Every entry in this array defines a scenario for which the stage
 # `predict-risk` will compute the risks, given a set of samples
 risks:
-- name: ipsi-V/N0/early
+- name: ipsi/IV/N0/early
   involvement:
-    ipsi: {V: true}
+    ipsi: {IV: true}
   given_diagnosis:
     ipsi:   {I: false, II: false, III: false, IV: false, V: false, VII: false}
     contra: {I: false, II: false, III: false, IV: false, V: false, VII: false}
   given_diagnosis_spsn: [0.76, 0.81]
   t_stage: early
-- name: ipsi-V/N0/late
+- name: ipsi/IV/ipsi-II/early
   involvement:
-    ipsi: {V: true}
-  given_diagnosis:
-    ipsi:   {I: false, II: false, III: false, IV: false, V: false, VII: false}
-    contra: {I: false, II: false, III: false, IV: false, V: false, VII: false}
-  given_diagnosis_spsn: [0.76, 0.81]
-  t_stage: late
-- name: ipsi-V/ipsi-II/early
-  involvement:
-    ipsi: {V: true}
+    ipsi: {IV: true}
   given_diagnosis:
     ipsi:   {I: false, II: true , III: false, IV: false, V: false, VII: false}
     contra: {I: false, II: false, III: false, IV: false, V: false, VII: false}
   given_diagnosis_spsn: [0.76, 0.81]
   t_stage: early
-- name: ipsi-V/ipsi-II/late
+- name: ipsi/IV/ipsi-II/late
   involvement:
-    ipsi: {V: true}
+    ipsi: {IV: true}
   given_diagnosis:
     ipsi:   {I: false, II: true , III: false, IV: false, V: false, VII: false}
     contra: {I: false, II: false, III: false, IV: false, V: false, VII: false}
   given_diagnosis_spsn: [0.76, 0.81]
   t_stage: late
-- name: ipsi-V/ipsi-IIandIII/late
+- name: ipsi/IV/ipsi-IIandIII/late
   involvement:
-    ipsi: {V: true}
+    ipsi: {IV: true}
   given_diagnosis:
     ipsi:   {I: false, II: true , III: true , IV: false, V: false, VII: false}
     contra: {I: false, II: false, III: false, IV: false, V: false, VII: false}
   given_diagnosis_spsn: [0.76, 0.81]
   t_stage: late
-- name: ipsi-V/ipsi-IIandIIIandIV/late
+
+- name: contra/II/N0/early/noext
   involvement:
-    ipsi: {V: true}
+    contra: {II: true}
   given_diagnosis:
-    ipsi:   {I: false, II: true , III: true , IV: true , V: false, VII: false}
+    ipsi:   {I: false, II: false, III: false, IV: false, V: false, VII: false}
+    contra: {I: false, II: false, III: false, IV: false, V: false, VII: false}
+  given_diagnosis_spsn: [0.76, 0.81]
+  t_stage: early
+  midline_extension: false
+- name: contra/II/N0/late/ext
+  involvement:
+    contra: {II: true}
+  given_diagnosis:
+    ipsi:   {I: false, II: false, III: false, IV: false, V: false, VII: false}
     contra: {I: false, II: false, III: false, IV: false, V: false, VII: false}
   given_diagnosis_spsn: [0.76, 0.81]
   t_stage: late
+  midline_extension: true
+- name: contra/II/ipsi-IIandIII/late/noext
+  involvement:
+    contra: {II: true}
+  given_diagnosis:
+    ipsi:   {I: false, II: true , III: true , IV: false, V: false, VII: false}
+    contra: {I: false, II: false, III: false, IV: false, V: false, VII: false}
+  given_diagnosis_spsn: [0.76, 0.81]
+  t_stage: late
+  midline_extension: false
+- name: contra/II/ipsi-IIandIII/late/ext
+  involvement:
+    contra: {II: true}
+  given_diagnosis:
+    ipsi:   {I: false, II: true , III: true , IV: false, V: false, VII: false}
+    contra: {I: false, II: false, III: false, IV: false, V: false, VII: false}
+  given_diagnosis_spsn: [0.76, 0.81]
+  t_stage: late
+  midline_extension: true
 
 
 ########################################################################################
@@ -165,4 +186,74 @@ risks:
 # prevalence of a certain pattern of involvement for a defined
 # diagnostic modality. It can, however, be compared to the prevalence
 # in the data.
-prevalences: []
+prevalences:
+# ipsilateral
+- name: ipsi/II/early
+  pattern:
+    ipsi: {II: true}
+  modality: max_llh
+  modality_spsn: [1.0, 1.0]
+  t_stage: early
+- name: ipsi/II/late
+  pattern:
+    ipsi: {II: true}
+  modality: max_llh
+  modality_spsn: [1.0, 1.0]
+  t_stage: late
+
+- name: ipsi/IV/early
+  pattern:
+    ipsi: {IV: true}
+  modality: max_llh
+  modality_spsn: [1.0, 1.0]
+  t_stage: early
+- name: ipsi/IV/late
+  pattern:
+    ipsi: {IV: true}
+  modality: max_llh
+  modality_spsn: [1.0, 1.0]
+  t_stage: late
+
+- name: ipsi/V/early
+  pattern:
+    ipsi: {V: true}
+  modality: max_llh
+  modality_spsn: [1.0, 1.0]
+  t_stage: early
+- name: ipsi/V/late
+  pattern:
+    ipsi: {V: true}
+  modality: max_llh
+  modality_spsn: [1.0, 1.0]
+  t_stage: late
+
+# contralateral
+- name: contra/II/noext
+  pattern:
+    contra: {II: true}
+  modality: max_llh
+  modality_spsn: [1.0, 1.0]
+  t_stage: late
+  midline_ext: false
+- name: contra/II/ext
+  pattern:
+    contra: {II: true}
+  modality: max_llh
+  modality_spsn: [1.0, 1.0]
+  t_stage: late
+  midline_ext: true
+
+- name: contra/III/noext
+  pattern:
+    contra: {III: true}
+  modality: max_llh
+  modality_spsn: [1.0, 1.0]
+  t_stage: late
+  midline_ext: false
+- name: contra/III/ext
+  pattern:
+    contra: {III: true}
+  modality: max_llh
+  modality_spsn: [1.0, 1.0]
+  t_stage: late
+  midline_ext: true
