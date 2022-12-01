@@ -1,7 +1,7 @@
 schema: '2.0'
 stages:
   join:
-    cmd: "lyscripts join --inputs data/2021-usz-oropharynx.csv data/2021-clb-oropharynx.csv\
+    cmd: "lyscripts data join --inputs data/2021-usz-oropharynx.csv data/2021-clb-oropharynx.csv\
       \ --output data/joined.csv\n"
     deps:
     - path: data/2021-clb-oropharynx.csv
@@ -15,8 +15,8 @@ stages:
       md5: 7992f871b1be0f226a516418a7531892
       size: 307977
   enhance:
-    cmd: "lyscripts enhance data/joined.csv data/enhanced.csv --modalities 'CT' 'MRI'\
-      \ 'PET' 'FNA' 'diagnostic_consensus' 'pathology' 'pCT'\n"
+    cmd: "lyscripts data enhance data/joined.csv data/enhanced.csv --modalities CT\
+      \ MRI PET FNA diagnostic_consensus pathology pCT\n"
     deps:
     - path: data/joined.csv
       md5: 7992f871b1be0f226a516418a7531892
@@ -50,28 +50,28 @@ stages:
           - 1.0
     outs:
     - path: data/enhanced.csv
-      md5: 053e113111dc64710916e5446d3d6ba6
+      md5: 870702142deb29ac46002296ba6d1225
       size: 375364
   clean:
-    cmd: lyscripts clean data/enhanced.csv data/cleaned.csv
+    cmd: lyscripts data clean data/enhanced.csv data/cleaned.csv
     deps:
     - path: data/enhanced.csv
-      md5: 053e113111dc64710916e5446d3d6ba6
+      md5: 870702142deb29ac46002296ba6d1225
       size: 375364
     params:
       params.yaml:
-        model.class: MidlineBilateral
+        model.class: Unilateral
     outs:
     - path: data/cleaned.csv
-      md5: 4c6ec4376c1d6ca3814a17a61305c89b
-      size: 300071
+      md5: 5c2b261b840a237ad630c450ec0d9ae4
+      size: 155737
   sampling:
     cmd: "lyscripts sample data/cleaned.csv models/samples.hdf5 --plots plots/sampling\
-      \ --pools 0 --modalities 'max_llh'\n"
+      \ --pools 0 --ti --modalities max_llh\n"
     deps:
     - path: data/cleaned.csv
-      md5: 4c6ec4376c1d6ca3814a17a61305c89b
-      size: 300071
+      md5: 5c2b261b840a237ad630c450ec0d9ae4
+      size: 155737
     params:
       params.yaml:
         graph:
@@ -86,12 +86,9 @@ stages:
           lnl:
             I: []
             II:
-            - I
             - III
-            - V
             III:
             - IV
-            - V
             IV: []
             V: []
             VII: []
@@ -126,7 +123,7 @@ stages:
           t_stages:
           - early
           - late
-          class: MidlineBilateral
+          class: Unilateral
           kwargs:
             base_symmetric: false
             trans_symmetric: true
@@ -134,8 +131,25 @@ stages:
         sampling:
           walkers_per_dim: 20
           burnin: 1000
-          nsteps: 50
-          thin_by: 5
+          nsteps: 20
+          thin_by: 10
+          temp_schedule:
+          - 0.0
+          - 1.316872427983538e-06
+          - 4.2139917695473246e-05
+          - 0.0003200000000000001
+          - 0.0013484773662551439
+          - 0.004115226337448558
+          - 0.010240000000000003
+          - 0.022132674897119342
+          - 0.043151275720164604
+          - 0.07775999999999998
+          - 0.13168724279835387
+          - 0.21208362139917689
+          - 0.3276800000000001
+          - 0.48894551440329226
+          - 0.708245596707819
+          - 1.0
           kwargs:
             max_steps: 20000
             check_interval: 100
@@ -143,14 +157,14 @@ stages:
             rel_acor_threshold: 0.075
     outs:
     - path: models/samples.hdf5
-      md5: cf0603eb71eb87010494a1629f3c78ea
-      size: 4839888
+      md5: b314e1668e0650671f4b65b931871211
+      size: 38190520
     - path: plots/sampling/accept_rates.csv
-      md5: 0e4dd68f06be463c61d70393a1b69e7c
-      size: 3158
+      md5: 3392ab60b85ae61836adb34ff409bcbc
+      size: 611
     - path: plots/sampling/acor_times.csv
-      md5: 9f6dbcd885460db88bdb533101390c95
-      size: 3193
+      md5: 0ef014f1199e153daaada68b7eb65e1f
+      size: 605
   predict-risks:
     cmd: "lyscripts predict risks models/samples.hdf5 models/risks.hdf5\n"
     deps:
@@ -269,14 +283,15 @@ stages:
       md5: 482530636158d86338279d278b63ae87
       size: 470280
   evaluate:
-    cmd: "lyscripts evaluate data/cleaned.csv models/samples.hdf5 --metrics metrics.json\n"
+    cmd: "lyscripts evaluate data/cleaned.csv models/samples.hdf5 --metrics metrics.json\
+      \ --plots plots/ti/accuracies.csv\n"
     deps:
     - path: data/cleaned.csv
-      md5: 4c6ec4376c1d6ca3814a17a61305c89b
-      size: 300071
+      md5: 5c2b261b840a237ad630c450ec0d9ae4
+      size: 155737
     - path: models/samples.hdf5
-      md5: cf0603eb71eb87010494a1629f3c78ea
-      size: 4839888
+      md5: b314e1668e0650671f4b65b931871211
+      size: 38190520
     params:
       params.yaml:
         graph:
@@ -291,12 +306,9 @@ stages:
           lnl:
             I: []
             II:
-            - I
             - III
-            - V
             III:
             - IV
-            - V
             IV: []
             V: []
             VII: []
@@ -331,7 +343,7 @@ stages:
           t_stages:
           - early
           - late
-          class: MidlineBilateral
+          class: Unilateral
           kwargs:
             base_symmetric: false
             trans_symmetric: true
@@ -339,8 +351,25 @@ stages:
         sampling:
           walkers_per_dim: 20
           burnin: 1000
-          nsteps: 50
-          thin_by: 5
+          nsteps: 20
+          thin_by: 10
+          temp_schedule:
+          - 0.0
+          - 1.316872427983538e-06
+          - 4.2139917695473246e-05
+          - 0.0003200000000000001
+          - 0.0013484773662551439
+          - 0.004115226337448558
+          - 0.010240000000000003
+          - 0.022132674897119342
+          - 0.043151275720164604
+          - 0.07775999999999998
+          - 0.13168724279835387
+          - 0.21208362139917689
+          - 0.3276800000000001
+          - 0.48894551440329226
+          - 0.708245596707819
+          - 1.0
           kwargs:
             max_steps: 20000
             check_interval: 100
@@ -348,8 +377,11 @@ stages:
             rel_acor_threshold: 0.075
     outs:
     - path: metrics.json
-      md5: 9a71a3a0152ef8617045600221edef4b
-      size: 92
+      md5: ae7394fe35c6b2b7669081cbde141485
+      size: 159
+    - path: plots/ti/accuracies.csv
+      md5: 92a3de2abe595e59338e3e9070b4cf19
+      size: 922
   predict-prevalences:
     cmd: "lyscripts predict prevalences models/samples.hdf5 data/cleaned.csv models/prevalences.hdf5\n"
     deps:
@@ -442,12 +474,12 @@ stages:
     cmd: "lyscripts plot corner models/samples.hdf5 plots/corner.png\n"
     deps:
     - path: models/samples.hdf5
-      md5: cf0603eb71eb87010494a1629f3c78ea
-      size: 4839888
+      md5: b314e1668e0650671f4b65b931871211
+      size: 38190520
     outs:
     - path: plots/corner.png
-      md5: 255008c8782b2a8859a71264ebf88e23
-      size: 24799366
+      md5: 635ef3e2ec9d93fb04c91f4d28313b3a
+      size: 816117
     - path: plots/corner.svg
-      md5: ff4f9db33b511a7d5526582fedc7babd
-      size: 18192538
+      md5: 726b61c695d3b664c32cb1be91e26b4c
+      size: 3520303
