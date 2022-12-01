@@ -8,7 +8,7 @@ stages:
     vars:
     - output: data/joined.csv
     cmd: >
-      lyscripts join
+      lyscripts data join
       --inputs data/2021-usz-oropharynx.csv data/2021-clb-oropharynx.csv
       --output ${output}
     deps:
@@ -27,7 +27,7 @@ stages:
     - input: data/joined.csv
     - output: data/enhanced.csv
     cmd: >
-      lyscripts enhance ${input} ${output} ${data_cleaning_modalities}
+      lyscripts data enhance ${input} ${output} ${data_cleaning_modalities}
     deps:
     - ${input}
     params:
@@ -44,7 +44,7 @@ stages:
       instances of the classes `Bilateral` and `MidlineBilateral` expect three.
     vars:
     - input: data/enhanced.csv
-    cmd: lyscripts clean ${input} ${general.data}
+    cmd: lyscripts data clean ${input} ${general.data}
     deps:
     - ${input}
     params:
@@ -62,6 +62,7 @@ stages:
       lyscripts sample ${general.data} ${general.samples}
       --plots ${general.plots_dir}/sampling
       --pools 0
+      --ti
       ${inference_modalities}
     deps:
     - ${general.data}
@@ -91,6 +92,7 @@ stages:
     cmd: >
       lyscripts evaluate ${general.data} ${general.samples}
       --metrics ${general.metrics}
+      --plots ${general.plots_dir}/ti/accuracies.csv
     params:
     - graph
     - model
@@ -99,6 +101,10 @@ stages:
     deps:
     - ${general.data}
     - ${general.samples}
+    plots:
+    - ${general.plots_dir}/ti/accuracies.csv:
+        x: β
+        y: accuracy
     metrics:
     - ${general.metrics}
 
@@ -115,41 +121,41 @@ stages:
     - ${general.plots_dir}/corner.png
     - ${general.plots_dir}/corner.svg
 
-  predict-risks:
-    wdir: ..
-    desc:
-      Compute risk predictions for all the scenarios defined in the `params.yaml`
-      file and store them in an HDF5 file.
-    cmd: >
-      lyscripts predict risks
-      ${general.samples}
-      ${general.risks}
-    deps:
-    - ${general.samples}
-    params:
-    - graph
-    - model
-    - risks
-    outs:
-    - ${general.risks}
+  # predict-risks:
+  #   wdir: ..
+  #   desc:
+  #     Compute risk predictions for all the scenarios defined in the `params.yaml`
+  #     file and store them in an HDF5 file.
+  #   cmd: >
+  #     lyscripts predict risks
+  #     ${general.samples}
+  #     ${general.risks}
+  #   deps:
+  #   - ${general.samples}
+  #   params:
+  #   - graph
+  #   - model
+  #   - risks
+  #   outs:
+  #   - ${general.risks}
 
-  predict-prevalences:
-    wdir: ..
-    desc:
-      Compute prevalences for all the scenarios defined in the `params.yaml`
-      file, compare it to the data prevalence of the same scenario and store the
-      results in an HDF5 file.
-    cmd: >
-      lyscripts predict prevalences
-      ${general.samples}
-      ${general.data}
-      ${general.prevalences}
-    deps:
-    - ${general.samples}
-    - ${general.data}
-    params:
-    - graph
-    - model
-    - prevalences
-    outs:
-    - ${general.prevalences}
+  # predict-prevalences:
+  #   wdir: ..
+  #   desc:
+  #     Compute prevalences for all the scenarios defined in the `params.yaml`
+  #     file, compare it to the data prevalence of the same scenario and store the
+  #     results in an HDF5 file.
+  #   cmd: >
+  #     lyscripts predict prevalences
+  #     ${general.samples}
+  #     ${general.data}
+  #     ${general.prevalences}
+  #   deps:
+  #   - ${general.samples}
+  #   - ${general.data}
+  #   params:
+  #   - graph
+  #   - model
+  #   - prevalences
+  #   outs:
+  #   - ${general.prevalences}

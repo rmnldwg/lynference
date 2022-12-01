@@ -5,8 +5,8 @@ stages:
       \ >> dag.md\n"
     outs:
     - path: dag.md
-      md5: 0e102d9fef8528a0f1c9237a88585990
-      size: 627
+      md5: c3fa8afe3eac35019e335d63e7b6c131
+      size: 480
   mermaid-png:
     cmd: ./node_modules/.bin/mmdc -i dag.md -o dag.png && mv dag-1.png dag.png
     deps:
@@ -21,8 +21,8 @@ stages:
     cmd: pip freeze | grep -v "pkg_resources" > frozen.txt
     outs:
     - path: frozen.txt
-      md5: 788305a20dff989f85af7228a8e30b44
-      size: 2361
+      md5: 53adf09f26be04ab8b13e0773ef5b28c
+      size: 2382
   pipeline:
     cmd: dvc repro pipeline/dvc.yaml
   remote:
@@ -30,20 +30,20 @@ stages:
       \ local ../lynference.dvc && dvc push -r local\n"
     deps:
     - path: ./data
-      md5: b6a1468f7105288a63444dcfa78a182d.dir
-      size: 1236427
+      md5: 3a41b6c4c183d8b57e3dc60cd1d1ae91.dir
+      size: 1092093
       nfiles: 8
     - path: ./models
-      md5: b9368a7d1b1d30246694a99ee9e619df.dir
-      size: 5929824
-      nfiles: 3
+      md5: 55d558452b577fe937eaa6f9997c6808.dir
+      size: 38190520
+      nfiles: 1
     - path: ./plots
-      md5: 645e4fd6a927081b6b61af6ceb23eeb9.dir
-      size: 42998255
-      nfiles: 4
+      md5: 75d3337f0ed1d7862dc94a9d6a37e81f.dir
+      size: 4338558
+      nfiles: 5
     - path: metrics.json
-      md5: 9a71a3a0152ef8617045600221edef4b
-      size: 92
+      md5: ae7394fe35c6b2b7669081cbde141485
+      size: 159
   mermaid-readme:
     cmd: cat dag.md | sed 's/^/3i/' | sed -f- README.template > README.md
     deps:
@@ -51,9 +51,9 @@ stages:
       md5: b4774a95f1c7a06c5d29b202de91e28a
       size: 10765
     - path: dag.md
-      md5: 0e102d9fef8528a0f1c9237a88585990
-      size: 627
+      md5: c3fa8afe3eac35019e335d63e7b6c131
+      size: 480
     outs:
     - path: README.md
-      md5: 6a7e55c53c13bc5aaf1dceae5f188370
-      size: 11307
+      md5: 0b3deff99b7dbbfc3918fa2ac7b317f9
+      size: 11220
