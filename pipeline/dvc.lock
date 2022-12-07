@@ -86,9 +86,12 @@ stages:
           lnl:
             I: []
             II:
+            - I
             - III
+            - V
             III:
             - IV
+            - V
             IV: []
             V: []
             VII: []
@@ -205,14 +208,14 @@ stages:
             rel_acor_threshold: 0.075
     outs:
     - path: models/samples.hdf5
-      md5: a450ea18766cd65808fc2d5aeebaa5fa
-      size: 146406528
+      md5: 8cd8a44a5d58459eb47b5ccc93733a51
+      size: 211994528
     - path: plots/sampling/accept_rates.csv
-      md5: b59131b140a0c2d80bf55fad09d3638e
-      size: 2444
+      md5: 885cf84c34dec15f4d89deb87944c3e9
+      size: 2351
     - path: plots/sampling/acor_times.csv
-      md5: aa568105e0936df7071ad943caebc7b4
-      size: 2449
+      md5: 1c363cea09ef9725953e2cb1efe94ba3
+      size: 2443
   predict-risks:
     cmd: "lyscripts predict risks models/samples.hdf5 models/risks.hdf5\n"
     deps:
@@ -338,8 +341,8 @@ stages:
       md5: 5c2b261b840a237ad630c450ec0d9ae4
       size: 155737
     - path: models/samples.hdf5
-      md5: a450ea18766cd65808fc2d5aeebaa5fa
-      size: 146406528
+      md5: 8cd8a44a5d58459eb47b5ccc93733a51
+      size: 211994528
     params:
       params.yaml:
         graph:
@@ -354,9 +357,12 @@ stages:
           lnl:
             I: []
             II:
+            - I
             - III
+            - V
             III:
             - IV
+            - V
             IV: []
             V: []
             VII: []
@@ -473,11 +479,11 @@ stages:
             rel_acor_threshold: 0.075
     outs:
     - path: metrics.json
-      md5: 28d9022c6ba16a3c63188b4ef84d8edf
-      size: 160
+      md5: 433bc86872f9fc2952475266be73032a
+      size: 162
     - path: plots/ti/accuracies.csv
-      md5: ff887747457397d39b6bb616f5b00646
-      size: 3721
+      md5: 8874882966430612157cfa86eb7df3eb
+      size: 3723
   predict-prevalences:
     cmd: "lyscripts predict prevalences models/samples.hdf5 data/cleaned.csv models/prevalences.hdf5\n"
     deps:
@@ -570,12 +576,12 @@ stages:
     cmd: "lyscripts plot corner models/samples.hdf5 plots/corner.png\n"
     deps:
     - path: models/samples.hdf5
-      md5: a450ea18766cd65808fc2d5aeebaa5fa
-      size: 146406528
+      md5: 8cd8a44a5d58459eb47b5ccc93733a51
+      size: 211994528
     outs:
     - path: plots/corner.png
-      md5: 0b6334c292e6d37e15aa4fa2918a8ee4
-      size: 767204
+      md5: 7db499ff697413214bf8f6e787e9acfa
+      size: 1439644
     - path: plots/corner.svg
-      md5: d7ad54a3fb73adfbfdc8c50d7e76dc43
-      size: 3447904
+      md5: dd3b99493254e2c93491bd736df1ddc1
+      size: 6583713
