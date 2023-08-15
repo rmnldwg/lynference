@@ -8,12 +8,12 @@ stages:
     vars:
     - output: data/joined.csv
     cmd: >
-      lyscripts join
-      --inputs data/2021-usz-oropharynx.csv data/2021-clb-oropharynx.csv
+      lyscripts data join
+      --inputs data/2023-clb-multisite.csv data/2023-isb-multisite.csv
       --output ${output}
     deps:
-    - data/2021-usz-oropharynx.csv
-    - data/2021-clb-oropharynx.csv
+    - data/2023-clb-multisite.csv
+    - data/2023-isb-multisite.csv
     outs:
     - ${output}
 
@@ -27,13 +27,24 @@ stages:
     - input: data/joined.csv
     - output: data/enhanced.csv
     cmd: >
-      lyscripts enhance ${input} ${output} ${data_cleaning_modalities}
+      lyscripts data enhance ${input} ${output} ${data_cleaning_modalities}
     deps:
     - ${input}
     params:
     - modalities
     outs:
     - ${output}
+
+  filter:
+    wdir: ..
+    desc:
+      Select only oral cavity patients with specific ICD codes.
+    cmd: python scripts/filter.py --input data/enhanced.csv --output data/filtered.csv
+    deps:
+    - scripts/filter.py
+    - data/enhanced.csv
+    outs:
+    - data/filtered.csv
 
   clean:
     wdir: ..
@@ -43,14 +54,15 @@ stages:
       data for the `Unilateral` model class expect only two header rows, while
       instances of the classes `Bilateral` and `MidlineBilateral` expect three.
     vars:
-    - input: data/enhanced.csv
-    cmd: lyscripts clean ${input} ${general.data}
+    - input: data/filtered.csv
+    cmd: lyscripts data clean ${input} ${general.data}
     deps:
     - ${input}
     params:
     - model.class
     outs:
     - ${general.data}
+
 
   sampling:
     wdir: ..
@@ -61,7 +73,7 @@ stages:
     cmd: >
       lyscripts sample ${general.data} ${general.samples}
       --plots ${general.plots_dir}/sampling
-      --pools 0
+      --pools 8
       ${inference_modalities}
     deps:
     - ${general.data}
@@ -106,50 +118,11 @@ stages:
     wdir: ..
     desc: Create a corner plot of the last set of drawn samples.
     cmd: >
-      lyscripts plot corner
-      ${general.samples}
-      ${general.plots_dir}/corner.png
+      python scripts/plot_corner.py
+      --samples ${general.samples}
+      --output ${general.plots_dir}/corner.png
     deps:
     - ${general.samples}
     plots:
     - ${general.plots_dir}/corner.png
     - ${general.plots_dir}/corner.svg
-
-  predict-risks:
-    wdir: ..
-    desc:
-      Compute risk predictions for all the scenarios defined in the `params.yaml`
-      file and store them in an HDF5 file.
-    cmd: >
-      lyscripts predict risks
-      ${general.samples}
-      ${general.risks}
-    deps:
-    - ${general.samples}
-    params:
-    - graph
-    - model
-    - risks
-    outs:
-    - ${general.risks}
-
-  predict-prevalences:
-    wdir: ..
-    desc:
-      Compute prevalences for all the scenarios defined in the `params.yaml`
-      file, compare it to the data prevalence of the same scenario and store the
-      results in an HDF5 file.
-    cmd: >
-      lyscripts predict prevalences
-      ${general.samples}
-      ${general.data}
-      ${general.prevalences}
-    deps:
-    - ${general.samples}
-    - ${general.data}
-    params:
-    - graph
-    - model
-    - prevalences
-    outs:
-    - ${general.prevalences}
