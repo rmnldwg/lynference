@@ -73,7 +73,6 @@ stages:
     cmd: >
       lyscripts sample ${general.data} ${general.samples}
       --plots ${general.plots_dir}/sampling
-      --pools 8
       ${inference_modalities}
     deps:
     - ${general.data}
