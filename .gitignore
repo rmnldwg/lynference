@@ -147,3 +147,4 @@ dvc_plots/
 /evidence.json
 /model.hdf5
 /data.csv
+/midext_ratios.json

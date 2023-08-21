@@ -55,14 +55,14 @@ stages:
     outs:
     - path: data/enhanced.csv
       hash: md5
-      md5: 6c90e40f8a3963f786e728dc668f0c89
+      md5: 79ee2a07804565b82bc113d37c9d6334
       size: 483692
   clean:
     cmd: lyscripts data clean data/filtered.csv data/cleaned.csv
     deps:
     - path: data/filtered.csv
       hash: md5
-      md5: 306e1fbcb95ed5d3347e3ad52fcf2fef
+      md5: 907c8a72f5eb7cfee4d041a82da1def3
       size: 166037
     params:
       params.yaml:
@@ -70,7 +70,7 @@ stages:
     outs:
     - path: data/cleaned.csv
       hash: md5
-      md5: c966358aafeefa3509ac881df4bb1750
+      md5: 1a40ed6909f8f0bf9dcd74ed1dd9f34d
       size: 134066
   sampling:
     cmd: "lyscripts sample data/cleaned.csv models/samples.hdf5 --plots plots/sampling
@@ -78,7 +78,7 @@ stages:
     deps:
     - path: data/cleaned.csv
       hash: md5
-      md5: c966358aafeefa3509ac881df4bb1750
+      md5: 1a40ed6909f8f0bf9dcd74ed1dd9f34d
       size: 134066
     params:
       params.yaml:
@@ -144,16 +144,16 @@ stages:
     outs:
     - path: models/samples.hdf5
       hash: md5
-      md5: 50fc8f7dbff91e054b990ab3790761c6
+      md5: e9fe3cb37e8bdb234daa77947f99d1bf
       size: 3301440
     - path: plots/sampling/accept_rates.csv
       hash: md5
-      md5: 2b498da16f2a56e48db1fff5c8ed7ded
-      size: 957
+      md5: 1485505c83c686bf7cef828a9ec00b3f
+      size: 1081
     - path: plots/sampling/acor_times.csv
       hash: md5
-      md5: 022f780c2ccf553b674046e37db24d8c
-      size: 928
+      md5: 2f46684c70bc3f30f6c8cc6dbec259e1
+      size: 1052
   predict-risks:
     cmd: "lyscripts predict risks models/samples.hdf5 models/risks.hdf5\n"
     deps:
@@ -276,11 +276,11 @@ stages:
     deps:
     - path: data/cleaned.csv
       hash: md5
-      md5: c966358aafeefa3509ac881df4bb1750
+      md5: 1a40ed6909f8f0bf9dcd74ed1dd9f34d
       size: 134066
     - path: models/samples.hdf5
       hash: md5
-      md5: 50fc8f7dbff91e054b990ab3790761c6
+      md5: e9fe3cb37e8bdb234daa77947f99d1bf
       size: 3301440
     params:
       params.yaml:
@@ -346,8 +346,8 @@ stages:
     outs:
     - path: metrics.json
       hash: md5
-      md5: d385939b4613e971a15d31c6dd4a666f
-      size: 91
+      md5: 470b458c5741132d6921511c248ef584
+      size: 92
   predict-prevalences:
     cmd: "lyscripts predict prevalences models/samples.hdf5 data/cleaned.csv models/prevalences.hdf5\n"
     deps:
@@ -441,23 +441,23 @@ stages:
     deps:
     - path: models/samples.hdf5
       hash: md5
-      md5: 50fc8f7dbff91e054b990ab3790761c6
+      md5: e9fe3cb37e8bdb234daa77947f99d1bf
       size: 3301440
     outs:
     - path: plots/corner.png
       hash: md5
-      md5: ba2875c1413753e011136ce7c82b27bc
-      size: 1365982
+      md5: 8b8c5b399edca9d427b844c9f6d8b363
+      size: 1382301
     - path: plots/corner.svg
       hash: md5
-      md5: a903b7c4bc27c6274f8380bade097e49
-      size: 5641892
+      md5: 3bf59848b3546b3d0d799930dbcaa39f
+      size: 5688089
   filter:
     cmd: python scripts/filter.py --input data/enhanced.csv --output data/filtered.csv
     deps:
     - path: data/enhanced.csv
       hash: md5
-      md5: 6c90e40f8a3963f786e728dc668f0c89
+      md5: 79ee2a07804565b82bc113d37c9d6334
       size: 483692
     - path: scripts/filter.py
       hash: md5
@@ -466,5 +466,42 @@ stages:
     outs:
     - path: data/filtered.csv
       hash: md5
-      md5: 306e1fbcb95ed5d3347e3ad52fcf2fef
+      md5: 907c8a72f5eb7cfee4d041a82da1def3
       size: 166037
+  comp-midext-ratio:
+    cmd: "python scripts/comp_midext.py -m midext_ratios.json\n"
+    deps:
+    - path: models/samples.hdf5
+      hash: md5
+      md5: e9fe3cb37e8bdb234daa77947f99d1bf
+      size: 3301440
+    - path: scripts/comp_midext.py
+      hash: md5
+      md5: 68914b33780b3109bef4ed375f19c127
+      size: 2051
+    params:
+      params.yaml:
+        general:
+          data: data/cleaned.csv
+          samples: models/samples.hdf5
+          risks: models/risks.hdf5
+          prevalences: models/prevalences.hdf5
+          metrics: metrics.json
+          plots_dir: plots
+        model:
+          first_binom_prob: 0.3
+          max_t: 10
+          t_stages:
+          - early
+          - late
+          class: MidlineBilateral
+          kwargs:
+            base_symmetric: false
+            trans_symmetric: true
+            evolve_midext: true
+            use_mixing: true
+    outs:
+    - path: midext_ratios.json
+      hash: md5
+      md5: 3b4d0f471a0167e99d82d61ccc6d3de6
+      size: 188

@@ -113,6 +113,20 @@ stages:
     metrics:
     - ${general.metrics}
 
+  comp-midext-ratio:
+    wdir: ..
+    desc: Compute the expected ratio of midline for every T-stage.
+    cmd: >
+      python scripts/comp_midext.py -m midext_ratios.json
+    params:
+    - general
+    - model
+    deps:
+    - models/samples.hdf5
+    - scripts/comp_midext.py
+    metrics:
+    - midext_ratios.json
+
   plot-corner:
     wdir: ..
     desc: Create a corner plot of the last set of drawn samples.
