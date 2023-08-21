@@ -47,15 +47,7 @@ if __name__ == "__main__":
     for sample in samples:
         for i, stage in enumerate(params["model"]["t_stages"]):
             midext_prob = sample[num_spread_probs - 1]
-            if i == 0:
-                binom_p = first_binom_prob
-            else:
-                binom_p = sample[num_spread_probs - 1 + i]
-
-            ratio = ((1. - midext_prob) ** time) @ sp.stats.binom.pmf(
-                k=time, n=max_t, p=binom_p
-            )
-            midext_ratios[stage].append(ratio)
+            midext_ratios[stage].append(1. - midext_prob)
 
     # Compute the mean and std
     for stage in params["model"]["t_stages"]:

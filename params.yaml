@@ -32,7 +32,7 @@ model:
   kwargs:
     base_symmetric: false
     trans_symmetric: true
-    evolve_midext: true
+    evolve_midext: false
     use_mixing: true
 
 ########################################################################################

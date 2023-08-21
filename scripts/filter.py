@@ -53,7 +53,7 @@ if __name__ == "__main__":
     is_oral_cavity = patient_data["tumor", "1", "subsite"].isin(
         icd for icd_list in ORAL_CAVITY_ICD_CODES.values() for icd in icd_list
     )
-    # is_isb = patient_data["patient", "#", "institution"] == "Inselspital Bern"
-    oral_cavity_data = patient_data[is_oral_cavity]
+    is_isb = patient_data["patient", "#", "institution"] == "Inselspital Bern"
+    oral_cavity_data = patient_data[is_oral_cavity & is_isb]
 
     oral_cavity_data.to_csv(args.output, index=False)
