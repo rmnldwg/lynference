@@ -1,3 +1,3 @@
 dvc[azure]
-lyscripts==0.6.6
+lyscripts==0.7.2
 lymph-model==0.4.3

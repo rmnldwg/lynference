@@ -1,8 +1,8 @@
 schema: '2.0'
 stages:
   join:
-    cmd: "lyscripts data join --inputs data/2021-usz-oropharynx.csv data/2021-clb-oropharynx.csv\
-      \ --output data/joined.csv\n"
+    cmd: "lyscripts data join --inputs data/2021-usz-oropharynx.csv data/2021-clb-oropharynx.csv
+      data/2023-isb-multisite.csv data/2023-clb-multisite.csv --output data/joined.csv\n"
     deps:
     - path: data/2021-clb-oropharynx.csv
       md5: d40c0a1ae967a6983d60a0a809cf3972
@@ -10,17 +10,27 @@ stages:
     - path: data/2021-usz-oropharynx.csv
       md5: 4c62057de32538d2274eaf7f2af0c759
       size: 159482
+    - path: data/2023-clb-multisite.csv
+      hash: md5
+      md5: 9d72ee96af2c51033a2fb0bb8551e318
+      size: 123938
+    - path: data/2023-isb-multisite.csv
+      hash: md5
+      md5: 3de3a3d4238148e1b4e5f813e83d4c80
+      size: 205012
     outs:
     - path: data/joined.csv
-      md5: 7992f871b1be0f226a516418a7531892
-      size: 307977
+      hash: md5
+      md5: 5ec14ca2f3c8644bee7dae9dbc379a05
+      size: 808201
   enhance:
-    cmd: "lyscripts data enhance data/joined.csv data/enhanced.csv --modalities CT\
-      \ MRI PET FNA diagnostic_consensus pathology pCT\n"
+    cmd: "lyscripts data enhance data/joined.csv data/enhanced.csv --modalities CT
+      MRI PET FNA diagnostic_consensus pathology pCT\n"
     deps:
     - path: data/joined.csv
-      md5: 7992f871b1be0f226a516418a7531892
-      size: 307977
+      hash: md5
+      md5: 5ec14ca2f3c8644bee7dae9dbc379a05
+      size: 808201
     params:
       params.yaml:
         modalities:
@@ -50,28 +60,32 @@ stages:
           - 1.0
     outs:
     - path: data/enhanced.csv
-      md5: 870702142deb29ac46002296ba6d1225
-      size: 375364
+      hash: md5
+      md5: 487be005c1d05dd7475ec365cf0e4d46
+      size: 977703
   clean:
-    cmd: lyscripts data clean data/enhanced.csv data/cleaned.csv
+    cmd: lyscripts data clean data/filtered.csv data/cleaned.csv
     deps:
-    - path: data/enhanced.csv
-      md5: 870702142deb29ac46002296ba6d1225
-      size: 375364
+    - path: data/filtered.csv
+      hash: md5
+      md5: ca4cc74d89e7234103744bd5f555631e
+      size: 529238
     params:
       params.yaml:
         model.class: Unilateral
     outs:
     - path: data/cleaned.csv
-      md5: 5c2b261b840a237ad630c450ec0d9ae4
-      size: 155737
+      hash: md5
+      md5: c98cfd2e5a4d6680b2ff3c10d077d4c0
+      size: 227786
   sampling:
-    cmd: "lyscripts sample data/cleaned.csv models/samples.hdf5 --plots plots/sampling\
-      \ --pools 0 --ti --modalities max_llh\n"
+    cmd: "lyscripts sample data/cleaned.csv models/samples.hdf5 --plots plots/sampling
+      --ti --modalities max_llh\n"
     deps:
     - path: data/cleaned.csv
-      md5: 5c2b261b840a237ad630c450ec0d9ae4
-      size: 155737
+      hash: md5
+      md5: c98cfd2e5a4d6680b2ff3c10d077d4c0
+      size: 227786
     params:
       params.yaml:
         graph:
@@ -208,14 +222,17 @@ stages:
             rel_acor_threshold: 0.075
     outs:
     - path: models/samples.hdf5
-      md5: 8cd8a44a5d58459eb47b5ccc93733a51
-      size: 211994528
+      hash: md5
+      md5: 9130d3481d69aef14b4bf4b6199162f2
+      size: 208835384
     - path: plots/sampling/accept_rates.csv
-      md5: 885cf84c34dec15f4d89deb87944c3e9
-      size: 2351
+      hash: md5
+      md5: 16679eb39869965805fa2446c9eb6977
+      size: 2396
     - path: plots/sampling/acor_times.csv
-      md5: 1c363cea09ef9725953e2cb1efe94ba3
-      size: 2443
+      hash: md5
+      md5: b11c28bfe485bd416b1ed15472e19e10
+      size: 2440
   predict-risks:
     cmd: "lyscripts predict risks models/samples.hdf5 models/risks.hdf5\n"
     deps:
@@ -334,15 +351,17 @@ stages:
       md5: 482530636158d86338279d278b63ae87
       size: 470280
   evaluate:
-    cmd: "lyscripts evaluate data/cleaned.csv models/samples.hdf5 --metrics metrics.json\
-      \ --plots plots/ti/accuracies.csv\n"
+    cmd: "lyscripts evaluate data/cleaned.csv models/samples.hdf5 --metrics metrics.json
+      --plots plots/ti/accuracies.csv\n"
     deps:
     - path: data/cleaned.csv
-      md5: 5c2b261b840a237ad630c450ec0d9ae4
-      size: 155737
+      hash: md5
+      md5: c98cfd2e5a4d6680b2ff3c10d077d4c0
+      size: 227786
     - path: models/samples.hdf5
-      md5: 8cd8a44a5d58459eb47b5ccc93733a51
-      size: 211994528
+      hash: md5
+      md5: 9130d3481d69aef14b4bf4b6199162f2
+      size: 208835384
     params:
       params.yaml:
         graph:
@@ -479,11 +498,13 @@ stages:
             rel_acor_threshold: 0.075
     outs:
     - path: metrics.json
-      md5: 433bc86872f9fc2952475266be73032a
-      size: 162
+      hash: md5
+      md5: e6a09ce9d3fffa0ed73babafc05e15ba
+      size: 160
     - path: plots/ti/accuracies.csv
-      md5: 8874882966430612157cfa86eb7df3eb
-      size: 3723
+      hash: md5
+      md5: cb4fab80ce615c93dacf4b9d4517b164
+      size: 3712
   predict-prevalences:
     cmd: "lyscripts predict prevalences models/samples.hdf5 data/cleaned.csv models/prevalences.hdf5\n"
     deps:
@@ -576,12 +597,31 @@ stages:
     cmd: "lyscripts plot corner models/samples.hdf5 plots/corner.png\n"
     deps:
     - path: models/samples.hdf5
-      md5: 8cd8a44a5d58459eb47b5ccc93733a51
-      size: 211994528
+      hash: md5
+      md5: 9130d3481d69aef14b4bf4b6199162f2
+      size: 208835384
     outs:
     - path: plots/corner.png
-      md5: 7db499ff697413214bf8f6e787e9acfa
-      size: 1439644
+      hash: md5
+      md5: affecc049129b00bb69b416365e51304
+      size: 1450261
     - path: plots/corner.svg
-      md5: dd3b99493254e2c93491bd736df1ddc1
-      size: 6583713
+      hash: md5
+      md5: 11fb3f81b002f8ab60fa0e6a9523fa0d
+      size: 6615736
+  filter:
+    cmd: "python scripts/filter.py --input data/enhanced.csv --output data/filtered.csv\n"
+    deps:
+    - path: data/enhanced.csv
+      hash: md5
+      md5: 487be005c1d05dd7475ec365cf0e4d46
+      size: 977703
+    - path: scripts/filter.py
+      hash: md5
+      md5: f512d1482a7a03f178b554b3837376a3
+      size: 1850
+    outs:
+    - path: data/filtered.csv
+      hash: md5
+      md5: ca4cc74d89e7234103744bd5f555631e
+      size: 529238

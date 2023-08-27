@@ -9,11 +9,13 @@ stages:
     - output: data/joined.csv
     cmd: >
       lyscripts data join
-      --inputs data/2021-usz-oropharynx.csv data/2021-clb-oropharynx.csv
+      --inputs data/2021-usz-oropharynx.csv data/2021-clb-oropharynx.csv data/2023-isb-multisite.csv data/2023-clb-multisite.csv
       --output ${output}
     deps:
     - data/2021-usz-oropharynx.csv
     - data/2021-clb-oropharynx.csv
+    - data/2023-isb-multisite.csv
+    - data/2023-clb-multisite.csv
     outs:
     - ${output}
 
@@ -35,6 +37,21 @@ stages:
     outs:
     - ${output}
 
+  filter:
+    wdir: ..
+    desc:
+      Select only those patients that have oropharyngeal SCC, because in the new
+      datasets (the 2023 ones) we also have other subsites.
+    cmd: >
+      python scripts/filter.py
+      --input data/enhanced.csv
+      --output data/filtered.csv
+    deps:
+      - scripts/filter.py
+      - data/enhanced.csv
+    outs:
+      - data/filtered.csv
+
   clean:
     wdir: ..
     desc:
@@ -43,7 +60,7 @@ stages:
       data for the `Unilateral` model class expect only two header rows, while
       instances of the classes `Bilateral` and `MidlineBilateral` expect three.
     vars:
-    - input: data/enhanced.csv
+    - input: data/filtered.csv
     cmd: lyscripts data clean ${input} ${general.data}
     deps:
     - ${input}
@@ -61,7 +78,6 @@ stages:
     cmd: >
       lyscripts sample ${general.data} ${general.samples}
       --plots ${general.plots_dir}/sampling
-      --pools 0
       --ti
       ${inference_modalities}
     deps:
