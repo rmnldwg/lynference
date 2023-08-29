@@ -1,4 +1,4 @@
 [core]
     remote = azure
-['remote "local"']
-    url = ../../lynference.dvc
+['remote "azure"']
+    url = https://dvcpipelines.blob.core.windows.net/lynference

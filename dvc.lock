@@ -1,12 +1,13 @@
 schema: '2.0'
 stages:
   mermaid-md:
-    cmd: "dvc dag pipeline/dvc.yaml --full --mermaid --md | sed 's/pipeline\\/dvc.yaml://'\
-      \ >> dag.md\n"
+    cmd: "dvc dag pipeline/dvc.yaml --full --mermaid --md | sed 's/pipeline\\/dvc.yaml://'
+      >> dag.md\n"
     outs:
     - path: dag.md
-      md5: c3fa8afe3eac35019e335d63e7b6c131
-      size: 480
+      hash: md5
+      md5: 02187229b504062ed9ef9249df8dea08
+      size: 691
   mermaid-png:
     cmd: ./node_modules/.bin/mmdc -i dag.md -o dag.png && mv dag-1.png dag.png
     deps:
@@ -21,29 +22,34 @@ stages:
     cmd: pip freeze | grep -v "pkg_resources" > frozen.txt
     outs:
     - path: frozen.txt
-      md5: 53adf09f26be04ab8b13e0773ef5b28c
-      size: 2382
+      hash: md5
+      md5: 7eb0bf65dd854590d7cd0b745ac8fa9c
+      size: 2091
   pipeline:
     cmd: dvc repro pipeline/dvc.yaml
   remote:
-    cmd: "rm -rf ../lynference.dvc && mkdir ../lynference.dvc && dvc remote add --force\
-      \ local ../lynference.dvc && dvc push -r local\n"
+    cmd: "rm -rf ../lynference.dvc && mkdir ../lynference.dvc && dvc remote add --force
+      local ../lynference.dvc && dvc push -r local\n"
     deps:
     - path: ./data
-      md5: 3a41b6c4c183d8b57e3dc60cd1d1ae91.dir
-      size: 1092093
-      nfiles: 8
+      hash: md5
+      md5: b9358af329aeca777d4a416a503bd8cd.dir
+      size: 3125577
+      nfiles: 13
     - path: ./models
-      md5: 0d09d5fae73c71b8c408b015e23988d9.dir
-      size: 211994528
-      nfiles: 1
+      hash: md5
+      md5: 982cb010572c1be453d9cb3953923fa6.dir
+      size: 143248184
+      nfiles: 2
     - path: ./plots
-      md5: 9e7828f31b0ea30a2c066296b5aac2c8.dir
-      size: 8031874
+      hash: md5
+      md5: b49f23c7aa1f97f357137af08ea5b4a2.dir
+      size: 4372464
       nfiles: 5
     - path: metrics.json
-      md5: 433bc86872f9fc2952475266be73032a
-      size: 162
+      hash: md5
+      md5: b015a7141a9915784bfe699c8996630a
+      size: 161
   mermaid-readme:
     cmd: cat dag.md | sed 's/^/3i/' | sed -f- README.template > README.md
     deps:
@@ -51,9 +57,11 @@ stages:
       md5: b4774a95f1c7a06c5d29b202de91e28a
       size: 10765
     - path: dag.md
-      md5: c3fa8afe3eac35019e335d63e7b6c131
-      size: 480
+      hash: md5
+      md5: 02187229b504062ed9ef9249df8dea08
+      size: 691
     outs:
     - path: README.md
-      md5: 0b3deff99b7dbbfc3918fa2ac7b317f9
-      size: 11220
+      hash: md5
+      md5: 462eb1b981193e71107e431282eb1f03
+      size: 11422
