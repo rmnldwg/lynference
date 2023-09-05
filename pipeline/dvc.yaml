@@ -78,7 +78,6 @@ stages:
     cmd: >
       lyscripts sample ${general.data} ${general.samples}
       --plots ${general.plots_dir}/sampling
-      --ti
       ${inference_modalities}
     deps:
     - ${general.data}
@@ -108,7 +107,6 @@ stages:
     cmd: >
       lyscripts evaluate ${general.data} ${general.samples}
       --metrics ${general.metrics}
-      --plots ${general.plots_dir}/ti/accuracies.csv
     params:
     - graph
     - model
@@ -117,10 +115,6 @@ stages:
     deps:
     - ${general.data}
     - ${general.samples}
-    plots:
-    - ${general.plots_dir}/ti/accuracies.csv:
-        x: β
-        y: accuracy
     metrics:
     - ${general.metrics}
 
