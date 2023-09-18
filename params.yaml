@@ -81,7 +81,7 @@ data_cleaning_modalities:
 
 # this lists the above defined modalities that will be used for
 # inference and evaluation.
-# The wird nested way of writing them down here is so that DVC can unpack the dict
+# The weird nested way of writing them down here is so that DVC can unpack the dict
 # directly into the command.
 inference_modalities:
   modalities:
