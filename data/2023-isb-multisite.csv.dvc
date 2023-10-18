@@ -1,12 +1,12 @@
-md5: 2b0aa7420cb4ee540b807ef9ffdc631d
+md5: 3531bed7df24d3e59a2a795f6f3e67f5
 frozen: true
 deps:
 - path: 2023-isb-multisite/data.csv
   repo:
     url: git@github.com:rmnldwg/lydata.private
-    rev_lock: 738357181f770068b669befbd56d6675f1414be5
+    rev_lock: a4ec165c7690f4c494ccb9405e20aedaf9dba8b7
 outs:
-- md5: 3de3a3d4238148e1b4e5f813e83d4c80
-  size: 205012
+- md5: 569984943168f3a56d6ca58d0813dee2
+  size: 204323
   hash: md5
   path: 2023-isb-multisite.csv
