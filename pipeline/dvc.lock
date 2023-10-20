@@ -61,14 +61,14 @@ stages:
     outs:
     - path: data/enhanced.csv
       hash: md5
-      md5: 35d376689521fd57429c1ea21a6be8d9
+      md5: c47cda3386f87dd144743b5d4d0bcc2a
       size: 976692
   clean:
     cmd: lyscripts data clean data/filtered.csv data/cleaned.csv
     deps:
     - path: data/filtered.csv
       hash: md5
-      md5: 2e0caf7088c85a176bbb4a536d8db541
+      md5: de35d3fcd02a05fc39fe0afcc1becb6a
       size: 529238
     params:
       params.yaml:
@@ -76,7 +76,7 @@ stages:
     outs:
     - path: data/cleaned.csv
       hash: md5
-      md5: 92c33f37a66d048716545f7899a76e85
+      md5: b303c4c1420b1d5f0f4e291f24edaa5a
       size: 227786
   sampling:
     cmd: "lyscripts sample data/cleaned.csv models/samples.hdf5 --plots plots/sampling
@@ -84,7 +84,7 @@ stages:
     deps:
     - path: data/cleaned.csv
       hash: md5
-      md5: 92c33f37a66d048716545f7899a76e85
+      md5: b303c4c1420b1d5f0f4e291f24edaa5a
       size: 227786
     params:
       params.yaml:
@@ -98,9 +98,9 @@ stages:
             - V
             - VII
           lnl:
-            I: []
+            I:
+            - II
             II:
-            - I
             - III
             III:
             - IV
@@ -221,16 +221,16 @@ stages:
     outs:
     - path: models/samples.hdf5
       hash: md5
-      md5: 1e9144f54e06e65d3af314cb1e66d674
+      md5: 353b32e35f4adddb414adc79fb8f46df
       size: 155170424
     - path: plots/sampling/accept_rates.csv
       hash: md5
-      md5: 76743a8eb69f33ca21b057d9cc38cd66
-      size: 2029
+      md5: fbe172ff98f77324d94e2e2f0a36eb18
+      size: 2058
     - path: plots/sampling/acor_times.csv
       hash: md5
-      md5: 63c2631ed418106e5eb0af4ded210584
-      size: 2451
+      md5: f04b078452a10c57f5152a52bb9e0be2
+      size: 2462
   predict-risks:
     cmd: "lyscripts predict risks models/samples.hdf5 models/risks.hdf5\n"
     deps:
@@ -354,11 +354,11 @@ stages:
     deps:
     - path: data/cleaned.csv
       hash: md5
-      md5: 92c33f37a66d048716545f7899a76e85
+      md5: b303c4c1420b1d5f0f4e291f24edaa5a
       size: 227786
     - path: models/samples.hdf5
       hash: md5
-      md5: 1e9144f54e06e65d3af314cb1e66d674
+      md5: 353b32e35f4adddb414adc79fb8f46df
       size: 155170424
     params:
       params.yaml:
@@ -372,9 +372,9 @@ stages:
             - V
             - VII
           lnl:
-            I: []
+            I:
+            - II
             II:
-            - I
             - III
             III:
             - IV
@@ -495,12 +495,12 @@ stages:
     outs:
     - path: metrics.json
       hash: md5
-      md5: e06fae37bd373585818aa8a7a2150d2d
-      size: 161
+      md5: 38f255fac0f361adc38103183211d1b4
+      size: 159
     - path: plots/ti/accuracies.csv
       hash: md5
-      md5: 98ca0c77a4b73321a540c2a66486124c
-      size: 3707
+      md5: 5652900042f1add7c1442529fe313946
+      size: 3731
   predict-prevalences:
     cmd: "lyscripts predict prevalences models/samples.hdf5 data/cleaned.csv models/prevalences.hdf5\n"
     deps:
@@ -594,23 +594,23 @@ stages:
     deps:
     - path: models/samples.hdf5
       hash: md5
-      md5: 1e9144f54e06e65d3af314cb1e66d674
+      md5: 353b32e35f4adddb414adc79fb8f46df
       size: 155170424
     outs:
     - path: plots/corner.png
       hash: md5
-      md5: 6e6919f5286c5eb011d828a49d82cd3f
-      size: 989343
+      md5: edb62a444a92e153b3072df57bb03043
+      size: 1007118
     - path: plots/corner.svg
       hash: md5
-      md5: ec6df65de9b5c3674e0e93cfd5f06cfa
-      size: 4378748
+      md5: a00e08e8e421764607c745ab1c95a858
+      size: 4439580
   filter:
     cmd: "python scripts/filter.py --input data/enhanced.csv --output data/filtered.csv\n"
     deps:
     - path: data/enhanced.csv
       hash: md5
-      md5: 35d376689521fd57429c1ea21a6be8d9
+      md5: c47cda3386f87dd144743b5d4d0bcc2a
       size: 976692
     - path: scripts/filter.py
       hash: md5
@@ -619,5 +619,5 @@ stages:
     outs:
     - path: data/filtered.csv
       hash: md5
-      md5: 2e0caf7088c85a176bbb4a536d8db541
+      md5: de35d3fcd02a05fc39fe0afcc1becb6a
       size: 529238
