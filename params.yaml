@@ -16,8 +16,8 @@ graph:
     primary: [I, II, III, IV, V, VII]
   lnl:
     I: []
-    II: [III]
-    III: [IV, V]
+    II: [III, VII]
+    III: [IV]
     IV: []
     V: []
     VII: []
