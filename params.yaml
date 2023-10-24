@@ -15,10 +15,10 @@ graph:
   tumor:
     primary: [I, II, III, IV, V, VII]
   lnl:
-    I: []
-    II: [III, VII]
-    III: [IV]
-    IV: [V]
+    I: [II]
+    II: [III]
+    III: [IV, V]
+    IV: []
     V: []
     VII: []
 
