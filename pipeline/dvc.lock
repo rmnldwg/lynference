@@ -76,7 +76,7 @@ stages:
     outs:
     - path: data/cleaned.csv
       hash: md5
-      md5: bc0ad29a891424828bf77126b5939c4e
+      md5: 78ede9eef5a3bf81f834c317e238608b
       size: 227786
   sampling:
     cmd: "lyscripts sample data/cleaned.csv models/samples.hdf5 --plots plots/sampling
@@ -84,7 +84,7 @@ stages:
     deps:
     - path: data/cleaned.csv
       hash: md5
-      md5: bc0ad29a891424828bf77126b5939c4e
+      md5: 78ede9eef5a3bf81f834c317e238608b
       size: 227786
     params:
       params.yaml:
@@ -222,16 +222,16 @@ stages:
     outs:
     - path: models/samples.hdf5
       hash: md5
-      md5: d095bb3731f10783f424699ac26c1cd6
+      md5: 65b668650d108ed6eb66a315fc12b3bb
       size: 202769624
     - path: plots/sampling/accept_rates.csv
       hash: md5
-      md5: 037702af4ff4fdca0bf676b5221977fd
-      size: 2440
+      md5: e9123d1ab4bc5e5e15689b57d6cdc4e0
+      size: 2453
     - path: plots/sampling/acor_times.csv
       hash: md5
-      md5: 1a25c07fc43d8d39d60617d2703c56fd
-      size: 2451
+      md5: 7bd415f8a7e954eda07960473ffd1543
+      size: 2447
   predict-risks:
     cmd: "lyscripts predict risks models/samples.hdf5 models/risks.hdf5\n"
     deps:
@@ -355,11 +355,11 @@ stages:
     deps:
     - path: data/cleaned.csv
       hash: md5
-      md5: bc0ad29a891424828bf77126b5939c4e
+      md5: 78ede9eef5a3bf81f834c317e238608b
       size: 227786
     - path: models/samples.hdf5
       hash: md5
-      md5: d095bb3731f10783f424699ac26c1cd6
+      md5: 65b668650d108ed6eb66a315fc12b3bb
       size: 202769624
     params:
       params.yaml:
@@ -497,12 +497,12 @@ stages:
     outs:
     - path: metrics.json
       hash: md5
-      md5: 3bfc091e51ad3b871773630575d1d5f7
-      size: 159
+      md5: fe64aa5bf2c62999cdb4d75432b6d992
+      size: 162
     - path: plots/ti/accuracies.csv
       hash: md5
-      md5: a7881129f9ae83f1dad0a06733df896d
-      size: 3719
+      md5: c18f36ae440ff6487829c7411202f3cd
+      size: 3728
   predict-prevalences:
     cmd: "lyscripts predict prevalences models/samples.hdf5 data/cleaned.csv models/prevalences.hdf5\n"
     deps:
@@ -596,17 +596,17 @@ stages:
     deps:
     - path: models/samples.hdf5
       hash: md5
-      md5: d095bb3731f10783f424699ac26c1cd6
+      md5: 65b668650d108ed6eb66a315fc12b3bb
       size: 202769624
     outs:
     - path: plots/corner.png
       hash: md5
-      md5: 65744fd652f3dc3cb965324e0ac2f84d
-      size: 1250662
+      md5: 57069f3b048e7ff1d01c0b1c7698e671
+      size: 1190310
     - path: plots/corner.svg
       hash: md5
-      md5: aa24570d57426ec33f5643673cfae57e
-      size: 5501071
+      md5: dbcec801ab82ec261bb9a343fdae4a77
+      size: 5420104
   filter:
     cmd: "python scripts/filter.py --input data/enhanced.csv --output data/filtered.csv\n"
     deps:
