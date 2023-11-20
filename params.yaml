@@ -17,7 +17,7 @@ graph:
   lnl:
     I: []
     II: []
-    III: []
+    III: [IV]
     IV: []
     V: []
     VII: []
