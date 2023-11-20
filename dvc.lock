@@ -23,8 +23,8 @@ stages:
     outs:
     - path: frozen.txt
       hash: md5
-      md5: 390b17e74f7c3a49dcb89f5faeabb06e
-      size: 2213
+      md5: 2a5a1679bf11db4bb6764f9fcf923f01
+      size: 2214
   pipeline:
     cmd: dvc repro pipeline/dvc.yaml
   remote:
@@ -33,23 +33,23 @@ stages:
     deps:
     - path: ./data
       hash: md5
-      md5: aa205eef525c8458c869595bab3299f4.dir
+      md5: 241e701792694a8f789dfdfd4a063117.dir
       size: 3123062
       nfiles: 13
     - path: ./models
       hash: md5
-      md5: 3209662dc5c42ae7a6e0b9a9b10e6f45.dir
-      size: 208835384
+      md5: 761a36827c67de81aa9a230e17f63d14.dir
+      size: 104167864
       nfiles: 1
     - path: ./plots
       hash: md5
-      md5: bd7a34723cd8deaeeead73d959aebc57.dir
-      size: 8090482
+      md5: bbd507e6d453f0cf116c969fad3bb913.dir
+      size: 3339456
       nfiles: 5
     - path: metrics.json
       hash: md5
-      md5: e437f00461260a706925d75ea8220bf8
-      size: 159
+      md5: 852d060984eef8e8895b7a1ec34c18ff
+      size: 162
   mermaid-readme:
     cmd: cat dag.md | sed 's/^/3i/' | sed -f- README.template > README.md
     deps:

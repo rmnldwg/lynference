@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #SBATCH --cpus-per-task=1
-#SBATCH --mem=1000
+#SBATCH --mem=2000
 #SBATCH --time=2-00:00:00
 #SBATCH --output=job.log
 
