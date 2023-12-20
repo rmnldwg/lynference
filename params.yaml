@@ -10,16 +10,14 @@ general:
 
 ########################################################################################
 # This dictionary defines which LNLs are present in the
-# graph and how they are connected. In this case, the
-# primary tumors spreads to the LNLs II, III and IV.
-# Subsequently, level II spreads to III and III to IV.
+# graph and how they are connected.
 graph:
   tumor:
     primary: [I, II, III, IV, V, VII]
   lnl:
     I: []
-    II: [I, III, V]
-    III: [IV, V]
+    II: []
+    III: [IV]
     IV: []
     V: []
     VII: []
@@ -30,7 +28,7 @@ model:
   first_binom_prob: 0.3         # defines shape of time prior of first T-stage
   max_t: 10                     # max number of time steps to evolve system
   t_stages: [early, late]       # T-stages to consider in the data
-  class: MidlineBilateral       # model class to use (see `lymph-model` docs)
+  class: Unilateral             # model class to use (see `lymph-model` docs)
   # keyword arguments to pass to the model constructor
   kwargs:
     base_symmetric: false
@@ -94,8 +92,73 @@ inference_modalities:
 sampling:
   walkers_per_dim: 20           # num of parallel walkers per parameter space dimension
   burnin: 1000                  # burn-in steps to discard
-  nsteps: 50                    # do this many serious steps per sampling round
-  thin_by: 5                    # draw this many samples for one step in `nsteps`
+  nsteps: 20                    # do this many serious steps per sampling round
+  thin_by: 10                   # draw this many samples for one step in `nsteps`
+  temp_schedule:                # use this as the inverse temp schedule for TI
+  - 0.0
+  - 1.0076210988534706e-09
+  - 3.224387516331106e-08
+  - 2.448519270213934e-07
+  - 1.031804005225954e-06
+  - 3.148815933917096e-06
+  - 7.835261664684588e-06
+  - 1.6935087808430282e-05
+  - 3.3017728167230525e-05
+  - 5.949901826619859e-05
+  - 0.00010076210988534707
+  - 0.0001622783855914503
+  - 0.0002507283732699068
+  - 0.0003741226606566017
+  - 0.000541922809869769
+  - 0.0007651622719418543
+  - 0.0010565673013513768
+  - 0.0014306778705547923
+  - 0.001903968584518355
+  - 0.00249496959524998
+  - 0.0032243875163311063
+  - 0.004115226337448558
+  - 0.00519290833892641
+  - 0.006485395006257844
+  - 0.008023307944637018
+  - 0.009840049793490924
+  - 0.011971925141011254
+  - 0.014458261438686257
+  - 0.01734152991583261
+  - 0.020667466494127266
+  - 0.02448519270213934
+  - 0.02884733658986194
+  - 0.03381015364324406
+  - 0.0394336476987224
+  - 0.045781691857753354
+  - 0.05292214940134466
+  - 0.06092699470458736
+  - 0.06987243415118778
+  - 0.07983902704799936
+  - 0.09091180653955425
+  - 0.1031804005225954
+  - 0.11673915256060852
+  - 0.13168724279835387
+  - 0.14812880887639787
+  - 0.16617306684564512
+  - 0.18593443208187052
+  - 0.207532640200251
+  - 0.231092867969897
+  - 0.2567458542283846
+  - 0.28462802079628763
+  - 0.31488159339170957
+  - 0.34765472254481466
+  - 0.38310160451236014
+  - 0.4213826021922288
+  - 0.46266436603796024
+  - 0.5071199549732823
+  - 0.5549289573066435
+  - 0.6062776116457449
+  - 0.6613589278120725
+  - 0.7203728077554274
+  - 0.7835261664684589
+  - 0.8510330529011965
+  - 0.923114770875582
+  - 1.0
   # only used when sampling until convergence
   kwargs:
     max_steps: 20000
@@ -107,34 +170,7 @@ sampling:
 # RISKS:
 # Every entry in this array defines a scenario for which the stage
 # `predict-risk` will compute the risks, given a set of samples
-risks:
-- name: contra/III/N0/late/ext
-  involvement:
-    contra: {III: true}
-  given_diagnosis:
-    ipsi:   {I: false, II: false, III: false, IV: false, V: false, VII: false}
-    contra: {I: false, II: false, III: false, IV: false, V: false, VII: false}
-  given_diagnosis_spsn: [0.76, 0.81]
-  t_stage: late
-  midline_extension: true
-- name: contra/III/ipsi-IIandIII/late/noext
-  involvement:
-    contra: {III: true}
-  given_diagnosis:
-    ipsi:   {I: false, II: true , III: true , IV: false, V: false, VII: false}
-    contra: {I: false, II: false, III: false, IV: false, V: false, VII: false}
-  given_diagnosis_spsn: [0.76, 0.81]
-  t_stage: late
-  midline_extension: false
-- name: contra/III/ipsi-IIandIII/late/ext
-  involvement:
-    contra: {III: true}
-  given_diagnosis:
-    ipsi:   {I: false, II: true , III: true , IV: false, V: false, VII: false}
-    contra: {I: false, II: false, III: false, IV: false, V: false, VII: false}
-  given_diagnosis_spsn: [0.76, 0.81]
-  t_stage: late
-  midline_extension: true
+risks: []
 
 
 ########################################################################################
@@ -144,30 +180,4 @@ risks:
 # prevalence of a certain pattern of involvement for a defined
 # diagnostic modality. It can, however, be compared to the prevalence
 # in the data.
-prevalences:
-# ipsilateral
-- name: ipsi/IInotI/early
-  pattern:
-    ipsi: {I: false, II: true}
-  modality: max_llh
-  modality_spsn: [1.0, 1.0]
-  t_stage: early
-- name: ipsi/IInotI/late
-  pattern:
-    ipsi: {I: false, II: true}
-  modality: max_llh
-  modality_spsn: [1.0, 1.0]
-  t_stage: late
-
-- name: ipsi/IIandIII/early
-  pattern:
-    ipsi: {II: true, III: true}
-  modality: max_llh
-  modality_spsn: [1.0, 1.0]
-  t_stage: early
-- name: ipsi/IIandIII/late
-  pattern:
-    ipsi: {II: true, III: true}
-  modality: max_llh
-  modality_spsn: [1.0, 1.0]
-  t_stage: late
+prevalences: []

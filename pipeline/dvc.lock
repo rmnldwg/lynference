@@ -1,8 +1,8 @@
 schema: '2.0'
 stages:
   join:
-    cmd: "lyscripts join --inputs data/2021-usz-oropharynx.csv data/2021-clb-oropharynx.csv\
-      \ --output data/joined.csv\n"
+    cmd: "lyscripts data join --inputs data/2021-usz-oropharynx.csv data/2021-clb-oropharynx.csv
+      data/2023-isb-multisite.csv data/2023-clb-multisite.csv --output data/joined.csv\n"
     deps:
     - path: data/2021-clb-oropharynx.csv
       md5: d40c0a1ae967a6983d60a0a809cf3972
@@ -10,17 +10,27 @@ stages:
     - path: data/2021-usz-oropharynx.csv
       md5: 4c62057de32538d2274eaf7f2af0c759
       size: 159482
+    - path: data/2023-clb-multisite.csv
+      hash: md5
+      md5: 9d72ee96af2c51033a2fb0bb8551e318
+      size: 123938
+    - path: data/2023-isb-multisite.csv
+      hash: md5
+      md5: 569984943168f3a56d6ca58d0813dee2
+      size: 204323
     outs:
     - path: data/joined.csv
-      md5: 7992f871b1be0f226a516418a7531892
-      size: 307977
+      hash: md5
+      md5: 3214cee7533ee9b99d6ff78df65d9ab3
+      size: 807386
   enhance:
-    cmd: "lyscripts enhance data/joined.csv data/enhanced.csv --modalities 'CT' 'MRI'\
-      \ 'PET' 'FNA' 'diagnostic_consensus' 'pathology' 'pCT'\n"
+    cmd: "lyscripts data enhance data/joined.csv data/enhanced.csv --modalities CT
+      MRI PET FNA diagnostic_consensus pathology pCT\n"
     deps:
     - path: data/joined.csv
-      md5: 7992f871b1be0f226a516418a7531892
-      size: 307977
+      hash: md5
+      md5: 3214cee7533ee9b99d6ff78df65d9ab3
+      size: 807386
     params:
       params.yaml:
         modalities:
@@ -50,28 +60,32 @@ stages:
           - 1.0
     outs:
     - path: data/enhanced.csv
-      md5: 053e113111dc64710916e5446d3d6ba6
-      size: 375364
+      hash: md5
+      md5: c47cda3386f87dd144743b5d4d0bcc2a
+      size: 976692
   clean:
-    cmd: lyscripts clean data/enhanced.csv data/cleaned.csv
+    cmd: lyscripts data clean data/filtered.csv data/cleaned.csv
     deps:
-    - path: data/enhanced.csv
-      md5: 053e113111dc64710916e5446d3d6ba6
-      size: 375364
+    - path: data/filtered.csv
+      hash: md5
+      md5: de35d3fcd02a05fc39fe0afcc1becb6a
+      size: 529238
     params:
       params.yaml:
-        model.class: MidlineBilateral
+        model.class: Unilateral
     outs:
     - path: data/cleaned.csv
-      md5: 4c6ec4376c1d6ca3814a17a61305c89b
-      size: 300071
+      hash: md5
+      md5: 9e99529170c092774a0933c11fac75ec
+      size: 227786
   sampling:
-    cmd: "lyscripts sample data/cleaned.csv models/samples.hdf5 --plots plots/sampling\
-      \ --pools 0 --modalities 'max_llh'\n"
+    cmd: "lyscripts sample data/cleaned.csv models/samples.hdf5 --plots plots/sampling
+      --ti --modalities max_llh\n"
     deps:
     - path: data/cleaned.csv
-      md5: 4c6ec4376c1d6ca3814a17a61305c89b
-      size: 300071
+      hash: md5
+      md5: 9e99529170c092774a0933c11fac75ec
+      size: 227786
     params:
       params.yaml:
         graph:
@@ -85,13 +99,9 @@ stages:
             - VII
           lnl:
             I: []
-            II:
-            - I
-            - III
-            - V
+            II: []
             III:
             - IV
-            - V
             IV: []
             V: []
             VII: []
@@ -126,7 +136,7 @@ stages:
           t_stages:
           - early
           - late
-          class: MidlineBilateral
+          class: Unilateral
           kwargs:
             base_symmetric: false
             trans_symmetric: true
@@ -134,8 +144,73 @@ stages:
         sampling:
           walkers_per_dim: 20
           burnin: 1000
-          nsteps: 50
-          thin_by: 5
+          nsteps: 20
+          thin_by: 10
+          temp_schedule:
+          - 0.0
+          - 1.0076210988534706e-09
+          - 3.224387516331105e-08
+          - 2.448519270213933e-07
+          - 1.031804005225953e-06
+          - 3.148815933917096e-06
+          - 7.835261664684588e-06
+          - 1.6935087808430282e-05
+          - 3.3017728167230525e-05
+          - 5.949901826619859e-05
+          - 0.00010076210988534707
+          - 0.0001622783855914503
+          - 0.0002507283732699068
+          - 0.0003741226606566017
+          - 0.000541922809869769
+          - 0.0007651622719418543
+          - 0.0010565673013513768
+          - 0.0014306778705547923
+          - 0.001903968584518355
+          - 0.00249496959524998
+          - 0.0032243875163311063
+          - 0.004115226337448558
+          - 0.00519290833892641
+          - 0.006485395006257844
+          - 0.008023307944637018
+          - 0.009840049793490924
+          - 0.011971925141011254
+          - 0.014458261438686257
+          - 0.01734152991583261
+          - 0.020667466494127266
+          - 0.02448519270213934
+          - 0.02884733658986194
+          - 0.03381015364324406
+          - 0.0394336476987224
+          - 0.045781691857753354
+          - 0.05292214940134466
+          - 0.06092699470458736
+          - 0.06987243415118778
+          - 0.07983902704799936
+          - 0.09091180653955425
+          - 0.1031804005225954
+          - 0.11673915256060852
+          - 0.13168724279835387
+          - 0.14812880887639787
+          - 0.16617306684564512
+          - 0.18593443208187052
+          - 0.207532640200251
+          - 0.231092867969897
+          - 0.2567458542283846
+          - 0.28462802079628763
+          - 0.31488159339170957
+          - 0.34765472254481466
+          - 0.38310160451236014
+          - 0.4213826021922288
+          - 0.46266436603796024
+          - 0.5071199549732823
+          - 0.5549289573066435
+          - 0.6062776116457449
+          - 0.6613589278120725
+          - 0.7203728077554274
+          - 0.7835261664684589
+          - 0.8510330529011965
+          - 0.923114770875582
+          - 1.0
           kwargs:
             max_steps: 20000
             check_interval: 100
@@ -143,14 +218,17 @@ stages:
             rel_acor_threshold: 0.075
     outs:
     - path: models/samples.hdf5
-      md5: cf0603eb71eb87010494a1629f3c78ea
-      size: 4839888
+      hash: md5
+      md5: e57ceda4fe25f53fe1b4e0cd4c5df323
+      size: 104167864
     - path: plots/sampling/accept_rates.csv
-      md5: 0e4dd68f06be463c61d70393a1b69e7c
-      size: 3158
+      hash: md5
+      md5: 4f9f9804e0b51e8178d5ef4f68a1a1d5
+      size: 2131
     - path: plots/sampling/acor_times.csv
-      md5: 9f6dbcd885460db88bdb533101390c95
-      size: 3193
+      hash: md5
+      md5: 6b156fc49b297d5fa12bcf17fc71af13
+      size: 2458
   predict-risks:
     cmd: "lyscripts predict risks models/samples.hdf5 models/risks.hdf5\n"
     deps:
@@ -269,14 +347,17 @@ stages:
       md5: 482530636158d86338279d278b63ae87
       size: 470280
   evaluate:
-    cmd: "lyscripts evaluate data/cleaned.csv models/samples.hdf5 --metrics metrics.json\n"
+    cmd: "lyscripts evaluate data/cleaned.csv models/samples.hdf5 --metrics metrics.json
+      --plots plots/ti/accuracies.csv\n"
     deps:
     - path: data/cleaned.csv
-      md5: 4c6ec4376c1d6ca3814a17a61305c89b
-      size: 300071
+      hash: md5
+      md5: 9e99529170c092774a0933c11fac75ec
+      size: 227786
     - path: models/samples.hdf5
-      md5: cf0603eb71eb87010494a1629f3c78ea
-      size: 4839888
+      hash: md5
+      md5: e57ceda4fe25f53fe1b4e0cd4c5df323
+      size: 104167864
     params:
       params.yaml:
         graph:
@@ -290,13 +371,9 @@ stages:
             - VII
           lnl:
             I: []
-            II:
-            - I
-            - III
-            - V
+            II: []
             III:
             - IV
-            - V
             IV: []
             V: []
             VII: []
@@ -331,7 +408,7 @@ stages:
           t_stages:
           - early
           - late
-          class: MidlineBilateral
+          class: Unilateral
           kwargs:
             base_symmetric: false
             trans_symmetric: true
@@ -339,8 +416,73 @@ stages:
         sampling:
           walkers_per_dim: 20
           burnin: 1000
-          nsteps: 50
-          thin_by: 5
+          nsteps: 20
+          thin_by: 10
+          temp_schedule:
+          - 0.0
+          - 1.0076210988534706e-09
+          - 3.224387516331106e-08
+          - 2.448519270213934e-07
+          - 1.031804005225954e-06
+          - 3.148815933917096e-06
+          - 7.835261664684588e-06
+          - 1.6935087808430282e-05
+          - 3.3017728167230525e-05
+          - 5.949901826619859e-05
+          - 0.00010076210988534707
+          - 0.0001622783855914503
+          - 0.0002507283732699068
+          - 0.0003741226606566017
+          - 0.000541922809869769
+          - 0.0007651622719418543
+          - 0.0010565673013513768
+          - 0.0014306778705547923
+          - 0.001903968584518355
+          - 0.00249496959524998
+          - 0.0032243875163311063
+          - 0.004115226337448558
+          - 0.00519290833892641
+          - 0.006485395006257844
+          - 0.008023307944637018
+          - 0.009840049793490924
+          - 0.011971925141011254
+          - 0.014458261438686257
+          - 0.01734152991583261
+          - 0.020667466494127266
+          - 0.02448519270213934
+          - 0.02884733658986194
+          - 0.03381015364324406
+          - 0.0394336476987224
+          - 0.045781691857753354
+          - 0.05292214940134466
+          - 0.06092699470458736
+          - 0.06987243415118778
+          - 0.07983902704799936
+          - 0.09091180653955425
+          - 0.1031804005225954
+          - 0.11673915256060852
+          - 0.13168724279835387
+          - 0.14812880887639787
+          - 0.16617306684564512
+          - 0.18593443208187052
+          - 0.207532640200251
+          - 0.231092867969897
+          - 0.2567458542283846
+          - 0.28462802079628763
+          - 0.31488159339170957
+          - 0.34765472254481466
+          - 0.38310160451236014
+          - 0.4213826021922288
+          - 0.46266436603796024
+          - 0.5071199549732823
+          - 0.5549289573066435
+          - 0.6062776116457449
+          - 0.6613589278120725
+          - 0.7203728077554274
+          - 0.7835261664684589
+          - 0.8510330529011965
+          - 0.923114770875582
+          - 1.0
           kwargs:
             max_steps: 20000
             check_interval: 100
@@ -348,8 +490,13 @@ stages:
             rel_acor_threshold: 0.075
     outs:
     - path: metrics.json
-      md5: 9a71a3a0152ef8617045600221edef4b
-      size: 92
+      hash: md5
+      md5: 2c75292e5fa6565a990ff5971910f983
+      size: 159
+    - path: plots/ti/accuracies.csv
+      hash: md5
+      md5: 342da680ab433f544177360c38b1b454
+      size: 3716
   predict-prevalences:
     cmd: "lyscripts predict prevalences models/samples.hdf5 data/cleaned.csv models/prevalences.hdf5\n"
     deps:
@@ -442,12 +589,31 @@ stages:
     cmd: "lyscripts plot corner models/samples.hdf5 plots/corner.png\n"
     deps:
     - path: models/samples.hdf5
-      md5: cf0603eb71eb87010494a1629f3c78ea
-      size: 4839888
+      hash: md5
+      md5: e57ceda4fe25f53fe1b4e0cd4c5df323
+      size: 104167864
     outs:
     - path: plots/corner.png
-      md5: 255008c8782b2a8859a71264ebf88e23
-      size: 24799366
+      hash: md5
+      md5: 163d7089751ff578d4f366b0c6da1660
+      size: 646582
     - path: plots/corner.svg
-      md5: ff4f9db33b511a7d5526582fedc7babd
-      size: 18192538
+      hash: md5
+      md5: 2e67fcc8cd35c5a38a8f7aaf85c2ff06
+      size: 2708273
+  filter:
+    cmd: "python scripts/filter.py --input data/enhanced.csv --output data/filtered.csv\n"
+    deps:
+    - path: data/enhanced.csv
+      hash: md5
+      md5: c47cda3386f87dd144743b5d4d0bcc2a
+      size: 976692
+    - path: scripts/filter.py
+      hash: md5
+      md5: f512d1482a7a03f178b554b3837376a3
+      size: 1850
+    outs:
+    - path: data/filtered.csv
+      hash: md5
+      md5: de35d3fcd02a05fc39fe0afcc1becb6a
+      size: 529238
