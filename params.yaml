@@ -15,10 +15,10 @@ graph:
   tumor:
     primary: [I, II, III, IV, V, VII]
   lnl:
-    I: []
-    II: []
+    I: [II]
+    II: [III]
     III: [IV]
-    IV: []
+    IV: [V]
     V: []
     VII: []
 
@@ -161,8 +161,8 @@ sampling:
   - 1.0
   # only used when sampling until convergence
   kwargs:
-    max_steps: 20000
-    check_interval: 100
+    max_steps: 200
+    check_interval: 10
     trust_threshold: 30.0
     rel_acor_threshold: 0.075
 

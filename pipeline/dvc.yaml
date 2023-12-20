@@ -45,29 +45,12 @@ stages:
     cmd: >
       python scripts/filter.py
       --input data/enhanced.csv
-      --output data/filtered.csv
+      --output ${general.data}
     deps:
       - scripts/filter.py
       - data/enhanced.csv
     outs:
-      - data/filtered.csv
-
-  clean:
-    wdir: ..
-    desc:
-      Transform the lyDATA/LyProX files into CSVs that the lymph model consumes.
-      This largerly amounts to discarding data the model cannot (yet) use. Also,
-      data for the `Unilateral` model class expect only two header rows, while
-      instances of the classes `Bilateral` and `MidlineBilateral` expect three.
-    vars:
-    - input: data/filtered.csv
-    cmd: lyscripts data clean ${input} ${general.data}
-    deps:
-    - ${input}
-    params:
-    - model.class
-    outs:
-    - ${general.data}
+      - ${general.data}
 
   sampling:
     wdir: ..
@@ -78,7 +61,6 @@ stages:
     cmd: >
       lyscripts sample ${general.data} ${general.samples}
       --plots ${general.plots_dir}/sampling
-      --ti
       ${inference_modalities}
     deps:
     - ${general.data}
@@ -87,13 +69,6 @@ stages:
     - model
     - sampling
     - modalities
-    plots:
-    - ${general.plots_dir}/sampling/accept_rates.csv:
-        x: x
-        y: accept_rates
-    - ${general.plots_dir}/sampling/acor_times.csv:
-        x: x
-        y: acor_times
     outs:
     - ${general.samples}
 
@@ -108,7 +83,6 @@ stages:
     cmd: >
       lyscripts evaluate ${general.data} ${general.samples}
       --metrics ${general.metrics}
-      --plots ${general.plots_dir}/ti/accuracies.csv
     params:
     - graph
     - model
@@ -117,10 +91,6 @@ stages:
     deps:
     - ${general.data}
     - ${general.samples}
-    plots:
-    - ${general.plots_dir}/ti/accuracies.csv:
-        x: β
-        y: accuracy
     metrics:
     - ${general.metrics}
 

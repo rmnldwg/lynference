@@ -80,12 +80,12 @@ stages:
       size: 227786
   sampling:
     cmd: "lyscripts sample data/cleaned.csv models/samples.hdf5 --plots plots/sampling
-      --ti --modalities max_llh\n"
+      --modalities max_llh\n"
     deps:
     - path: data/cleaned.csv
       hash: md5
-      md5: 9e99529170c092774a0933c11fac75ec
-      size: 227786
+      md5: de35d3fcd02a05fc39fe0afcc1becb6a
+      size: 529238
     params:
       params.yaml:
         graph:
@@ -98,11 +98,14 @@ stages:
             - V
             - VII
           lnl:
-            I: []
-            II: []
+            I:
+            - II
+            II:
+            - III
             III:
             - IV
-            IV: []
+            IV:
+            - V
             V: []
             VII: []
         modalities:
@@ -150,7 +153,7 @@ stages:
           - 0.0
           - 1.0076210988534706e-09
           - 3.224387516331105e-08
-          - 2.448519270213933e-07
+          - 2.448519270213932e-07
           - 1.031804005225953e-06
           - 3.148815933917096e-06
           - 7.835261664684588e-06
@@ -212,23 +215,15 @@ stages:
           - 0.923114770875582
           - 1.0
           kwargs:
-            max_steps: 20000
-            check_interval: 100
+            max_steps: 200
+            check_interval: 10
             trust_threshold: 30.0
             rel_acor_threshold: 0.075
     outs:
     - path: models/samples.hdf5
       hash: md5
-      md5: e57ceda4fe25f53fe1b4e0cd4c5df323
-      size: 104167864
-    - path: plots/sampling/accept_rates.csv
-      hash: md5
-      md5: 4f9f9804e0b51e8178d5ef4f68a1a1d5
-      size: 2131
-    - path: plots/sampling/acor_times.csv
-      hash: md5
-      md5: 6b156fc49b297d5fa12bcf17fc71af13
-      size: 2458
+      md5: 33a529ac8c8418aa97753be0fea376fd
+      size: 3122240
   predict-risks:
     cmd: "lyscripts predict risks models/samples.hdf5 models/risks.hdf5\n"
     deps:
@@ -347,17 +342,16 @@ stages:
       md5: 482530636158d86338279d278b63ae87
       size: 470280
   evaluate:
-    cmd: "lyscripts evaluate data/cleaned.csv models/samples.hdf5 --metrics metrics.json
-      --plots plots/ti/accuracies.csv\n"
+    cmd: "lyscripts evaluate data/cleaned.csv models/samples.hdf5 --metrics metrics.json\n"
     deps:
     - path: data/cleaned.csv
       hash: md5
-      md5: 9e99529170c092774a0933c11fac75ec
-      size: 227786
+      md5: de35d3fcd02a05fc39fe0afcc1becb6a
+      size: 529238
     - path: models/samples.hdf5
       hash: md5
-      md5: e57ceda4fe25f53fe1b4e0cd4c5df323
-      size: 104167864
+      md5: 33a529ac8c8418aa97753be0fea376fd
+      size: 3122240
     params:
       params.yaml:
         graph:
@@ -370,11 +364,14 @@ stages:
             - V
             - VII
           lnl:
-            I: []
-            II: []
+            I:
+            - II
+            II:
+            - III
             III:
             - IV
-            IV: []
+            IV:
+            - V
             V: []
             VII: []
         modalities:
@@ -421,9 +418,9 @@ stages:
           temp_schedule:
           - 0.0
           - 1.0076210988534706e-09
-          - 3.224387516331106e-08
-          - 2.448519270213934e-07
-          - 1.031804005225954e-06
+          - 3.224387516331105e-08
+          - 2.448519270213933e-07
+          - 1.031804005225953e-06
           - 3.148815933917096e-06
           - 7.835261664684588e-06
           - 1.6935087808430282e-05
@@ -484,19 +481,15 @@ stages:
           - 0.923114770875582
           - 1.0
           kwargs:
-            max_steps: 20000
-            check_interval: 100
+            max_steps: 200
+            check_interval: 10
             trust_threshold: 30.0
             rel_acor_threshold: 0.075
     outs:
     - path: metrics.json
       hash: md5
-      md5: 2c75292e5fa6565a990ff5971910f983
-      size: 159
-    - path: plots/ti/accuracies.csv
-      hash: md5
-      md5: 342da680ab433f544177360c38b1b454
-      size: 3716
+      md5: 4a71a06a8a6b84876d8504a8d70aead7
+      size: 91
   predict-prevalences:
     cmd: "lyscripts predict prevalences models/samples.hdf5 data/cleaned.csv models/prevalences.hdf5\n"
     deps:
@@ -590,19 +583,19 @@ stages:
     deps:
     - path: models/samples.hdf5
       hash: md5
-      md5: e57ceda4fe25f53fe1b4e0cd4c5df323
-      size: 104167864
+      md5: 33a529ac8c8418aa97753be0fea376fd
+      size: 3122240
     outs:
     - path: plots/corner.png
       hash: md5
-      md5: 163d7089751ff578d4f366b0c6da1660
-      size: 646582
+      md5: d6248b70e4f7c06f023220a9d6056f65
+      size: 978803
     - path: plots/corner.svg
       hash: md5
-      md5: 2e67fcc8cd35c5a38a8f7aaf85c2ff06
-      size: 2708273
+      md5: 217faecbb058fd74722b84eee87d545c
+      size: 5014962
   filter:
-    cmd: "python scripts/filter.py --input data/enhanced.csv --output data/filtered.csv\n"
+    cmd: "python scripts/filter.py --input data/enhanced.csv --output data/cleaned.csv\n"
     deps:
     - path: data/enhanced.csv
       hash: md5
@@ -613,7 +606,7 @@ stages:
       md5: f512d1482a7a03f178b554b3837376a3
       size: 1850
     outs:
-    - path: data/filtered.csv
+    - path: data/cleaned.csv
       hash: md5
       md5: de35d3fcd02a05fc39fe0afcc1becb6a
       size: 529238
