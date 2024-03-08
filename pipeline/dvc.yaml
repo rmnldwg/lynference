@@ -9,11 +9,17 @@ stages:
     - output: data/joined.csv
     cmd: >
       lyscripts join
-      --inputs data/2021-usz-oropharynx.csv data/2021-clb-oropharynx.csv
+      --inputs
+      data/2021-usz-oropharynx.csv
+      data/2021-clb-oropharynx.csv
+      data/2023-hvh-oropharynx.csv
+      data/2023-isb-multisite.csv
       --output ${output}
     deps:
     - data/2021-usz-oropharynx.csv
     - data/2021-clb-oropharynx.csv
+    - data/2023-hvh-oropharynx.csv
+    - data/2023-isb-multisite.csv
     outs:
     - ${output}
 
@@ -35,6 +41,19 @@ stages:
     outs:
     - ${output}
 
+  filter:
+    wdir: ..
+    desc:
+      Filter out all patients that are not oropharynx. We do this by checking for their
+      ICD code. If it contains C01, C09, or C10, then it is included.
+    cmd: >
+      python scripts/filter.py
+    deps:
+    - data/enhanced.csv
+    - scripts/filter.py
+    outs:
+    - data/filtered.csv
+
   clean:
     wdir: ..
     desc:
@@ -43,7 +62,7 @@ stages:
       data for the `Unilateral` model class expect only two header rows, while
       instances of the classes `Bilateral` and `MidlineBilateral` expect three.
     vars:
-    - input: data/enhanced.csv
+    - input: data/filtered.csv
     cmd: lyscripts clean ${input} ${general.data}
     deps:
     - ${input}
@@ -61,7 +80,7 @@ stages:
     cmd: >
       lyscripts sample ${general.data} ${general.samples}
       --plots ${general.plots_dir}/sampling
-      --pools 0
+      --pools 8
       ${inference_modalities}
     deps:
     - ${general.data}
@@ -114,42 +133,3 @@ stages:
     plots:
     - ${general.plots_dir}/corner.png
     - ${general.plots_dir}/corner.svg
-
-  predict-risks:
-    wdir: ..
-    desc:
-      Compute risk predictions for all the scenarios defined in the `params.yaml`
-      file and store them in an HDF5 file.
-    cmd: >
-      lyscripts predict risks
-      ${general.samples}
-      ${general.risks}
-    deps:
-    - ${general.samples}
-    params:
-    - graph
-    - model
-    - risks
-    outs:
-    - ${general.risks}
-
-  predict-prevalences:
-    wdir: ..
-    desc:
-      Compute prevalences for all the scenarios defined in the `params.yaml`
-      file, compare it to the data prevalence of the same scenario and store the
-      results in an HDF5 file.
-    cmd: >
-      lyscripts predict prevalences
-      ${general.samples}
-      ${general.data}
-      ${general.prevalences}
-    deps:
-    - ${general.samples}
-    - ${general.data}
-    params:
-    - graph
-    - model
-    - prevalences
-    outs:
-    - ${general.prevalences}

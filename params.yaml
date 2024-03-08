@@ -17,10 +17,10 @@ graph:
   tumor:
     primary: [I, II, III, IV, V, VII]
   lnl:
-    I: []
-    II: [I, III, V]
-    III: [IV, V]
-    IV: []
+    I: [II]
+    II: [III]
+    III: [IV]
+    IV: [V]
     V: []
     VII: []
 
@@ -107,34 +107,7 @@ sampling:
 # RISKS:
 # Every entry in this array defines a scenario for which the stage
 # `predict-risk` will compute the risks, given a set of samples
-risks:
-- name: contra/III/N0/late/ext
-  involvement:
-    contra: {III: true}
-  given_diagnosis:
-    ipsi:   {I: false, II: false, III: false, IV: false, V: false, VII: false}
-    contra: {I: false, II: false, III: false, IV: false, V: false, VII: false}
-  given_diagnosis_spsn: [0.76, 0.81]
-  t_stage: late
-  midline_extension: true
-- name: contra/III/ipsi-IIandIII/late/noext
-  involvement:
-    contra: {III: true}
-  given_diagnosis:
-    ipsi:   {I: false, II: true , III: true , IV: false, V: false, VII: false}
-    contra: {I: false, II: false, III: false, IV: false, V: false, VII: false}
-  given_diagnosis_spsn: [0.76, 0.81]
-  t_stage: late
-  midline_extension: false
-- name: contra/III/ipsi-IIandIII/late/ext
-  involvement:
-    contra: {III: true}
-  given_diagnosis:
-    ipsi:   {I: false, II: true , III: true , IV: false, V: false, VII: false}
-    contra: {I: false, II: false, III: false, IV: false, V: false, VII: false}
-  given_diagnosis_spsn: [0.76, 0.81]
-  t_stage: late
-  midline_extension: true
+risks: []
 
 
 ########################################################################################
@@ -144,30 +117,4 @@ risks:
 # prevalence of a certain pattern of involvement for a defined
 # diagnostic modality. It can, however, be compared to the prevalence
 # in the data.
-prevalences:
-# ipsilateral
-- name: ipsi/IInotI/early
-  pattern:
-    ipsi: {I: false, II: true}
-  modality: max_llh
-  modality_spsn: [1.0, 1.0]
-  t_stage: early
-- name: ipsi/IInotI/late
-  pattern:
-    ipsi: {I: false, II: true}
-  modality: max_llh
-  modality_spsn: [1.0, 1.0]
-  t_stage: late
-
-- name: ipsi/IIandIII/early
-  pattern:
-    ipsi: {II: true, III: true}
-  modality: max_llh
-  modality_spsn: [1.0, 1.0]
-  t_stage: early
-- name: ipsi/IIandIII/late
-  pattern:
-    ipsi: {II: true, III: true}
-  modality: max_llh
-  modality_spsn: [1.0, 1.0]
-  t_stage: late
+prevalences: []

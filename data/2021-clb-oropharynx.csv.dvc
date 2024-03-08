@@ -1,5 +1,4 @@
-md5: 45a399f1fa9d5f49560db03164bb74b2
-wdir: ..
+md5: 835f0be6b4e53e9e4827285477c59a98
 frozen: true
 deps:
 - path: 2021-clb-oropharynx/data.csv
@@ -10,4 +9,5 @@ deps:
 outs:
 - md5: d40c0a1ae967a6983d60a0a809cf3972
   size: 92742
-  path: data/2021-clb-oropharynx.csv
+  hash: md5
+  path: 2021-clb-oropharynx.csv
